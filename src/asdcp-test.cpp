@@ -1944,7 +1944,7 @@ main(int argc, const char** argv)
     {
       result = show_file_info(Options);
 
-      for ( int i = 1; ASDCP_SUCCESS(result) && i < Options.file_count; ++i )
+      for ( ui32_t i = 1; ASDCP_SUCCESS(result) && i < Options.file_count; ++i )
 	{
 	  Options.filenames[0] = Options.filenames[i]; // oh-so hackish
 	  result = show_file_info(Options);

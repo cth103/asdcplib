@@ -209,7 +209,7 @@ make_pink_wav_file(CommandOptions& Options)
 	  // fill the frame buffer with a frame of pink noise
 	  byte_t *p = FrameBuffer.Data();
 
-	  for ( int i = 0; i < samples_per_frame; ++i )
+	  for ( ui32_t i = 0; i < samples_per_frame; ++i )
 	    {
 	      float pink_sample = pink_filter.GetNextSample(lcg.GetNextSample());
 	      ScalePackSample(pink_sample, p, ADesc.BlockAlign);

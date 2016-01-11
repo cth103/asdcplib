@@ -331,7 +331,7 @@ namespace ASDCP
 	  // get absolute frame position and go read the frame's key and length
 	  Result_t result = RESULT_OK;
 
-	  if ( TmpEntry.StreamOffset != m_LastPosition )
+	  if ( (Kumu::fpos_t) TmpEntry.StreamOffset != m_LastPosition )
 	    {
 	      m_LastPosition = TmpEntry.StreamOffset;
 	      result = m_File.Seek(TmpEntry.StreamOffset);
@@ -370,7 +370,7 @@ namespace ASDCP
 	  streamOffset = body_offset + TmpEntry.StreamOffset;
 	  temporalOffset = TmpEntry.TemporalOffset;
 	  keyFrameOffset = TmpEntry.KeyFrameOffset;
-	  
+
 	  return RESULT_OK;
 	}
 
@@ -380,7 +380,7 @@ namespace ASDCP
 	  m_File.Close();
 	}
       };
-      
+
       //------------------------------------------------------------------------------------------
       //
 
@@ -621,7 +621,7 @@ namespace ASDCP
 	  MPTrack.Clip->Duration.set_has_value();
 	  m_DurationUpdateList.push_back(&(MPTrack.Clip->Duration.get()));
 
-  
+
 	  //
 	  // File (Source) Package
 	  //
@@ -727,7 +727,7 @@ namespace ASDCP
 
 	  m_DurationUpdateList.push_back(&(MPTrack.Clip->Duration));
 
-  
+
 	  //
 	  // File (Source) Package
 	  //
@@ -814,7 +814,7 @@ namespace ASDCP
 	}
 
       };
-      
+
   }/// namespace MXF
 
   //------------------------------------------------------------------------------------------

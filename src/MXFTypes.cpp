@@ -709,7 +709,7 @@ ASDCP::MXF::RGBALayout::EncodeString(char* buf, ui32_t buf_len) const
   std::string tmp_str;
   char tmp_buf[64];
 
-  for ( int i = 0; i < RGBAValueLength && m_value[i] != 0; i += 2 )
+  for ( size_t i = 0; i < RGBAValueLength && m_value[i] != 0; i += 2 )
     {
       snprintf(tmp_buf, 64, "%c(%d)", get_char_for_code(m_value[i]), m_value[i+1]);
 
