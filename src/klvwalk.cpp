@@ -209,7 +209,6 @@ main(int argc, const char** argv)
 	  if ( ASDCP_SUCCESS(result) )
 	    {
 	      result = RIP.InitFromFile(Reader);
-	      ui32_t test_s = RIP.PairArray.size();
 
 	      if ( ASDCP_FAILURE(result) )
 		{
@@ -286,7 +285,6 @@ main(int argc, const char** argv)
 	  if ( ASDCP_SUCCESS(result) )
 	    {
 	      result = RIP.InitFromFile(Reader);
-	      ui32_t test_s = RIP.PairArray.size();
 
 	      if ( ASDCP_FAILURE(result) )
 		{

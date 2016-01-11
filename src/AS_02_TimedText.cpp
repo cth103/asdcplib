@@ -25,7 +25,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /*! \file    AS_DCP_TimedText.cpp
-    \version $Id$       
+    \version $Id$
     \brief   AS-DCP library, PCM essence reader and writer implementation
 */
 
@@ -67,7 +67,7 @@ class AS_02::TimedText::MXFReader::h__Reader : public AS_02::h__AS02Reader
   ASDCP_NO_COPY_CONSTRUCT(h__Reader);
 
 public:
-  TimedTextDescriptor m_TDesc;    
+  TimedTextDescriptor m_TDesc;
 
   h__Reader(const Dictionary& d) : AS_02::h__AS02Reader(d), m_EssenceDescriptor(0) {
     memset(&m_TDesc.AssetID, 0, UUIDlen);
@@ -144,7 +144,7 @@ ASDCP::Result_t
 AS_02::TimedText::MXFReader::h__Reader::OpenRead(const std::string& filename)
 {
   Result_t result = OpenMXFRead(filename.c_str());
-  
+
   if( ASDCP_SUCCESS(result) )
     {
       if ( m_EssenceDescriptor == 0 )
@@ -523,14 +523,14 @@ AS_02::TimedText::MXFWriter::h__Writer::SetSourceStream(ASDCP::TimedText::TimedT
 	  m_HeaderSize += ( resourceSubdescriptor->MIMEMediaType.ArchiveLength() * 2 /*ArchiveLength is broken*/ ) + 72;
 	}
     }
-  
+
   if ( KM_SUCCESS(result) )
     {
       result = WriteAS02Header(TIMED_TEXT_PACKAGE_LABEL, UL(m_Dict->ul(MDD_TimedTextWrappingClip)),
 			       "Data Track", UL(m_EssenceUL), UL(m_Dict->ul(MDD_TimedTextEssence)),
 			       TDesc.EditRate, derive_timecode_rate_from_edit_rate(TDesc.EditRate));
     }
- 
+
   if ( KM_SUCCESS(result) )
     {
       this->m_IndexWriter.SetPrimerLookup(&this->m_HeaderPart.m_Primer);
@@ -559,17 +559,15 @@ AS_02::TimedText::MXFWriter::h__Writer::WriteTimedTextResource(const std::string
 
       ui32_t str_size = XMLDoc.size();
       ASDCP::TimedText::FrameBuffer FrameBuf(str_size);
-      
+
       memcpy(FrameBuf.Data(), XMLDoc.c_str(), str_size);
       FrameBuf.Size(str_size);
 
       IndexTableSegment::IndexEntry Entry;
       Entry.StreamOffset = m_StreamOffset;
-      
+
       if ( KM_SUCCESS(result) )
 	{
-	  ui64_t this_stream_offset = m_StreamOffset; // m_StreamOffset will be changed by the call to Write_EKLV_Packet
-
 	  result = Write_EKLV_Packet(m_File, *m_Dict, m_HeaderPart, m_Info, m_CtFrameBuf, m_FramesWritten,
 				     m_StreamOffset, FrameBuf, m_EssenceUL, Ctx, HMAC);
 	}
@@ -609,8 +607,6 @@ AS_02::TimedText::MXFWriter::h__Writer::WriteAncillaryResource(const ASDCP::Time
 
   if ( KM_SUCCESS(result) )
     {
-      ui64_t this_stream_offset = m_StreamOffset; // m_StreamOffset will be changed by the call to Write_EKLV_Packet
-      
       result = Write_EKLV_Packet(m_File, *m_Dict, m_HeaderPart, m_Info, m_CtFrameBuf, m_FramesWritten,
 				 m_StreamOffset, FrameBuf, GenericStream_DataElement.Value(), Ctx, HMAC);
     }
@@ -696,7 +692,7 @@ AS_02::TimedText::MXFWriter::OpenWrite(const std::string& filename, const Writer
 
   m_Writer = new h__Writer(DefaultSMPTEDict());
   m_Writer->m_Info = Info;
-  
+
   Result_t result = m_Writer->OpenWrite(filename, HeaderSize);
 
   if ( ASDCP_SUCCESS(result) )

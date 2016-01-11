@@ -354,7 +354,6 @@ public:
   //
   void get_PictureEssenceCoding(FILE* = 0)
   {
-    const Dictionary& Dict = DefaultCompositeDict();
     MXF::RGBAEssenceDescriptor *descriptor = 0;
 
     Result_t result = m_Reader.OP1aHeader().GetMDObjectByType(DefaultCompositeDict().ul(MDD_RGBAEssenceDescriptor),
@@ -513,7 +512,6 @@ public:
   //
   void dump_WaveAudioDescriptor(FILE* stream = 0)
   {
-    const Dictionary& Dict = DefaultCompositeDict();
     MXF::WaveAudioDescriptor *descriptor = 0;
 
     Result_t result = m_Reader.OP1aHeader().GetMDObjectByType(DefaultCompositeDict().ul(MDD_WaveAudioDescriptor),
@@ -678,7 +676,6 @@ int
 main(int argc, const char** argv)
 {
   Result_t result = RESULT_OK;
-  char     str_buf[64];
   CommandOptions Options(argc, argv);
 
   if ( Options.version_flag )

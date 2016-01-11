@@ -403,7 +403,6 @@ AS_02::h__AS02Reader::OpenMXFRead(const char* filename)
     {
       //
       UL OP1a_ul(m_Dict->ul(MDD_OP1a));
-      InterchangeObject* Object;
       m_Info.LabelSetType = LS_MXF_SMPTE;
 
       if ( m_HeaderPart.OperationalPattern != OP1a_ul )

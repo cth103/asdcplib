@@ -203,7 +203,6 @@ make_pink_wav_file(CommandOptions& Options)
     {
       ui32_t write_count = 0;
       ui32_t duration = 0;
-      byte_t scaled_pink[sizeof(ui32_t)];
 
       while ( ASDCP_SUCCESS(result) && (duration++ < Options.duration) )
 	{

@@ -25,9 +25,9 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/ 
+*/
 /*! \file    AS_02_internal.h
-  \version $Id: AS_02_internal.h ***       
+  \version $Id: AS_02_internal.h ***
   \brief   AS-02 library, non-public common elements
 */
 
@@ -92,7 +92,7 @@ namespace AS_02
       public:
 	const ASDCP::Dictionary*&  m_Dict;
 	ASDCP::IPrimerLookup*      m_Lookup;
-      
+
 	AS02IndexWriterVBR(const ASDCP::Dictionary*&);
 	virtual ~AS02IndexWriterVBR();
 
@@ -124,7 +124,7 @@ namespace AS_02
 	ASDCP::IPrimerLookup* m_Lookup;
 	ui32_t m_Duration;
 	ui32_t m_SampleSize;
-      
+
 	AS02IndexWriterCBR(const ASDCP::Dictionary*&);
 	virtual ~AS02IndexWriterCBR();
 
@@ -159,7 +159,7 @@ namespace AS_02
       ~h__AS02Writer() {}
 
 
-      
+
       // all the above for a single source clip
       Result_t WriteAS02Header(const std::string& PackageLabel, const ASDCP::UL& WrappingUL,
 			       const std::string& TrackName, const ASDCP::UL& EssenceUL,
@@ -244,14 +244,13 @@ namespace AS_02
 
 	if ( KM_SUCCESS(result) )
 	  result = this->m_File.Seek(0);
-	
+
 	if ( KM_SUCCESS(result) )
 	  result = m_HeaderPart.WriteToFile(this->m_File, this->m_HeaderSize);
-  
+
 	if ( KM_SUCCESS(result) )
 	  {
 	    ASDCP::MXF::RIP::const_pair_iterator i = this->m_RIP.PairArray.begin();
-	    ui64_t header_byte_count = this->m_HeaderPart.HeaderByteCount;
 	    ui64_t previous_partition = 0;
 
 	    for ( i = this->m_RIP.PairArray.begin(); KM_SUCCESS(result) && i != this->m_RIP.PairArray.end(); ++i )
@@ -261,7 +260,7 @@ namespace AS_02
 
 		if ( KM_SUCCESS(result) )
 		  result = plain_part.InitFromFile(this->m_File);
-		
+
 		if ( KM_SUCCESS(result)
 		     && ( plain_part.IndexSID > 0 || plain_part.BodySID > 0 ) )
 		  {
@@ -278,7 +277,7 @@ namespace AS_02
 		  }
 	      }
 	  }
-	
+
 	this->m_File.Close();
 	return result;
       }
