@@ -25,7 +25,7 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/ 
+*/
 /*! \file    h__02_Reader.cpp
   \version $Id$
   \brief   MXF file reader base class
@@ -62,14 +62,14 @@ AS_02::default_md_object_init()
 //---------------------------------------------------------------------------------
 //
 
-    
+
 AS_02::MXF::AS02IndexReader::AS02IndexReader(const ASDCP::Dictionary*& d) :
-  m_Duration(0), m_BytesPerEditUnit(0),
-  ASDCP::MXF::Partition(d), m_Dict(d) {}
+  ASDCP::MXF::Partition(d),
+  m_Duration(0), m_BytesPerEditUnit(0), m_Dict(d) {}
 
 AS_02::MXF::AS02IndexReader::~AS02IndexReader() {}
 
-//    
+//
 Result_t
 AS_02::MXF::AS02IndexReader::InitFromFile(const Kumu::FileReader& reader, const ASDCP::MXF::RIP& rip, const bool has_header_essence)
 {
@@ -198,7 +198,7 @@ AS_02::MXF::AS02IndexReader::InitFromFile(const Kumu::FileReader& reader, const 
   if ( KM_SUCCESS(result) )
     {
       std::list<InterchangeObject*>::const_iterator ii;
-  
+
       for ( ii = m_PacketList->m_List.begin(); ii != m_PacketList->m_List.end(); ++ii )
 	{
 	  IndexTableSegment *segment = dynamic_cast<IndexTableSegment*>(*ii);

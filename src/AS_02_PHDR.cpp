@@ -24,7 +24,7 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/ 
+*/
 /*! \file    AS_02_PHDR.cpp
   \version $Id$
   \brief   AS-02 library, JPEG 2000 P-HDR essence reader and writer implementation
@@ -146,7 +146,7 @@ AS_02::PHDR::MXFReader::h__Reader::OpenRead(const std::string& filename, std::st
     {
       RIP::const_pair_iterator pi;
       RIP::PartitionPair TmpPair;
-      
+
       // Look up the partition start in the RIP using the SID.
       for ( pi = m_RIP.PairArray.begin(); pi != m_RIP.PairArray.end(); ++pi )
 	{
@@ -356,7 +356,7 @@ public:
   byte_t            m_EssenceUL[SMPTE_UL_LENGTH];
   byte_t            m_MetadataUL[SMPTE_UL_LENGTH];
 
-  h__Writer(const Dictionary& d) : h__AS02WriterFrame(d), m_EssenceSubDescriptor(0), m_MetadataTrackSubDescriptor(0) {
+  h__Writer(const Dictionary& d) : h__AS02WriterFrame(d), m_MetadataTrackSubDescriptor(0), m_EssenceSubDescriptor(0) {
     memset(m_EssenceUL, 0, SMPTE_UL_LENGTH);
     memset(m_MetadataUL, 0, SMPTE_UL_LENGTH);
   }
@@ -444,9 +444,9 @@ AS_02::PHDR::MXFWriter::h__Writer::WritePHDRHeader(const std::string& PackageLab
       DefaultLogSink().Error("Non-zero edit-rate reqired.\n");
       return RESULT_PARAM;
     }
-  
+
   InitHeader();
-  
+
   AddSourceClip(EditRate, EditRate/*TODO: for a moment*/, TCFrameRate, TrackName, EssenceUL, DataDefinition, PackageLabel);
 
   // add metadata track
@@ -469,7 +469,7 @@ AS_02::PHDR::MXFWriter::h__Writer::WritePHDRHeader(const std::string& PackageLab
   // for now we do not allow setting this value, so all files will be 'original'
   metdata_track.Clip->SourceTrackID = 0;
   metdata_track.Clip->SourcePackageID = NilUMID;
-  
+
   metdata_track.Clip->Duration.set_has_value();
   m_DurationUpdateList.push_back(&(metdata_track.Clip->Duration.get()));
 
@@ -571,20 +571,20 @@ AS_02::PHDR::MXFWriter::h__Writer::WriteFrame(const AS_02::PHDR::FrameBuffer& Fr
 
       result = Write_EKLV_Packet(m_File, *m_Dict, m_HeaderPart, m_Info, m_CtFrameBuf, m_FramesWritten,
 				 m_StreamOffset, FrameBuf, m_EssenceUL, Ctx, HMAC);
-      
+
       if ( KM_SUCCESS(result) )
 	{
 	  ASDCP::FrameBuffer metadata_buffer_wrapper;
 	  metadata_buffer_wrapper.SetData((byte_t*)(FrameBuf.OpaqueMetadata.c_str()), FrameBuf.OpaqueMetadata.size());
 	  metadata_buffer_wrapper.Size(FrameBuf.OpaqueMetadata.size());
-	  
-	  
+
+
 	  result = Write_EKLV_Packet(m_File, *m_Dict, m_HeaderPart, m_Info, m_CtFrameBuf, m_FramesWritten,
 				     m_StreamOffset, metadata_buffer_wrapper, m_MetadataUL, Ctx, HMAC);
 	}
-      
+
       if ( KM_SUCCESS(result) )
-	{  
+	{
 	  IndexTableSegment::IndexEntry Entry;
 	  Entry.StreamOffset = this_stream_offset;
 	  m_IndexWriter.PushIndexEntry(Entry);
@@ -751,7 +751,7 @@ AS_02::PHDR::MXFWriter::OpenWrite(const std::string& filename, const ASDCP::Writ
 // argument is present, the essence is encrypted prior to writing.
 // Fails if the file is not open, is finalized, or an operating system
 // error occurs.
-Result_t 
+Result_t
 AS_02::PHDR::MXFWriter::WriteFrame(const AS_02::PHDR::FrameBuffer& FrameBuf, AESEncContext* Ctx, HMACContext* HMAC)
 {
   if ( m_Writer.empty() )

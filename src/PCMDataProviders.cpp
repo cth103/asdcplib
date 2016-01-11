@@ -40,7 +40,7 @@ ASDCP::PCMDataProviderInterface::~PCMDataProviderInterface() {}
 
 //
 ASDCP::WAVDataProvider::WAVDataProvider()
-    : m_Parser(), m_FB(), m_ADesc(), m_SampleSize(0), m_ptr(NULL)
+    : m_Parser(), m_FB(), m_ADesc(), m_ptr(NULL), m_SampleSize(0)
 {}
 
 ASDCP::WAVDataProvider::~WAVDataProvider()

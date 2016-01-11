@@ -291,19 +291,20 @@ public:
 
   //
   CommandOptions(int argc, const char** argv) :
-    error_flag(true), key_flag(false), key_id_flag(false), asset_id_flag(false),
+    error_flag(true), key_flag(false), asset_id_flag(false),
     encrypt_header_flag(true), write_hmac(true),
     verbose_flag(false), fb_dump_size(0),
     no_write_flag(false), version_flag(false), help_flag(false), stereo_image_flag(false),
     write_partial_pcm_flag(false), start_frame(0),
     duration(0xffffffff), use_smpte_labels(false), j2c_pedantic(true),
     fb_size(FRAME_BUFFER_SIZE),
+    key_id_flag(false),
     channel_fmt(PCM::CF_NONE),
-    ffoa(0), max_channel_count(10), max_object_count(118), // hard-coded sample atmos properties
-    dolby_atmos_sync_flag(false),
     show_ul_values_flag(false),
-    mca_config(g_dict),
-    use_interop_sound_wtf(false)
+    dolby_atmos_sync_flag(false),
+    ffoa(0), max_channel_count(10), max_object_count(118), // hard-coded sample atmos properties
+    use_interop_sound_wtf(false),
+    mca_config(g_dict)
   {
     memset(key_value, 0, KeyLen);
     memset(key_id_value, 0, UUIDlen);
