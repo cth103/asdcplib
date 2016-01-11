@@ -178,6 +178,9 @@ ASDCP::JP2K::ParseMetadataIntoDesc(const FrameBuffer& FB, PictureDescriptor& PDe
 	  memcpy(&PDesc.QuantizationDefault, NextMarker.m_Data, NextMarker.m_DataSize);
 	  PDesc.QuantizationDefault.SPqcdLength = NextMarker.m_DataSize - 1;
 	  break;
+
+	default:
+	  break;
 	}
     }
 

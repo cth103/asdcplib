@@ -593,6 +593,9 @@ main(int argc, const char **argv)
     case MMT_VAL_WRITE:
       result = ReadValidateWriteLargeFile(Options);
       break;
+
+    default:
+      break;
     }
 
   if ( result != RESULT_OK )

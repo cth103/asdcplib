@@ -133,6 +133,9 @@ class WavFileWriter
 	  file_count = m_ADesc.ChannelCount / 2;
 	  m_ChannelCount = 2;
 	  break;
+
+	default:
+	  break;
 	}
       assert(file_count && m_ChannelCount);
 

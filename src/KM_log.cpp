@@ -202,6 +202,7 @@ Kumu::SyslogLogSink::WriteEntry(const LogEntry& Entry)
     case Kumu::LOG_NOTICE:  priority = SYSLOG_NOTICE; break;
     case Kumu::LOG_INFO:    priority = SYSLOG_INFO; break;
     case Kumu::LOG_DEBUG:   priority = SYSLOG_DEBUG; break;
+    default: break;
     }
 
   AutoMutex L(m_lock);
@@ -294,6 +295,8 @@ Kumu::LogEntry::TestFilter(i32_t filter) const
 	return false;
       break;
 
+    default:
+      break;
     }
 
  return true;

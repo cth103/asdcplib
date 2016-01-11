@@ -81,6 +81,9 @@ ASDCP::PCM_ADesc_to_MD(PCM::AudioDescriptor& ADesc, MXF::WaveAudioDescriptor* AD
       case PCM::CF_CFG_6:
 	ADescObj->ChannelAssignment = DefaultSMPTEDict().Type(MDD_DCAudioChannelCfg_MCA).ul;
 	break;
+
+      default:
+	break;
     }
 
   return RESULT_OK;
