@@ -25,7 +25,7 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/ 
+*/
 /*! \file    h__02_Writer.cpp
   \version $Id$
   \brief   MXF file writer base class
@@ -58,7 +58,7 @@ AS_02::MXF::AS02IndexWriterVBR::WriteToFile(Kumu::FileWriter& Writer)
   assert(m_Dict);
   ASDCP::FrameBuffer index_body_buffer;
   ui32_t   index_body_size = m_PacketList->m_List.size() * MaxIndexSegmentSize; // segment-count * max-segment-size
-  Result_t result = index_body_buffer.Capacity(index_body_size); 
+  Result_t result = index_body_buffer.Capacity(index_body_size);
   ui64_t start_position = 0;
 
   if ( m_CurrentSegment != 0 )
@@ -185,7 +185,7 @@ AS_02::h__AS02WriterFrame::WriteEKLVPacket(const ASDCP::FrameBuffer& FrameBuf,co
 				      m_StreamOffset, FrameBuf, EssenceUL, Ctx, HMAC);
 
   if ( KM_SUCCESS(result) )
-    {  
+    {
       IndexTableSegment::IndexEntry Entry;
       Entry.StreamOffset = this_stream_offset;
       m_IndexWriter.PushIndexEntry(Entry);
@@ -233,7 +233,7 @@ AS_02::MXF::AS02IndexWriterCBR::WriteToFile(Kumu::FileWriter& Writer)
   assert(m_Dict);
   ASDCP::FrameBuffer index_body_buffer;
   ui32_t   index_body_size = MaxIndexSegmentSize; // segment-count * max-segment-size
-  Result_t result = index_body_buffer.Capacity(index_body_size); 
+  Result_t result = index_body_buffer.Capacity(index_body_size);
 
   m_CurrentSegment = new IndexTableSegment(m_Dict);
   assert(m_CurrentSegment);
@@ -306,7 +306,7 @@ AS_02::h__AS02WriterClip::HasOpenClip() const
 
 //
 Result_t
-AS_02::h__AS02WriterClip::StartClip(const byte_t* EssenceUL, AESEncContext* Ctx, HMACContext* HMAC)
+AS_02::h__AS02WriterClip::StartClip(const byte_t* EssenceUL, AESEncContext* Ctx, HMACContext*)
 {
   if ( Ctx != 0 )
     {
@@ -368,7 +368,7 @@ AS_02::h__AS02WriterClip::FinalizeClip(ui32_t bytes_per_frame)
       result = m_File.Seek(current_position);
       m_ClipStart = 0;
     }
-  
+
   return result;
 }
 

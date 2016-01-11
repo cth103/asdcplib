@@ -156,7 +156,7 @@ namespace ASDCP
 	    return result;
 	  }
 
-	  void Dump(FILE* stream = 0, ui32_t depth = 0) {
+	  void Dump(FILE* stream = 0, ui32_t = 0) {
 	    char identbuf[IdentBufferLen];
 
 	    if ( stream == 0 )
@@ -250,7 +250,7 @@ namespace ASDCP
 	  }
 
 	  //
-	  void Dump(FILE* stream = 0, ui32_t depth = 0)
+	  void Dump(FILE* stream = 0, ui32_t = 0)
 	    {
 	      char identbuf[IdentBufferLen];
 

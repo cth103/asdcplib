@@ -28,7 +28,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 /*! \file    AS_02_PCM.cpp
-  \version $Id$       
+  \version $Id$
   \brief   AS-02 library, PCM essence reader and writer implementation
 */
 
@@ -117,7 +117,7 @@ AS_02::PCM::MXFReader::h__Reader::OpenRead(const std::string& filename, const AS
 		{
 		  DefaultLogSink().Error("Essence wrapper key is not WAVEssenceClip: %s\n", entry->name);
 		}
-	      
+
 	      return RESULT_AS02_FORMAT;
 	    }
 
@@ -151,7 +151,7 @@ AS_02::PCM::MXFReader::h__Reader::OpenRead(const std::string& filename, const AS
 //
 ASDCP::Result_t
 AS_02::PCM::MXFReader::h__Reader::ReadFrame(ui32_t FrameNum, ASDCP::PCM::FrameBuffer& FrameBuf,
-					    ASDCP::AESDecContext* Ctx, ASDCP::HMACContext* HMAC)
+					    ASDCP::AESDecContext*, ASDCP::HMACContext*)
 {
   if ( ! m_File.IsOpen() )
     {
@@ -332,7 +332,7 @@ public:
   ASDCP::MXF::WaveAudioDescriptor *m_WaveAudioDescriptor;
   byte_t m_EssenceUL[SMPTE_UL_LENGTH];
   ui32_t m_BytesPerSample;
-  
+
   h__Writer(const Dictionary& d) : AS_02::h__AS02WriterClip(d), m_WaveAudioDescriptor(0), m_BytesPerSample(0)
   {
     memset(m_EssenceUL, 0, SMPTE_UL_LENGTH);
@@ -597,4 +597,3 @@ AS_02::PCM::MXFWriter::Finalize()
 //
 // end AS_02_PCM.cpp
 //
-

@@ -352,7 +352,7 @@ public:
   }
 
   //
-  void get_PictureEssenceCoding(FILE* stream = 0)
+  void get_PictureEssenceCoding(FILE* = 0)
   {
     const Dictionary& Dict = DefaultCompositeDict();
     MXF::RGBAEssenceDescriptor *descriptor = 0;
@@ -462,7 +462,7 @@ public:
 
   //
   void
-  calc_Bitrate(FILE* stream = 0)
+  calc_Bitrate(FILE* = 0)
   {
     MXF::OPAtomIndexFooter& footer = m_Reader.OPAtomIndexFooter();
     ui64_t total_frame_bytes = 0, last_stream_offset = 0;
