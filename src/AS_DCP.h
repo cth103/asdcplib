@@ -1225,9 +1225,10 @@ namespace ASDCP {
 
 	  // Writes a frame of essence to the MXF file. If the optional AESEncContext
 	  // argument is present, the essence is encrypted prior to writing.
+	  // A MD5 hash of the data that we write is written to hash if it is not 0
 	  // Fails if the file is not open, is finalized, or an operating system
 	  // error occurs.
-	  Result_t WriteFrame(const FrameBuffer&, AESEncContext* = 0, HMACContext* = 0);
+	  Result_t WriteFrame(const FrameBuffer&, AESEncContext* = 0, HMACContext* = 0, std::string* hash = 0);
 
 	  Result_t FakeWriteFrame(int size);
 
@@ -1346,7 +1347,7 @@ namespace ASDCP {
 	  // RESULT_SPHASE will be returned if phase is reversed. The first frame
 	  // written must be left eye.
 	  Result_t WriteFrame(const FrameBuffer&, StereoscopicPhase_t phase,
-			      AESEncContext* = 0, HMACContext* = 0);
+			      AESEncContext* = 0, HMACContext* = 0, std::string* hash = 0);
 
 	  Result_t FakeWriteFrame(int size, StereoscopicPhase_t phase);
 

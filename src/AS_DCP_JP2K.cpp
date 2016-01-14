@@ -933,7 +933,7 @@ public:
   Result_t OpenWrite(const std::string&, EssenceType_t type, ui32_t HeaderSize, bool);
   Result_t SetSourceStream(const PictureDescriptor&, const std::string& label,
 			   ASDCP::Rational LocalEditRate = ASDCP::Rational(0,0));
-  Result_t WriteFrame(const JP2K::FrameBuffer&, bool add_index, AESEncContext*, HMACContext*);
+  Result_t WriteFrame(const JP2K::FrameBuffer&, bool add_index, AESEncContext*, HMACContext*, std::string* hash = 0);
   Result_t FakeWriteFrame(int size, bool add_index);
   Result_t Finalize();
 };
@@ -1039,7 +1039,7 @@ lh__Writer::SetSourceStream(const PictureDescriptor& PDesc, const std::string& l
 //
 ASDCP::Result_t
 lh__Writer::WriteFrame(const JP2K::FrameBuffer& FrameBuf, bool add_index,
-		       AESEncContext* Ctx, HMACContext* HMAC)
+		       AESEncContext* Ctx, HMACContext* HMAC, std::string* hash)
 {
   Result_t result = RESULT_OK;
 
@@ -1049,7 +1049,7 @@ lh__Writer::WriteFrame(const JP2K::FrameBuffer& FrameBuf, bool add_index,
   ui64_t StreamOffset = m_StreamOffset;
 
   if ( ASDCP_SUCCESS(result) )
-    result = WriteEKLVPacket(FrameBuf, m_EssenceUL, Ctx, HMAC);
+    result = WriteEKLVPacket(FrameBuf, m_EssenceUL, Ctx, HMAC, hash);
 
   if ( ASDCP_SUCCESS(result) && add_index )
     {
@@ -1198,12 +1198,12 @@ ASDCP::JP2K::MXFWriter::OpenWrite(const std::string& filename, const WriterInfo&
 // Fails if the file is not open, is finalized, or an operating system
 // error occurs.
 ASDCP::Result_t
-ASDCP::JP2K::MXFWriter::WriteFrame(const FrameBuffer& FrameBuf, AESEncContext* Ctx, HMACContext* HMAC)
+ASDCP::JP2K::MXFWriter::WriteFrame(const FrameBuffer& FrameBuf, AESEncContext* Ctx, HMACContext* HMAC, std::string* hash)
 {
   if ( m_Writer.empty() )
     return RESULT_INIT;
 
-  return m_Writer->WriteFrame(FrameBuf, true, Ctx, HMAC);
+  return m_Writer->WriteFrame(FrameBuf, true, Ctx, HMAC, hash);
 }
 
 ASDCP::Result_t
@@ -1246,7 +1246,7 @@ public:
 
   //
   Result_t WriteFrame(const FrameBuffer& FrameBuf, StereoscopicPhase_t phase,
-		      AESEncContext* Ctx, HMACContext* HMAC)
+		      AESEncContext* Ctx, HMACContext* HMAC, std::string* hash)
   {
     if ( m_NextPhase != phase )
       return RESULT_SPHASE;
@@ -1254,11 +1254,11 @@ public:
     if ( phase == SP_LEFT )
       {
 	m_NextPhase = SP_RIGHT;
-	return lh__Writer::WriteFrame(FrameBuf, true, Ctx, HMAC);
+	return lh__Writer::WriteFrame(FrameBuf, true, Ctx, HMAC, hash);
       }
 
     m_NextPhase = SP_LEFT;
-    return lh__Writer::WriteFrame(FrameBuf, false, Ctx, HMAC);
+    return lh__Writer::WriteFrame(FrameBuf, false, Ctx, HMAC, hash);
   }
 
   Result_t FakeWriteFrame(int size, StereoscopicPhase_t phase)
@@ -1409,10 +1409,10 @@ ASDCP::JP2K::MXFSWriter::WriteFrame(const SFrameBuffer& FrameBuf, AESEncContext*
   if ( m_Writer.empty() )
     return RESULT_INIT;
 
-  Result_t result = m_Writer->WriteFrame(FrameBuf.Left, SP_LEFT, Ctx, HMAC);
+  Result_t result = m_Writer->WriteFrame(FrameBuf.Left, SP_LEFT, Ctx, HMAC, 0);
 
   if ( ASDCP_SUCCESS(result) )
-    result = m_Writer->WriteFrame(FrameBuf.Right, SP_RIGHT, Ctx, HMAC);
+    result = m_Writer->WriteFrame(FrameBuf.Right, SP_RIGHT, Ctx, HMAC, 0);
 
   return result;
 }
@@ -1423,12 +1423,12 @@ ASDCP::JP2K::MXFSWriter::WriteFrame(const SFrameBuffer& FrameBuf, AESEncContext*
 // error occurs.
 ASDCP::Result_t
 ASDCP::JP2K::MXFSWriter::WriteFrame(const FrameBuffer& FrameBuf, StereoscopicPhase_t phase,
-				    AESEncContext* Ctx, HMACContext* HMAC)
+				    AESEncContext* Ctx, HMACContext* HMAC, std::string* hash)
 {
   if ( m_Writer.empty() )
     return RESULT_INIT;
 
-  return m_Writer->WriteFrame(FrameBuf, phase, Ctx, HMAC);
+  return m_Writer->WriteFrame(FrameBuf, phase, Ctx, HMAC, hash);
 }
 
 ASDCP::Result_t
