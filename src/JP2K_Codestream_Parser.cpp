@@ -90,6 +90,26 @@ public:
 
     return result;
   }
+
+  Result_t OpenReadFrame(const unsigned char * data, unsigned int size, FrameBuffer& FB)
+  {
+    if ( FB.Capacity() < size )
+      {
+        DefaultLogSink().Error("FrameBuf.Capacity: %u frame length: %u\n", FB.Capacity(), (ui32_t) size);
+        return RESULT_SMALLBUF;
+      }
+
+    memcpy (FB.Data(), data, size);
+    FB.Size(size);
+
+    byte_t start_of_data = 0; // out param
+    const Result_t result = ParseMetadataIntoDesc(FB, m_PDesc, &start_of_data);
+
+    if ( ASDCP_SUCCESS(result) )
+      FB.PlaintextOffset(start_of_data);
+
+    return result;
+  }
 };
 
 ASDCP::Result_t
@@ -142,7 +162,7 @@ ASDCP::JP2K::ParseMetadataIntoDesc(const FrameBuffer& FB, PictureDescriptor& PDe
 		DefaultLogSink().Error("Unexpected number of components: %u\n", PDesc.Csize);
 		return RESULT_RAW_FORMAT;
 	      }
-	    
+
 	    for ( i = 0; i < PDesc.Csize; i++ )
 	      SIZ_.ReadComponent(i, PDesc.ImageComponents[i]);
 	  }
@@ -156,7 +176,7 @@ ASDCP::JP2K::ParseMetadataIntoDesc(const FrameBuffer& FB, PictureDescriptor& PDe
 	      DefaultLogSink().Error("Unexpectedly large CodingStyle data: %u\n", NextMarker.m_DataSize);
 	      return RESULT_RAW_FORMAT;
 	    }
-	  
+
 	  memcpy(&PDesc.CodingStyleDefault, NextMarker.m_Data, NextMarker.m_DataSize);
 	  break;
 
@@ -168,7 +188,7 @@ ASDCP::JP2K::ParseMetadataIntoDesc(const FrameBuffer& FB, PictureDescriptor& PDe
 	      DefaultLogSink().Error("No quantization signaled. QCD size=%s.\n", NextMarker.m_DataSize);
 	      return RESULT_RAW_FORMAT;
 	    }
-	  
+
 	  if ( NextMarker.m_DataSize > MaxDefaults )
 	    {
 	      DefaultLogSink().Error("Quantization Default length exceeds maximum %d\n", NextMarker.m_DataSize);
@@ -204,6 +224,15 @@ ASDCP::JP2K::CodestreamParser::OpenReadFrame(const std::string& filename, FrameB
 {
   const_cast<ASDCP::JP2K::CodestreamParser*>(this)->m_Parser = new h__CodestreamParser;
   return m_Parser->OpenReadFrame(filename, FB);
+}
+
+// Opens the stream for reading, parses enough data to provide a complete
+// set of stream metadata for the MXFWriter below.
+ASDCP::Result_t
+ASDCP::JP2K::CodestreamParser::OpenReadFrame(const unsigned char* data, unsigned int size, FrameBuffer& FB) const
+{
+  const_cast<ASDCP::JP2K::CodestreamParser*>(this)->m_Parser = new h__CodestreamParser;
+  return m_Parser->OpenReadFrame(data, size, FB);
 }
 
 //

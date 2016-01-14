@@ -204,7 +204,7 @@ namespace ASDCP {
   enum EssenceType_t {
     ESS_UNKNOWN,              // the file is not a supported AS-DCP of AS-02 essence container
 
-    // 
+    //
     ESS_MPEG2_VES,            // the file contains an MPEG-2 video elementary stream
 
     // d-cinema essence types
@@ -1141,6 +1141,8 @@ namespace ASDCP {
 	  // byte of the data segment. Set this value to zero if you want
 	  // encrypted headers.
 	  Result_t OpenReadFrame(const std::string& filename, FrameBuffer&) const;
+
+	  Result_t OpenReadFrame(const unsigned char * data, unsigned int size, FrameBuffer&) const;
 
 	  // Fill a PictureDescriptor struct with the values from the file's codestream.
 	  // Returns RESULT_INIT if the file is not open.
