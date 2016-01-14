@@ -162,7 +162,7 @@ ASDCP::JP2K::PictureDescriptorDump(const PictureDescriptor& PDesc, FILE* stream)
 	      PDesc.ImageComponents[i].YRsize
 	      );
     }
-  
+
   fprintf(stream, "               Scod: %hhu\n", PDesc.CodingStyleDefault.Scod);
   fprintf(stream, "   ProgressionOrder: %hhu\n", PDesc.CodingStyleDefault.SGcod.ProgressionOrder);
   fprintf(stream, "     NumberOfLayers: %hd\n",
@@ -232,7 +232,9 @@ ASDCP::JP2K_PDesc_to_MD(const JP2K::PictureDescriptor& PDesc,
   const ui32_t tmp_buffer_len = 1024;
   byte_t tmp_buffer[tmp_buffer_len];
 
-  *(ui32_t*)tmp_buffer = KM_i32_BE(MaxComponents); // three components
+  ui32_t* tmp_buffer_ui32 = (ui32_t*) tmp_buffer;
+
+  *tmp_buffer_ui32 = KM_i32_BE(MaxComponents); // three components
   *(ui32_t*)(tmp_buffer+4) = KM_i32_BE(sizeof(ASDCP::JP2K::ImageComponent_t));
   memcpy(tmp_buffer + 8, &PDesc.ImageComponents, sizeof(ASDCP::JP2K::ImageComponent_t) * MaxComponents);
 
@@ -310,7 +312,7 @@ ASDCP::MD_to_JP2K_PDesc(const ASDCP::MXF::GenericPictureEssenceDescriptor&  Esse
   memcpy(&PDesc.QuantizationDefault,
 	 EssenceSubDescriptor.QuantizationDefault.const_get().RoData(),
 	 EssenceSubDescriptor.QuantizationDefault.const_get().Length());
-  
+
   PDesc.QuantizationDefault.SPqcdLength = EssenceSubDescriptor.QuantizationDefault.const_get().Length() - 1;
   return RESULT_OK;
 }
@@ -391,7 +393,7 @@ lh__Reader::OpenRead(const std::string& filename, EssenceType_t type)
 	    {
 	      DefaultLogSink().Warn("EditRate and SampleRate do not match (%.03f, %.03f).\n",
 				    m_EditRate.Quotient(), m_SampleRate.Quotient());
-	      
+
 	      if ( ( m_EditRate == EditRate_24 && m_SampleRate == EditRate_48 )
 		   || ( m_EditRate == EditRate_25 && m_SampleRate == EditRate_50 )
 		   || ( m_EditRate == EditRate_30 && m_SampleRate == EditRate_60 )
@@ -512,7 +514,7 @@ ASDCP::JP2K::FrameBuffer::Dump(FILE* stream, ui32_t dump_len) const
     stream = stderr;
 
   fprintf(stream, "Frame: %06u, %7u bytes", m_FrameNumber, m_Size);
-  
+
   fputc('\n', stream);
 
   if ( dump_len > 0 )
@@ -692,7 +694,7 @@ public:
     Result_t result = RESULT_OK;
 
     if ( phase == SP_LEFT )
-      {    
+      {
 	if ( FilePosition != m_LastPosition )
 	  {
 	    m_LastPosition = FilePosition;
@@ -1033,14 +1035,14 @@ lh__Writer::WriteFrame(const JP2K::FrameBuffer& FrameBuf, bool add_index,
 
   if ( m_State.Test_READY() )
     result = m_State.Goto_RUNNING(); // first time through
- 
+
   ui64_t StreamOffset = m_StreamOffset;
 
   if ( ASDCP_SUCCESS(result) )
     result = WriteEKLVPacket(FrameBuf, m_EssenceUL, Ctx, HMAC);
 
   if ( ASDCP_SUCCESS(result) && add_index )
-    {  
+    {
       IndexTableSegment::IndexEntry Entry;
       Entry.StreamOffset = StreamOffset;
       m_FooterPart.PushIndexEntry(Entry);
