@@ -34,6 +34,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <KM_util.h>
 #include <string>
+#include <boost/filesystem.hpp>
 
 #ifdef KM_WIN32
 # include <io.h>
@@ -51,27 +52,19 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace Kumu
 {
-  //
   class DirScanner
     {
     public:
-#ifdef KM_WIN32
-      __int64               m_Handle;
-      struct _finddatai64_t m_FileInfo;
-#else
-      DIR*       m_Handle;
-#endif
-
-      DirScanner(void);
-      ~DirScanner() { Close(); }
-
+      DirScanner();
       Result_t Open(const std::string&);
-      Result_t Close();
       Result_t GetNext(char*);
+      Result_t Close();
+    private:
+      boost::filesystem::directory_iterator _iterator;
     };
 
 
-  // 
+  //
   enum DirectoryEntryType_t {
     DET_FILE,
     DET_DIR,
@@ -93,7 +86,7 @@ namespace Kumu
     KM_NO_COPY_CONSTRUCT(DirScannerEx);
 
   public:
-    
+
     DirScannerEx();
     ~DirScannerEx() { Close(); }
 
@@ -142,7 +135,7 @@ namespace Kumu
   //
   // error: 'void Kumu::compile_time_size_checker() [with bool sizecheck = false]' previously declared here
   //
-  // This is happening because the equality being tested below is false. The reason for this 
+  // This is happening because the equality being tested below is false. The reason for this
   // will depend on your OS, but on Linux it is probably because you have not used -D_FILE_OFFSET_BITS=64
   // Adding this magic macro to your CFLAGS will get you going again. If you are on a system that
   // does not support 64-bit files, you can disable this check by using -DKM_SMALL_FILES_OK. You
