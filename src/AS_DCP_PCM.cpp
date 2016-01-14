@@ -25,7 +25,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /*! \file    AS_DCP_PCM.cpp
-    \version $Id$       
+    \version $Id$
     \brief   AS-DCP library, PCM essence reader and writer implementation
 */
 
@@ -285,6 +285,8 @@ ASDCP::PCM::MXFReader::h__Reader::OpenRead(const std::string& filename)
       return RESULT_FORMAT;
     }
 
+#if 0
+  /* This check has been removed so that DCP-o-matic can use any edit rate it wants */
   // check for sample/frame rate sanity
   if ( ASDCP_SUCCESS(result)
        && m_ADesc.EditRate != EditRate_24
@@ -308,7 +310,7 @@ ASDCP::PCM::MXFReader::h__Reader::OpenRead(const std::string& filename)
       // oh, they gave us the audio sampling rate instead, assume 24/1
       if ( m_ADesc.EditRate == SampleRate_48k || m_ADesc.EditRate == SampleRate_96k )
 	{
-	  DefaultLogSink().Warn("adjusting EditRate to 24/1\n"); 
+	  DefaultLogSink().Warn("adjusting EditRate to 24/1\n");
 	  m_ADesc.EditRate = EditRate_24;
 	}
       else
@@ -318,6 +320,7 @@ ASDCP::PCM::MXFReader::h__Reader::OpenRead(const std::string& filename)
 	  return RESULT_FORMAT;
 	}
     }
+#endif
 
   // TODO: test file for sane CBR index BytesPerEditUnit
 
@@ -518,7 +521,7 @@ class ASDCP::PCM::MXFWriter::h__Writer : public ASDCP::h__ASDCPWriter
 public:
   AudioDescriptor m_ADesc;
   byte_t          m_EssenceUL[SMPTE_UL_LENGTH];
-  
+
   h__Writer(const Dictionary& d) : ASDCP::h__ASDCPWriter(d) {
     memset(m_EssenceUL, 0, SMPTE_UL_LENGTH);
   }
@@ -561,6 +564,8 @@ ASDCP::PCM::MXFWriter::h__Writer::SetSourceStream(const AudioDescriptor& ADesc)
   if ( ! m_State.Test_INIT() )
     return RESULT_STATE;
 
+#if 0
+  /* This check has been removed so that DCP-o-matic can use any edit rate it wants */
   if ( ADesc.EditRate != EditRate_24
        && ADesc.EditRate != EditRate_25
        && ADesc.EditRate != EditRate_30
@@ -580,6 +585,7 @@ ASDCP::PCM::MXFWriter::h__Writer::SetSourceStream(const AudioDescriptor& ADesc)
 			     ADesc.EditRate.Numerator, ADesc.EditRate.Denominator);
       return RESULT_RAW_FORMAT;
     }
+#endif
 
   if ( ADesc.AudioSamplingRate != SampleRate_48k && ADesc.AudioSamplingRate != SampleRate_96k )
     {
@@ -592,7 +598,7 @@ ASDCP::PCM::MXFWriter::h__Writer::SetSourceStream(const AudioDescriptor& ADesc)
   m_ADesc = ADesc;
 
   Result_t result = PCM_ADesc_to_MD(m_ADesc, (WaveAudioDescriptor*)m_EssenceDescriptor);
-  
+
   if ( ASDCP_SUCCESS(result) )
     {
       memcpy(m_EssenceUL, m_Dict->ul(MDD_WAVEssence), SMPTE_UL_LENGTH);
@@ -716,7 +722,7 @@ ASDCP::PCM::MXFWriter::OpenWrite(const std::string& filename, const WriterInfo& 
     m_Writer = new h__Writer(DefaultInteropDict());
 
   m_Writer->m_Info = Info;
-  
+
   Result_t result = m_Writer->OpenWrite(filename, HeaderSize);
 
   if ( ASDCP_SUCCESS(result) )
@@ -754,4 +760,3 @@ ASDCP::PCM::MXFWriter::Finalize()
 //
 // end AS_DCP_PCM.cpp
 //
-
