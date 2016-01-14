@@ -43,6 +43,7 @@ static std::string TIMED_TEXT_DEF_LABEL = "Timed Text Track";
 
 //------------------------------------------------------------------------------------------
 
+static
 const char*
 MIME2str(TimedText::MIMEType_t m)
 {
