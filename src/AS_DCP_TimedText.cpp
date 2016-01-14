@@ -25,7 +25,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /*! \file    AS_DCP_TimedText.cpp
-    \version $Id$       
+    \version $Id$
     \brief   AS-DCP library, PCM essence reader and writer implementation
 */
 
@@ -99,7 +99,7 @@ ASDCP::TimedText::DescriptorDump(ASDCP::TimedText::TimedTextDescriptor const& TD
     {
       TmpID.Set((*ri).ResourceID);
       fprintf(stream, "    %s: %s\n",
-	      TmpID.EncodeHex(buf, 64), 
+	      TmpID.EncodeHex(buf, 64),
 	      MIME2str((*ri).Type));
     }
 }
@@ -131,7 +131,7 @@ class ASDCP::TimedText::MXFReader::h__Reader : public ASDCP::h__ASDCPReader
   ASDCP_NO_COPY_CONSTRUCT(h__Reader);
 
 public:
-  TimedTextDescriptor m_TDesc;    
+  TimedTextDescriptor m_TDesc;
 
   h__Reader(const Dictionary& d) : ASDCP::h__ASDCPReader(d), m_EssenceDescriptor(0) {
     memset(&m_TDesc.AssetID, 0, UUIDlen);
@@ -204,7 +204,7 @@ ASDCP::Result_t
 ASDCP::TimedText::MXFReader::h__Reader::OpenRead(const std::string& filename)
 {
   Result_t result = OpenMXFRead(filename);
-  
+
   if( ASDCP_SUCCESS(result) )
     {
       if ( m_EssenceDescriptor == 0 )
@@ -599,7 +599,7 @@ ASDCP::TimedText::MXFWriter::h__Writer::SetSourceStream(ASDCP::TimedText::TimedT
       AddEssenceDescriptor(UL(m_Dict->ul(MDD_TimedTextWrappingClip)));
 
       result = m_HeaderPart.WriteToFile(m_File, m_HeaderSize);
-      
+
       if ( KM_SUCCESS(result) )
 	result = CreateBodyPart(m_TDesc.EditRate);
     }
@@ -627,13 +627,13 @@ ASDCP::TimedText::MXFWriter::h__Writer::WriteTimedTextResource(const std::string
 
       ui32_t str_size = XMLDoc.size();
       FrameBuffer FrameBuf(str_size);
-      
+
       memcpy(FrameBuf.Data(), XMLDoc.c_str(), str_size);
       FrameBuf.Size(str_size);
 
       IndexTableSegment::IndexEntry Entry;
       Entry.StreamOffset = m_StreamOffset;
-      
+
       if ( ASDCP_SUCCESS(result) )
 	result = WriteEKLVPacket(FrameBuf, m_EssenceUL, Ctx, HMAC);
 
@@ -763,7 +763,7 @@ ASDCP::TimedText::MXFWriter::OpenWrite(const std::string& filename, const Writer
 
   m_Writer = new h__Writer(DefaultSMPTEDict());
   m_Writer->m_Info = Info;
-  
+
   Result_t result = m_Writer->OpenWrite(filename, HeaderSize);
 
   if ( ASDCP_SUCCESS(result) )

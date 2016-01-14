@@ -45,6 +45,7 @@ namespace Kumu
       ~FortunaRNG();
       const byte_t* FillRandom(byte_t* buf, ui32_t len);
       const byte_t* FillRandom(ByteString&);
+      void Reset();
     };
 
 

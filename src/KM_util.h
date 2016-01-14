@@ -40,6 +40,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace Kumu
 {
+  extern bool cth_test;
+
   // The version number declaration and explanation are in ../configure.ac
   const char* Version();
 
@@ -53,7 +55,7 @@ namespace Kumu
     protected:
     const char* m_format;
     char m_strbuf[SIZE];
-    
+
     public:
     IntPrinter(const char* format, T value) {
       assert(format);
@@ -299,7 +301,7 @@ namespace Kumu
 	    if ( m_Value[i] != rhs.m_Value[i] )
 	      return m_Value[i] < rhs.m_Value[i];
 	  }
-	
+
 	return false;
       }
 
@@ -375,10 +377,11 @@ namespace Kumu
 	return bin2UUIDhex(m_Value, Size(), buf, buf_len);
       }
     };
-  
+
   void GenRandomUUID(byte_t* buf); // buf must be UUID_Length or longer
   void GenRandomValue(UUID&);
-  
+  void ResetTestRNG();
+
   typedef ArchivableList<UUID> UUIDList;
 
   // a self-wiping key container
@@ -427,7 +430,7 @@ namespace Kumu
 
       // always UTC
       void GetComponents(ui16_t& Year, ui8_t&  Month, ui8_t&  Day,
-			 ui8_t&  Hour, ui8_t&  Minute, ui8_t&  Second) const;      
+			 ui8_t&  Hour, ui8_t&  Minute, ui8_t&  Second) const;
       void SetComponents(const ui16_t& Year, const ui8_t&  Month, const ui8_t&  Day,
 			 const ui8_t&  Hour, const ui8_t&  Minute, const ui8_t&  Second);
 
@@ -470,12 +473,12 @@ namespace Kumu
   class ByteString : public IArchive
     {
       KM_NO_COPY_CONSTRUCT(ByteString);
-	
+
     protected:
       byte_t* m_Data;          // pointer to memory area containing frame data
       ui32_t  m_Capacity;      // size of memory area pointed to by m_Data
       ui32_t  m_Length;        // length of byte string in memory area pointed to by m_Data
-	
+
     public:
       ByteString();
       ByteString(ui32_t cap);
@@ -486,19 +489,19 @@ namespace Kumu
 
       Result_t Append(const ByteString&);
       Result_t Append(const byte_t* buf, ui32_t buf_len);
-	
+
       // returns the size of the buffer
       inline ui32_t  Capacity() const { return m_Capacity; }
 
       // returns a const pointer to the essence data
       inline const byte_t* RoData() const { assert(m_Data); return m_Data; }
-	
+
       // returns a non-const pointer to the essence data
       inline byte_t* Data() { assert(m_Data); return m_Data; }
-	
+
       // set the length of the buffer's contents
       inline ui32_t  Length(ui32_t l) { return m_Length = l; }
-	
+
       // returns the length of the buffer's contents
       inline ui32_t  Length() const { return m_Length; }
 

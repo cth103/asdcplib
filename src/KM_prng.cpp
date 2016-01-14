@@ -64,6 +64,7 @@ public:
   AES_KEY   m_Context;
   byte_t    m_ctr_buf[RNG_BLOCK_SIZE];
   Mutex     m_Lock;
+  unsigned int m_cth_test_rng_state;
 
   h__RNG()
   {
@@ -97,8 +98,9 @@ public:
     } // end AutoMutex context
 
     set_key(rng_key);
+    reset();
   }
-	
+
   //
   void
   set_key(const byte_t* key_fodder)
@@ -116,7 +118,7 @@ public:
     AES_set_encrypt_key(sha_buf, RNG_KEY_SIZE_BITS, &m_Context);
     *(ui32_t*)(m_ctr_buf + 12) = 1;
   }
-	
+
   //
   void
   fill_rand(byte_t* buf, ui32_t len)
@@ -131,14 +133,27 @@ public:
 	*(ui32_t*)(m_ctr_buf + 12) += 1;
 	gen_count += RNG_BLOCK_SIZE;
       }
-			
+
     if ( len != gen_count ) // partial count needed?
       {
 	byte_t tmp[RNG_BLOCK_SIZE];
 	AES_encrypt(m_ctr_buf, tmp, &m_Context);
 	memcpy(buf + gen_count, tmp, len - gen_count);
       }
+
+    if (cth_test)
+      {
+#ifdef __unix__
+	for (unsigned int i = 0; i < len; ++i)
+	  buf[i] = rand_r(&m_cth_test_rng_state);
+#endif
+      }
   }
+
+  void reset()
+    {
+      m_cth_test_rng_state = 1;
+    }
 };
 
 
@@ -173,13 +188,13 @@ Kumu::FortunaRNG::FillRandom(byte_t* buf, ui32_t len)
       s_RNG->fill_rand(buf, gen_size);
       buf += gen_size;
       len -= gen_size;
-	  
+
       // re-seed the generator
       byte_t rng_key[RNG_KEY_SIZE];
       s_RNG->fill_rand(rng_key, RNG_KEY_SIZE);
       s_RNG->set_key(rng_key);
   }
-  
+
   return front_of_buffer;
 }
 
@@ -190,6 +205,12 @@ Kumu::FortunaRNG::FillRandom(Kumu::ByteString& Buffer)
   FillRandom(Buffer.Data(), Buffer.Capacity());
   Buffer.Length(Buffer.Capacity());
   return Buffer.Data();
+}
+
+void
+Kumu::FortunaRNG::Reset()
+{
+  s_RNG->reset();
 }
 
 //------------------------------------------------------------------------------------------
