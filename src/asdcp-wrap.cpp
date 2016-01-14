@@ -1685,7 +1685,7 @@ main(int argc, const char** argv)
 	      result = write_PCM_file(Options);
 	    }
 	  break;
-	  
+
 	case ESS_TIMED_TEXT:
 	  result = write_timed_text_file(Options);
 	  break;

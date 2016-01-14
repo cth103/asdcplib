@@ -1217,11 +1217,11 @@ namespace ASDCP {
 	  virtual MXF::OPAtomIndexFooter& OPAtomIndexFooter();
 	  virtual MXF::RIP& RIP();
 
-	  // Open the file for writing. The file must not exist. Returns error if
+	  // Open the file for writing. The file must not exist unless overwrite is true. Returns error if
 	  // the operation cannot be completed or if nonsensical data is discovered
 	  // in the essence descriptor.
 	  Result_t OpenWrite(const std::string& filename, const WriterInfo&,
-			     const PictureDescriptor&, ui32_t HeaderSize = 16384);
+			     const PictureDescriptor&, ui32_t HeaderSize = 16384, bool overwrite = false);
 
 	  // Writes a frame of essence to the MXF file. If the optional AESEncContext
 	  // argument is present, the essence is encrypted prior to writing.
@@ -1229,8 +1229,13 @@ namespace ASDCP {
 	  // error occurs.
 	  Result_t WriteFrame(const FrameBuffer&, AESEncContext* = 0, HMACContext* = 0);
 
+	  Result_t FakeWriteFrame(int size);
+
 	  // Closes the MXF file, writing the index and revised header.
 	  Result_t Finalize();
+
+	  // Return the current file offset in the MXF file that we are writing
+	  ui64_t Tell() const;
 	};
 
       //
@@ -1322,11 +1327,11 @@ namespace ASDCP {
 	  virtual MXF::OPAtomIndexFooter& OPAtomIndexFooter();
 	  virtual MXF::RIP& RIP();
 
-	  // Open the file for writing. The file must not exist. Returns error if
+	  // Open the file for writing. The file must not exist unless overwrite is true. Returns error if
 	  // the operation cannot be completed or if nonsensical data is discovered
 	  // in the essence descriptor.
 	  Result_t OpenWrite(const std::string& filename, const WriterInfo&,
-			     const PictureDescriptor&, ui32_t HeaderSize = 16384);
+			     const PictureDescriptor&, ui32_t HeaderSize = 16384, bool overwrite = false);
 
 	  // Writes a pair of frames of essence to the MXF file. If the optional AESEncContext
 	  // argument is present, the essence is encrypted prior to writing.
@@ -1343,9 +1348,14 @@ namespace ASDCP {
 	  Result_t WriteFrame(const FrameBuffer&, StereoscopicPhase_t phase,
 			      AESEncContext* = 0, HMACContext* = 0);
 
+	  Result_t FakeWriteFrame(int size, StereoscopicPhase_t phase);
+
 	  // Closes the MXF file, writing the index and revised header.  Returns
 	  // RESULT_SPHASE if WriteFrame was called an odd number of times.
 	  Result_t Finalize();
+
+	  // Return the current file offset in the MXF file that we are writing
+	  ui64_t Tell() const;
 	};
 
       //

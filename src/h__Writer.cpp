@@ -107,7 +107,7 @@ ASDCP::h__ASDCPWriter::CreateBodyPart(const MXF::Rational& EditRate, ui32_t Byte
       UL OPAtomUL(m_Dict->ul(MDD_OPAtom));
       m_BodyPart.OperationalPattern = OPAtomUL;
       m_RIP.PairArray.push_back(RIP::PartitionPair(1, m_BodyPart.ThisPartition)); // Second RIP Entry
-      
+
       UL BodyUL(m_Dict->ul(MDD_ClosedCompleteBodyPartition));
       result = m_BodyPart.WriteToFile(m_File, BodyUL);
     }
@@ -172,6 +172,15 @@ ASDCP::h__ASDCPWriter::WriteEKLVPacket(const ASDCP::FrameBuffer& FrameBuf,const 
 {
   return Write_EKLV_Packet(m_File, *m_Dict, m_HeaderPart, m_Info, m_CtFrameBuf, m_FramesWritten,
 			   m_StreamOffset, FrameBuf, EssenceUL, Ctx, HMAC);
+}
+
+Result_t
+ASDCP::h__ASDCPWriter::FakeWriteEKLVPacket(int size)
+{
+  m_StreamOffset += size;
+  m_File.Seek(size, Kumu::SP_POS);
+
+  return RESULT_OK;
 }
 
 // standard method of writing the header and footer of a completed MXF file
@@ -354,7 +363,7 @@ ASDCP::Write_EKLV_Packet(Kumu::FileWriter& File, const ASDCP::Dictionary& Dict, 
 
       if ( ASDCP_SUCCESS(result) )
 	result = File.Writev(Overhead.Data(), Overhead.Length());
- 
+
       if ( ASDCP_SUCCESS(result) )
 	result = File.Writev((byte_t*)FrameBuf.RoData(), FrameBuf.Size());
 

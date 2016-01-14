@@ -861,6 +861,7 @@ namespace ASDCP
       Result_t CreateBodyPart(const MXF::Rational& EditRate, ui32_t BytesPerEditUnit = 0);
       Result_t WriteEKLVPacket(const ASDCP::FrameBuffer& FrameBuf,const byte_t* EssenceUL,
 			       AESEncContext* Ctx, HMACContext* HMAC);
+      Result_t FakeWriteEKLVPacket(int size);
       Result_t WriteASDCPFooter();
     };
 

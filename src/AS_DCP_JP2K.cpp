@@ -930,22 +930,32 @@ public:
 
   virtual ~lh__Writer(){}
 
-  Result_t OpenWrite(const std::string&, EssenceType_t type, ui32_t HeaderSize);
+  Result_t OpenWrite(const std::string&, EssenceType_t type, ui32_t HeaderSize, bool);
   Result_t SetSourceStream(const PictureDescriptor&, const std::string& label,
 			   ASDCP::Rational LocalEditRate = ASDCP::Rational(0,0));
   Result_t WriteFrame(const JP2K::FrameBuffer&, bool add_index, AESEncContext*, HMACContext*);
+  Result_t FakeWriteFrame(int size, bool add_index);
   Result_t Finalize();
 };
 
-// Open the file for writing. The file must not exist. Returns error if
+// Open the file for writing. The file must not exist unless overwrite is true. Returns error if
 // the operation cannot be completed.
 ASDCP::Result_t
-lh__Writer::OpenWrite(const std::string& filename, EssenceType_t type, ui32_t HeaderSize)
+lh__Writer::OpenWrite(const std::string& filename, EssenceType_t type, ui32_t HeaderSize, bool overwrite)
 {
   if ( ! m_State.Test_BEGIN() )
     return RESULT_STATE;
 
-  Result_t result = m_File.OpenWrite(filename);
+  Result_t result = RESULT_OK;
+  if (overwrite)
+    {
+      result = m_File.OpenModify(filename);
+      m_File.Seek(0);
+    }
+  else
+    {
+      result = m_File.OpenWrite(filename);
+    }
 
   if ( ASDCP_SUCCESS(result) )
     {
@@ -1052,6 +1062,29 @@ lh__Writer::WriteFrame(const JP2K::FrameBuffer& FrameBuf, bool add_index,
   return result;
 }
 
+Result_t
+lh__Writer::FakeWriteFrame(int size, bool add_index)
+{
+  Result_t result = RESULT_OK;
+
+  if ( m_State.Test_READY() )
+    result = m_State.Goto_RUNNING();
+
+  ui64_t StreamOffset = m_StreamOffset;
+
+  if ( ASDCP_SUCCESS(result) )
+    result = FakeWriteEKLVPacket(size);
+
+  if ( ASDCP_SUCCESS(result) && add_index )
+    {
+      IndexTableSegment::IndexEntry Entry;
+      Entry.StreamOffset = StreamOffset;
+      m_FooterPart.PushIndexEntry(Entry);
+    }
+
+  m_FramesWritten++;
+  return result;
+}
 
 // Closes the MXF file, writing the index and other closing information.
 //
@@ -1135,11 +1168,11 @@ ASDCP::JP2K::MXFWriter::RIP()
   return m_Writer->m_RIP;
 }
 
-// Open the file for writing. The file must not exist. Returns error if
+// Open the file for writing. The file must not exist unless overwrite is true. Returns error if
 // the operation cannot be completed.
 ASDCP::Result_t
 ASDCP::JP2K::MXFWriter::OpenWrite(const std::string& filename, const WriterInfo& Info,
-				  const PictureDescriptor& PDesc, ui32_t HeaderSize)
+				  const PictureDescriptor& PDesc, ui32_t HeaderSize, bool overwrite)
 {
   if ( Info.LabelSetType == LS_MXF_SMPTE )
     m_Writer = new h__Writer(DefaultSMPTEDict());
@@ -1148,7 +1181,7 @@ ASDCP::JP2K::MXFWriter::OpenWrite(const std::string& filename, const WriterInfo&
 
   m_Writer->m_Info = Info;
 
-  Result_t result = m_Writer->OpenWrite(filename, ASDCP::ESS_JPEG_2000, HeaderSize);
+  Result_t result = m_Writer->OpenWrite(filename, ASDCP::ESS_JPEG_2000, HeaderSize, overwrite);
 
   if ( ASDCP_SUCCESS(result) )
     result = m_Writer->SetSourceStream(PDesc, JP2K_PACKAGE_LABEL);
@@ -1173,6 +1206,15 @@ ASDCP::JP2K::MXFWriter::WriteFrame(const FrameBuffer& FrameBuf, AESEncContext* C
   return m_Writer->WriteFrame(FrameBuf, true, Ctx, HMAC);
 }
 
+ASDCP::Result_t
+ASDCP::JP2K::MXFWriter::FakeWriteFrame(int size)
+{
+  if ( m_Writer.empty() )
+    return RESULT_INIT;
+
+  return m_Writer->FakeWriteFrame(size, true);
+}
+
 // Closes the MXF file, writing the index and other closing information.
 ASDCP::Result_t
 ASDCP::JP2K::MXFWriter::Finalize()
@@ -1183,6 +1225,11 @@ ASDCP::JP2K::MXFWriter::Finalize()
   return m_Writer->Finalize();
 }
 
+ui64_t
+ASDCP::JP2K::MXFWriter::Tell() const
+{
+  return m_Writer->m_File.Tell();
+}
 
 //------------------------------------------------------------------------------------------
 //
@@ -1212,6 +1259,21 @@ public:
 
     m_NextPhase = SP_LEFT;
     return lh__Writer::WriteFrame(FrameBuf, false, Ctx, HMAC);
+  }
+
+  Result_t FakeWriteFrame(int size, StereoscopicPhase_t phase)
+  {
+    if ( m_NextPhase != phase )
+      return RESULT_SPHASE;
+
+    if ( phase == SP_LEFT )
+      {
+	m_NextPhase = SP_RIGHT;
+	return lh__Writer::FakeWriteFrame(size, true);
+      }
+
+    m_NextPhase = SP_LEFT;
+    return lh__Writer::FakeWriteFrame(size, true);
   }
 
   //
@@ -1285,7 +1347,7 @@ ASDCP::JP2K::MXFSWriter::RIP()
 // the operation cannot be completed.
 ASDCP::Result_t
 ASDCP::JP2K::MXFSWriter::OpenWrite(const std::string& filename, const WriterInfo& Info,
-				   const PictureDescriptor& PDesc, ui32_t HeaderSize)
+				   const PictureDescriptor& PDesc, ui32_t HeaderSize, bool overwrite)
 {
   if ( Info.LabelSetType == LS_MXF_SMPTE )
     m_Writer = new h__SWriter(DefaultSMPTEDict());
@@ -1308,7 +1370,7 @@ ASDCP::JP2K::MXFSWriter::OpenWrite(const std::string& filename, const WriterInfo
 
   m_Writer->m_Info = Info;
 
-  Result_t result = m_Writer->OpenWrite(filename, ASDCP::ESS_JPEG_2000_S, HeaderSize);
+  Result_t result = m_Writer->OpenWrite(filename, ASDCP::ESS_JPEG_2000_S, HeaderSize, overwrite);
 
   if ( ASDCP_SUCCESS(result) )
     {
@@ -1369,6 +1431,15 @@ ASDCP::JP2K::MXFSWriter::WriteFrame(const FrameBuffer& FrameBuf, StereoscopicPha
   return m_Writer->WriteFrame(FrameBuf, phase, Ctx, HMAC);
 }
 
+ASDCP::Result_t
+ASDCP::JP2K::MXFSWriter::FakeWriteFrame(int size, StereoscopicPhase_t phase)
+{
+  if ( m_Writer.empty() )
+    return RESULT_INIT;
+
+  return m_Writer->FakeWriteFrame(size, phase);
+}
+
 // Closes the MXF file, writing the index and other closing information.
 ASDCP::Result_t
 ASDCP::JP2K::MXFSWriter::Finalize()
@@ -1377,6 +1448,12 @@ ASDCP::JP2K::MXFSWriter::Finalize()
     return RESULT_INIT;
 
   return m_Writer->Finalize();
+}
+
+ui64_t
+ASDCP::JP2K::MXFSWriter::Tell() const
+{
+  return m_Writer->m_File.Tell();
 }
 
 //
