@@ -4,12 +4,13 @@ import sys
 import distutils.spawn
 from waflib import Logs
 
-APPNAME = 'asdcplib-cth'
+APPNAME = 'libasdcp-cth'
 VERSION = '2.5.11-cth1'
 
 def options(opt):
     opt.load('compiler_cxx')
     opt.add_option('--target-windows', action='store_true', default=False, help='set up to do a cross-compile to Windows')
+    opt.add_option('--enable-debug', action='store_true', default=False, help='build with debugging information and without optimisation')
     opt.add_option('--static', action='store_true', default=False, help='build statically')
 
 def configure(conf):
@@ -31,7 +32,10 @@ def configure(conf):
     else:
         boost_lib_suffix = ''
 
-    conf.env.append_value('CXXFLAGS', '-O2')
+    if conf.options.enable_debug:
+        conf.env.append_value('CXXFLAGS', '-g')
+    else:
+        conf.env.append_value('CXXFLAGS', '-O2')
 
     conf.check_cxx(fragment="""
                             #include <boost/version.hpp>\n
@@ -62,10 +66,10 @@ def build(bld):
     else:
         boost_lib_suffix = ''
 
-    bld(source='asdcplib-cth.pc.in',
+    bld(source='libasdcp-cth.pc.in',
         version=VERSION,
-        includedir='%s/include/asdcplib-cth' % bld.env.PREFIX,
-        libs="-L${libdir} -lasdcplib-cth -lkumu-cth -lboost_system%s" % boost_lib_suffix,
+        includedir='%s/include/libasdcp-cth' % bld.env.PREFIX,
+        libs="-L${libdir} -lasdcp-cth -lkumu-cth -lboost_system%s" % boost_lib_suffix,
         install_path='${LIBDIR}/pkgconfig')
 
     bld.recurse('src')

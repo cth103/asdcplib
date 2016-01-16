@@ -2,7 +2,7 @@ prefix=@prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: asdcplib-cth
+Name: libasdcp-cth
 Description: asdcplib with patches by cth@carlh.net
 Version: @version@
 Requires: openssl

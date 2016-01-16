@@ -112,7 +112,7 @@ def build(bld):
                  CRC16.h
                  """
 
-    bld.install_files('${PREFIX}/include/asdcplib-cth', headers)
+    bld.install_files('${PREFIX}/include/libasdcp-cth', headers)
     if bld.env.STATIC:
         bld.install_files('${PREFIX}/lib', 'libkumu-cth.a')
         bld.install_files('${PREFIX}/lib', 'libasdcp-cth.a')
