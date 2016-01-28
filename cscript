@@ -1,8 +1,8 @@
 
 def build(target, options):
-    cmd = './configure --prefix=%s ' % target.directory
+    cmd = './waf configure --prefix=%s ' % target.directory
     target.append_with_space('LIBS', '-lboost_system')
     target.append_with_space('LIBS', '-lboost_filesystem')
     target.command(cmd)
-    target.command('make -j8 V=1')
-    target.command('make install')
+    target.command('./waf')
+    target.command('./waf install')

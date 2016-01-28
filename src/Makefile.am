@@ -72,7 +72,7 @@ include_HEADERS += \
 	PCMDataProviders.h \
 	SyncCommon.h \
 	SyncEncoder.h \
-	UUIDInformation.h 
+	UUIDInformation.h
 
 
 endif
@@ -87,7 +87,7 @@ endif
 
 # list of the libraries to build and install
 
-lib_LTLIBRARIES = libkumu.la libasdcp.la
+lib_LTLIBRARIES = libkumu-cth.la libasdcp-cth.la
 
 if USE_AS_02
 lib_LTLIBRARIES		+= libas02.la
@@ -98,19 +98,19 @@ lib_LTLIBRARIES		+= libphdr.la
 endif
 
 # sources for kumu library
-libkumu_la_SOURCES = KM_error.h KM_fileio.cpp KM_fileio.h KM_log.cpp KM_log.h \
+libkumu_cth_la_SOURCES = KM_error.h KM_fileio.cpp KM_fileio.h KM_log.cpp KM_log.h \
 		KM_memio.h KM_mutex.h KM_platform.h KM_prng.cpp KM_prng.h KM_util.cpp \
 		KM_util.h KM_xml.cpp KM_xml.h KM_tai.h KM_tai.cpp
 
 # linker flags (*not* including libraries to link against) for a library
-libkumu_la_LDFLAGS = -release @VERSION@
+libkumu_cth_la_LDFLAGS = -release @VERSION@
 
 
 # sources for asdcp library that don't get added to a distribution
-nodist_libasdcp_la_SOURCES = Metadata_h.tt2 Metadata_cpp.tt2 \
+nodist_libasdcp_cth_la_SOURCES = Metadata_h.tt2 Metadata_cpp.tt2 \
 		mxfgen.pl MXF_def.pl ullist.pl ULList.xml dict.xml DMS_Crypto.xml
 # sources for asdcp library
-libasdcp_la_SOURCES = MPEG2_Parser.cpp MPEG.cpp JP2K_Codestream_Parser.cpp \
+libasdcp_cth_la_SOURCES = MPEG2_Parser.cpp MPEG.cpp JP2K_Codestream_Parser.cpp \
 	JP2K_Sequence_Parser.cpp JP2K.cpp PCM_Parser.cpp Wav.cpp \
 	TimedText_Parser.cpp KLV.cpp Dict.cpp MXFTypes.cpp MXF.cpp \
 	Index.cpp Metadata.cpp AS_DCP.cpp AS_DCP_MXF.cpp AS_DCP_AES.cpp \
@@ -129,10 +129,10 @@ libasdcp_la_SOURCES = MPEG2_Parser.cpp MPEG.cpp JP2K_Codestream_Parser.cpp \
 	ST2095_PinkNoise.cpp
 
 
-libasdcp_la_LDFLAGS = -release @VERSION@
+libasdcp_cth_la_LDFLAGS = -release @VERSION@
 # additional libraries to link against for a library
-libasdcp_la_LIBADD = libkumu.la
-libasdcp_la_CPPFLAGS = -DASDCP_PLATFORM=\"@host@\"
+libasdcp_cth_la_LIBADD = libkumu-cth.la
+libasdcp_cth_la_CPPFLAGS = -DASDCP_PLATFORM=\"@host@\"
 
 if USE_AS_02
 # sources for as-02 library
@@ -147,7 +147,7 @@ libas02_la_SOURCES	= \
 	AS_02_TimedText.cpp
 
 libas02_la_LDFLAGS = -release @VERSION@
-libas02_la_LIBADD = libasdcp.la libkumu.la
+libas02_la_LIBADD = libasdcp-cth.la libkumu-cth.la
 libas02_la_CPPFLAGS = -DASDCP_PLATFORM=\"@host@\"
 endif
 
@@ -160,7 +160,7 @@ libphdr_la_SOURCES	= \
 	AS_02_PHDR.cpp
 
 libphdr_la_LDFLAGS = -release @VERSION@
-libphdr_la_LIBADD = libasdcp.la libkumu.la
+libphdr_la_LIBADD = libasdcp-cth.la libkumu-cth.la
 libphdr_la_CPPFLAGS = -DASDCP_PLATFORM=\"@host@\"
 endif
 
@@ -185,7 +185,7 @@ nodist_libpyasdcp_la_SOURCES = \
 
 libpyasdcp_la_CPPFLAGS = @PYTHON_CPPFLAGS@
 libpyasdcp_la_LDFLAGS = @PYTHON_LSPEC@  -release @VERSION@
-libpyasdcp_la_LIBADD = libkumu.la libasdcp.la
+libpyasdcp_la_LIBADD = libkumu-cth.la libasdcp-cth.la
 
 if USE_AS_02
 libpyasdcp_la_LIBADD	+= libas02.la
@@ -238,61 +238,61 @@ endif
 
 # sources and linkage for CLI utilities
 asdcp_test_SOURCES = asdcp-test.cpp
-asdcp_test_LDADD = libasdcp.la libkumu.la
+asdcp_test_LDADD = libasdcp-cth.la libkumu-cth.la
 
 asdcp_wrap_SOURCES = asdcp-wrap.cpp
-asdcp_wrap_LDADD = libasdcp.la libkumu.la
+asdcp_wrap_LDADD = libasdcp-cth.la libkumu-cth.la
 
 asdcp_unwrap_SOURCES = asdcp-unwrap.cpp
-asdcp_unwrap_LDADD = libasdcp.la libkumu.la
+asdcp_unwrap_LDADD = libasdcp-cth.la libkumu-cth.la
 
 asdcp_util_SOURCES = asdcp-util.cpp
-asdcp_util_LDADD = libasdcp.la libkumu.la
+asdcp_util_LDADD = libasdcp-cth.la libkumu-cth.la
 
 asdcp_info_SOURCES = asdcp-info.cpp
-asdcp_info_LDADD = libasdcp.la libkumu.la
+asdcp_info_LDADD = libasdcp-cth.la libkumu-cth.la
 
 kmfilegen_SOURCES = kmfilegen.cpp
-kmfilegen_LDADD = libkumu.la 
+kmfilegen_LDADD = libkumu-cth.la
 
 kmrandgen_SOURCES = kmrandgen.cpp
-kmrandgen_LDADD = libkumu.la 
+kmrandgen_LDADD = libkumu-cth.la
 
 kmuuidgen_SOURCES = kmuuidgen.cpp
-kmuuidgen_LDADD = libkumu.la 
+kmuuidgen_LDADD = libkumu-cth.la
 
 blackwave_SOURCES = blackwave.cpp
-blackwave_LDADD = libasdcp.la  libkumu.la
+blackwave_LDADD = libasdcp-cth.la  libkumu-cth.la
 
 pinkwave_SOURCES = pinkwave.cpp
-pinkwave_LDADD = libasdcp.la  libkumu.la
+pinkwave_LDADD = libasdcp-cth.la  libkumu-cth.la
 
 klvwalk_SOURCES = klvwalk.cpp
-klvwalk_LDADD = libasdcp.la libkumu.la
+klvwalk_LDADD = libasdcp-cth.la libkumu-cth.la
 
 wavesplit_SOURCES = wavesplit.cpp
-wavesplit_LDADD = libasdcp.la libkumu.la
+wavesplit_LDADD = libasdcp-cth.la libkumu-cth.la
 
 j2c_test_SOURCES = j2c-test.cpp
-j2c_test_LDADD = libasdcp.la libkumu.la
+j2c_test_LDADD = libasdcp-cth.la libkumu-cth.la
 
 klvsplit_SOURCES = klvsplit.cpp
-klvsplit_LDADD = libasdcp.la libkumu.la
+klvsplit_LDADD = libasdcp-cth.la libkumu-cth.la
 
 if USE_AS_02
 as_02_wrap_SOURCES = as-02-wrap.cpp
-as_02_wrap_LDADD = libas02.la libasdcp.la libkumu.la
+as_02_wrap_LDADD = libas02.la libasdcp-cth.la libkumu-cth.la
 
 as_02_unwrap_SOURCES = as-02-unwrap.cpp
-as_02_unwrap_LDADD = libas02.la libasdcp.la libkumu.la
+as_02_unwrap_LDADD = libas02.la libasdcp-cth.la libkumu-cth.la
 endif
 
 if USE_PHDR
 phdr_wrap_SOURCES = phdr-wrap.cpp
-phdr_wrap_LDADD = libphdr.la libas02.la libasdcp.la libkumu.la
+phdr_wrap_LDADD = libphdr.la libas02.la libasdcp-cth.la libkumu-cth.la
 
 phdr_unwrap_SOURCES = phdr-unwrap.cpp
-phdr_unwrap_LDADD = libphdr.la libas02.la libasdcp.la libkumu.la
+phdr_unwrap_LDADD = libphdr.la libas02.la libasdcp-cth.la libkumu-cth.la
 endif
 
 # list of programs that need to be compiled for use in test suite
@@ -305,20 +305,20 @@ endif
 # sources for a test program
 # list of libraries to link against for a test program
 asdcp_mem_test_SOURCES = asdcp-mem-test.cpp
-asdcp_mem_test_LDADD = libasdcp.la
+asdcp_mem_test_LDADD = libasdcp-cth.la
 
 path_test_SOURCES = path-test.cpp
-path_test_LDADD = libkumu.la
+path_test_LDADD = libkumu-cth.la
 
 fips_186_rng_test_SOURCES = fips-186-rng-test.cpp
-fips_186_rng_test_LDADD = libasdcp.la
+fips_186_rng_test_LDADD = libasdcp-cth.la
 
 asdcp_version_SOURCES = asdcp-version.cpp
-asdcp_version_LDADD = libkumu.la 
+asdcp_version_LDADD = libkumu-cth.la
 
 if DEV_HEADERS
 nodist_tt_xform_SOURCES = tt-xform.cpp TimedText_Transform.h
-tt_xform_LDADD = libasdcp.la
+tt_xform_LDADD = libasdcp-cth.la
 endif
 
 
@@ -336,7 +336,7 @@ TESTS_ENVIRONMENT = BUILD_DIR="." TEST_FILES=../tests TEST_FILE_PREFIX=DCPd1-M1 
 EXTRA_DIST = fips-186-test-harness.pl $(TESTS)
 if !FREEDIST
 if DEV_HEADERS
-EXTRA_DIST += $(nodist_libasdcp_la_SOURCES) $(nodist_tt_xform_SOURCES)
+EXTRA_DIST += $(nodist_libasdcp_cth_la_SOURCES) $(nodist_tt_xform_SOURCES)
 endif
 if PYTHON_USE
 EXTRA_DIST += $(nodist_pyexec_include_HEADERS) $(nodist_libpyasdcp_la_SOURCES) $(nodist_kumu_la_SOURCES) $(nodist_asdcp_la_SOURCES)
