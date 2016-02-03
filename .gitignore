@@ -1,7 +1,8 @@
 *.o
 *.lo
-.lock-waf_linux2_build
+.lock-waf_*
 .waf-1.6.11-*
+.waf3-*
 Makefile
 *~
 build/
