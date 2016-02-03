@@ -804,9 +804,9 @@ Kumu::FileReader::OpenRead(const std::string& filename) const
   // suppress popup window on error
   UINT prev = ::SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 
-  int const wn = MultiByteToWideChar (CP_UTF8, 0, filename, -1, 0, 0);
+  int const wn = MultiByteToWideChar (CP_UTF8, 0, filename.c_str(), -1, 0, 0);
   wchar_t* buffer = new wchar_t[wn];
-  if (MultiByteToWideChar (CP_UTF8, 0, filename, -1, buffer, wn) == 0)
+  if (MultiByteToWideChar (CP_UTF8, 0, filename.c_str(), -1, buffer, wn) == 0)
     {
       delete[] buffer;
       return Kumu::RESULT_FAIL;
@@ -937,9 +937,9 @@ Kumu::FileWriter::OpenWrite(const std::string& filename)
   // suppress popup window on error
   UINT prev = ::SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 
-  int const wn = MultiByteToWideChar (CP_UTF8, 0, filename, -1, 0, 0);
+  int const wn = MultiByteToWideChar (CP_UTF8, 0, filename.c_str(), -1, 0, 0);
   wchar_t* buffer = new wchar_t[wn];
-  if (MultiByteToWideChar (CP_UTF8, 0, filename, -1, buffer, wn) == 0)
+  if (MultiByteToWideChar (CP_UTF8, 0, filename.c_str(), -1, buffer, wn) == 0)
     {
       delete[] buffer;
       return Kumu::RESULT_FAIL;
@@ -967,17 +967,16 @@ Kumu::FileWriter::OpenWrite(const std::string& filename)
 
 /** @param filename File name (UTF-8 encoded) */
 Kumu::Result_t
-Kumu::FileWriter::OpenModify(const char* filename)
+Kumu::FileWriter::OpenModify(const std::string& filename)
 {
-  KM_TEST_NULL_STR_L(filename);
   m_Filename = filename;
 
   // suppress popup window on error
   UINT prev = ::SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 
-  int const wn = MultiByteToWideChar (CP_UTF8, 0, filename, -1, 0, 0);
+  int const wn = MultiByteToWideChar (CP_UTF8, 0, filename.c_str(), -1, 0, 0);
   wchar_t* buffer = new wchar_t[wn];
-  if (MultiByteToWideChar (CP_UTF8, 0, filename, -1, buffer, wn) == 0) {
+  if (MultiByteToWideChar (CP_UTF8, 0, filename.c_str(), -1, buffer, wn) == 0) {
     delete[] buffer;
     return Kumu::RESULT_FAIL;
   }

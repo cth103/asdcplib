@@ -34,7 +34,7 @@ def build(bld):
 
     obj.name = 'libasdcp-cth'
     obj.target = 'asdcp-cth'
-    obj.uselib = 'OPENSSL'
+    obj.uselib = 'OPENSSL BOOST_FILESYSTEM'
     obj.use = 'libkumu-cth'
     obj.includes = ['.']
     obj.export_includes = ['.']
