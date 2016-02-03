@@ -7,4 +7,4 @@ Description: asdcplib with patches by cth@carlh.net
 Version: @version@
 Requires: openssl
 Libs: @libs@
-Cflags: -I${includedir}
+Cflags: -I${includedir} @cflags@

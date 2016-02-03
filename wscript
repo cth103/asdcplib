@@ -63,16 +63,16 @@ def configure(conf):
 def build(bld):
     if bld.env.TARGET_WINDOWS:
         boost_lib_suffix = '-mt'
-        cflags = '-DKM_WIN32'
+        flags = '-DKM_WIN32'
     else:
         boost_lib_suffix = ''
-        cflags = ''
+        flags = ''
 
     bld(source='libasdcp-cth.pc.in',
         version=VERSION,
         includedir='%s/include/libasdcp-cth' % bld.env.PREFIX,
         libs="-L${libdir} -lasdcp-cth -lkumu-cth -lboost_system%s" % boost_lib_suffix,
-        cflags=cflags,
+        cflags=flags,
         install_path='${LIBDIR}/pkgconfig')
 
     bld.recurse('src')
