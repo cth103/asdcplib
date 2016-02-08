@@ -1273,7 +1273,7 @@ public:
       }
 
     m_NextPhase = SP_LEFT;
-    return lh__Writer::FakeWriteFrame(size, true);
+    return lh__Writer::FakeWriteFrame(size, false);
   }
 
   //
