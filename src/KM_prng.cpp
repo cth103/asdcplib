@@ -116,7 +116,8 @@ public:
 
     AutoMutex Lock(m_Lock);
     AES_set_encrypt_key(sha_buf, RNG_KEY_SIZE_BITS, &m_Context);
-    *(ui32_t*)(m_ctr_buf + 12) = 1;
+    ui32_t* m_ctr_buf_int = reinterpret_cast<ui32_t*> (m_ctr_buf + 12);
+    *m_ctr_buf_int = 1;
   }
 
   //
@@ -130,7 +131,8 @@ public:
     while ( gen_count + RNG_BLOCK_SIZE <= len )
       {
 	AES_encrypt(m_ctr_buf, buf + gen_count, &m_Context);
-	*(ui32_t*)(m_ctr_buf + 12) += 1;
+	ui32_t* m_ctr_buf_int = reinterpret_cast<ui32_t*> (m_ctr_buf + 12);
+	*m_ctr_buf_int += 1;
 	gen_count += RNG_BLOCK_SIZE;
       }
 

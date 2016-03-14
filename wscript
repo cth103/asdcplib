@@ -19,11 +19,15 @@ def configure(conf):
 
     conf.env.TARGET_WINDOWS = conf.options.target_windows
     conf.env.TARGET_OSX = sys.platform == 'darwin'
+    conf.env.TARGET_LINUX = not conf.env.TARGET_WINDOWS and not conf.env.TARGET_OSX
     conf.env.STATIC = conf.options.static
     conf.env.VERSION = VERSION
 
     if conf.env.TARGET_OSX:
         conf.env.append_value('CXXFLAGS', ['-Wno-unused-result', '-Wno-unused-parameter', '-Wno-unused-local-typedef'])
+
+    if conf.env.TARGET_LINUX:
+        conf.env.append_value('CXXFLAGS', ['-Wno-unused-result'])
 
     conf.check_cfg(package='openssl', args='--cflags --libs', uselib_store='OPENSSL', mandatory=True)
 
