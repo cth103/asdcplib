@@ -42,7 +42,7 @@ using namespace ASDCP;
 
 
 //------------------------------------------------------------------------------------------
-  
+
 class FileList : public std::list<std::string>
 {
   std::string m_DirName;
@@ -111,7 +111,7 @@ public:
   h__SequenceParser() : m_FramesRead(0), m_Pedantic(false)
   {
     memset(&m_PDesc, 0, sizeof(m_PDesc));
-    m_PDesc.EditRate = Rational(24,1); 
+    m_PDesc.EditRate = Rational(24,1);
   }
 
   ~h__SequenceParser()
@@ -155,7 +155,7 @@ ASDCP::JP2K::SequenceParser::h__SequenceParser::OpenRead()
 
   if ( ASDCP_SUCCESS(result) )
     result = Parser.OpenReadFrame((*m_CurrentFile).c_str(), TmpBuffer);
-      
+
   if ( ASDCP_SUCCESS(result) )
     result = Parser.FillPictureDescriptor(m_PDesc);
 
@@ -207,7 +207,7 @@ operator==(const ASDCP::JP2K::QuantizationDefault_t& lhs, const ASDCP::JP2K::Qua
 {
   if ( lhs.Sqcd != rhs.Sqcd ) return false;
   if ( lhs.SPqcdLength != rhs.SPqcdLength ) return false;
-  
+
   for ( ui32_t i = 0; i < JP2K::MaxDefaults; i++ )
     {
       if ( lhs.SPqcd[i] != rhs.SPqcd[i]  )
@@ -229,7 +229,7 @@ operator==(const ASDCP::JP2K::CodingStyleDefault_t& lhs, const ASDCP::JP2K::Codi
 
   for ( ui32_t i = 0; i < sizeof(ui16_t); i++ )
     {
-      if ( lhs.SGcod.NumberOfLayers[i] != lhs.SGcod.NumberOfLayers[i]  )
+      if ( lhs.SGcod.NumberOfLayers[i] != rhs.SGcod.NumberOfLayers[i]  )
 	return false;
     }
 
@@ -239,7 +239,7 @@ operator==(const ASDCP::JP2K::CodingStyleDefault_t& lhs, const ASDCP::JP2K::Codi
   if ( lhs.SPcod.CodeblockHeight != rhs.SPcod.CodeblockHeight ) return false;
   if ( lhs.SPcod.CodeblockStyle != rhs.SPcod.CodeblockStyle ) return false;
   if ( lhs.SPcod.Transformation != rhs.SPcod.Transformation ) return false;
-  
+
   for ( ui32_t i = 0; i < JP2K::MaxPrecincts; i++ )
     {
       if ( lhs.SPcod.PrecinctSize[i] != rhs.SPcod.PrecinctSize[i]  )
@@ -271,7 +271,7 @@ operator==(const ASDCP::JP2K::PictureDescriptor& lhs, const ASDCP::JP2K::Picture
   if ( lhs.Csize != rhs.Csize ) return false;
   if ( ! ( lhs.CodingStyleDefault == rhs.CodingStyleDefault ) ) return false;
   if ( ! ( lhs.QuantizationDefault == rhs.QuantizationDefault ) ) return false;
-  
+
   for ( ui32_t i = 0; i < JP2K::MaxComponents; i++ )
     {
       if ( ! ( lhs.ImageComponents[i] == rhs.ImageComponents[i] ) )
