@@ -27,7 +27,9 @@ def configure(conf):
         conf.env.append_value('CXXFLAGS', ['-Wno-unused-result', '-Wno-unused-parameter', '-Wno-unused-local-typedef'])
 
     if conf.env.TARGET_LINUX:
-        conf.env.append_value('CXXFLAGS', ['-Wno-unused-result'])
+        gcc = conf.env['CC_VERSION']
+        if int(gcc[0]) >= 4 and int(gcc[1]) > 1:
+            conf.env.append_value('CXXFLAGS', ['-Wno-unused-result'])
 
     conf.check_cfg(package='openssl', args='--cflags --libs', uselib_store='OPENSSL', mandatory=True)
 
