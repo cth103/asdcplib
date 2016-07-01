@@ -33,9 +33,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _KM_LOG_H_
 #define _KM_LOG_H_
 
-#include <KM_platform.h>
+#include <asdcp/KM_platform.h>
 #include <KM_mutex.h>
-#include <KM_util.h>
+#include <asdcp/KM_util.h>
 #include <stdarg.h>
 #include <errno.h>
 #include <iosfwd>
@@ -144,7 +144,7 @@ namespace Kumu
 
 
   typedef ArchivableList<LogEntry> LogEntryList;
-  
+
   //
   class ILogSink
     {
@@ -306,7 +306,7 @@ namespace Kumu
     {
       KM_NO_COPY_CONSTRUCT(SyslogLogSink);
       SyslogLogSink();
-  
+
     public:
       SyslogLogSink(const std::string& source_name, int facility);
       virtual ~SyslogLogSink();

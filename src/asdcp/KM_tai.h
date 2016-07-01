@@ -51,7 +51,7 @@ The libtai source code is in the public domain.
 #ifndef _KUMU_TAI_H_
 #define _KUMU_TAI_H_
 
-#include <KM_platform.h>
+#include <asdcp/KM_platform.h>
 
 //
 namespace Kumu
@@ -72,7 +72,7 @@ namespace Kumu
 
       const tai& operator=(const caltime& rhs);
     };
-    
+
     //
     struct caldate
     {

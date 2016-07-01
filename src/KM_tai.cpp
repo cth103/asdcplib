@@ -48,7 +48,7 @@ The libtai source code is in the public domain.
     \brief   portable time functions
   */
 
-#include <KM_tai.h>
+#include <asdcp/KM_tai.h>
 #ifdef KM_WIN32
 #include <time.h>
 #else

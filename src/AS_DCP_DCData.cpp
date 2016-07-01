@@ -31,7 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <iostream>
 
-#include "AS_DCP.h"
+#include <asdcp/AS_DCP.h>
 #include "AS_DCP_DCData_internal.h"
 #include "AS_DCP_internal.h"
 

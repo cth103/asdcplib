@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _KM_MUTEX_H_
 #define _KM_MUTEX_H_
 
-#include <KM_platform.h>
+#include <asdcp/KM_platform.h>
 
 #ifndef KM_WIN32
 # include <pthread.h>
@@ -57,7 +57,7 @@ namespace Kumu
     {
       pthread_mutex_t m_Mutex;
       KM_NO_COPY_CONSTRUCT(Mutex);
-      
+
     public:
       inline Mutex()       { pthread_mutex_init(&m_Mutex, 0); }
       inline ~Mutex()      { pthread_mutex_destroy(&m_Mutex); }
@@ -66,7 +66,7 @@ namespace Kumu
     };
 #endif // KM_WIN32
 
-  // automatic Mutex management within a block - 
+  // automatic Mutex management within a block -
   // the mutex is created by the constructor and
   // released by the destructor
   class AutoMutex

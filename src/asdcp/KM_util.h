@@ -32,9 +32,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _KM_UTIL_H_
 #define _KM_UTIL_H_
 
-#include <KM_memio.h>
-#include <KM_error.h>
-#include <KM_tai.h>
+#include <asdcp/KM_memio.h>
+#include <asdcp/KM_error.h>
+#include <asdcp/KM_tai.h>
 #include <string.h>
 #include <list>
 

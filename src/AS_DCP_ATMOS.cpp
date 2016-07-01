@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <iostream>
 
-#include "AS_DCP.h"
+#include <asdcp/AS_DCP.h>
 #include "AS_DCP_DCData_internal.h"
 #include "AS_DCP_internal.h"
 
@@ -148,13 +148,13 @@ ASDCP::ATMOS::MXFReader::h__Reader::OpenRead(const std::string& filename)
 
   if( ASDCP_SUCCESS(result) )
     {
-      
+
       if (NULL == m_EssenceSubDescriptor)
 	{
 	  InterchangeObject* iObj = NULL;
 	  result = m_HeaderPart.GetMDObjectByType(OBJ_TYPE_ARGS(DolbyAtmosSubDescriptor), &iObj);
 	  m_EssenceSubDescriptor = static_cast<MXF::DolbyAtmosSubDescriptor*>(iObj);
-	  
+
 	  if ( iObj == 0 )
 	    {
 	      DefaultLogSink().Error("DolbyAtmosSubDescriptor object not found.\n");
@@ -487,5 +487,3 @@ ASDCP::ATMOS::MXFWriter::Finalize()
 //
 // end AS_DCP_ATMOS.cpp
 //
-
-

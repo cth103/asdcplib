@@ -32,8 +32,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _PCMPARSERLIST_H_
 #define _PCMPARSERLIST_H_
 
-#include <KM_fileio.h>
-#include <AS_DCP.h>
+#include <asdcp/KM_fileio.h>
+#include <asdcp/AS_DCP.h>
 #include <vector>
 
 namespace ASDCP

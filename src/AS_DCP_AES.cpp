@@ -25,15 +25,15 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /*! \file    AS_DCP_AES.h
-    \version $Id$       
+    \version $Id$
     \brief   AS-DCP library, AES wrapper
 */
 
 
 #include <assert.h>
-#include <AS_DCP.h>
+#include <asdcp/AS_DCP.h>
 #include <KM_log.h>
-#include <KM_prng.h>
+#include <asdcp/KM_prng.h>
 using Kumu::DefaultLogSink;
 
 using namespace ASDCP;
@@ -142,8 +142,8 @@ ASDCP::AESEncContext::EncryptBlock(const byte_t* pt_buf, byte_t* ct_buf, ui32_t 
     {
       // xor with the previous block
       for ( ui32_t i = 0; i < CBC_BLOCK_SIZE; i++ )
-	tmp_buf[i] = in_p[i] ^ Ctx->m_IVec[i]; 
-          
+	tmp_buf[i] = in_p[i] ^ Ctx->m_IVec[i];
+
       AES_encrypt(tmp_buf, Ctx->m_IVec, Ctx);
       memcpy(out_p, Ctx->m_IVec, CBC_BLOCK_SIZE);
 
@@ -226,7 +226,7 @@ ASDCP::AESDecContext::DecryptBlock(const byte_t* ct_buf, byte_t* pt_buf, ui32_t 
 
   while ( block_size )
     {
-      AES_decrypt(in_p, out_p, Ctx);  
+      AES_decrypt(in_p, out_p, Ctx);
 
       for ( ui32_t i = 0; i < CBC_BLOCK_SIZE; i++ )
 	out_p[i] ^= Ctx->m_IVec[i];
@@ -276,7 +276,7 @@ public:
   // MXF Interop MIC key generation
   void SetInteropKey(const byte_t* key)
   {
-    static byte_t key_nonce[KeyLen] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 
+    static byte_t key_nonce[KeyLen] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
 					0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff };
     byte_t sha_buf[SHA_DIGEST_LENGTH];
 
@@ -411,7 +411,7 @@ HMACContext::Finalize()
 {
   if ( m_Context.empty() || m_Context->m_Final )
     return RESULT_INIT;
-  
+
   m_Context->Finalize();
   return RESULT_OK;
 }
@@ -439,7 +439,7 @@ HMACContext::TestHMACValue(const byte_t* buf) const
 
   if ( m_Context.empty() || ! m_Context->m_Final )
     return RESULT_INIT;
-  
+
   return ( memcmp(buf, m_Context->m_SHAValue, HMAC_SIZE) == 0 ) ? RESULT_OK : RESULT_HMACFAIL;
 }
 

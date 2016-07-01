@@ -29,7 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     \brief   AS-DCP library, MPEG2 raw essence reader implementation
 */
 
-#include <KM_fileio.h>
+#include <asdcp/KM_fileio.h>
 #include <MPEG.h>
 
 #include <KM_log.h>
@@ -97,7 +97,7 @@ class h__ParserState
 	default:
 	  break;
 	}
-      
+
       DefaultLogSink().Error("SEQ follows %s\n", StringParserState(m_State));
       return RESULT_STATE;
     }
@@ -115,7 +115,7 @@ class h__ParserState
 	default:
 	  break;
 	}
-      
+
       DefaultLogSink().Error("Slice follows %s\n", StringParserState(m_State));
       return RESULT_STATE;
     }
@@ -135,7 +135,7 @@ class h__ParserState
 	default:
 	  break;
 	}
-      
+
       DefaultLogSink().Error("PIC follows %s\n", StringParserState(m_State));
       return RESULT_STATE;
     }
@@ -153,7 +153,7 @@ class h__ParserState
       default:
 	break;
       }
-    
+
     DefaultLogSink().Error("GOP follows %s\n", StringParserState(m_State));
     return RESULT_STATE;
   }
@@ -284,7 +284,7 @@ public:
   }
 
   ~FrameParser() {}
-  
+
   void Reset()
   {
     m_FrameSize = 0;
@@ -414,10 +414,10 @@ ASDCP::MPEG2::Parser::h__Parser::OpenRead(const std::string& filename)
   ui32_t read_count = 0;
 
   Result_t result = m_FileReader.OpenRead(filename);
-  
+
   if ( ASDCP_SUCCESS(result) )
     result = m_FileReader.Read(m_TmpBuffer.Data(), m_TmpBuffer.Capacity(), &read_count);
-  
+
   if ( ASDCP_SUCCESS(result) )
     {
       const byte_t* p = m_TmpBuffer.RoData();

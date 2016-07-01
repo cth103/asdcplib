@@ -32,8 +32,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _MPEG_H_
 #define _MPEG_H_
 
-#include <KM_platform.h>
-#include "AS_DCP.h"
+#include <asdcp/KM_platform.h>
+#include <asdcp/AS_DCP.h>
 #include <stdio.h>
 #include <assert.h>
 
@@ -219,7 +219,7 @@ namespace ASDCP
 	    {
 	      const byte_t*  m_p;
 	      ASDCP_NO_COPY_CONSTRUCT(Picture);
-	      
+
 	    public:
 	      Picture(const byte_t* p) { assert(p); m_p = p + 4; }
 	      inline i16_t       TemporalRef() {
@@ -230,7 +230,7 @@ namespace ASDCP
 		return (FrameType_t)( ( m_p[1] & 0x38 ) >> 3 );
 	      }
 	    };
-	  
+
 	} // namespace Accessor
 
     } // namespace MPEG2

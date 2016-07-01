@@ -29,8 +29,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     \brief   AS-DCP library, JPEG 2000 codestream essence reader implementation
 */
 
-#include <AS_DCP.h>
-#include <KM_fileio.h>
+#include <asdcp/AS_DCP.h>
+#include <asdcp/KM_fileio.h>
 #include <KM_log.h>
 #include <list>
 #include <string>

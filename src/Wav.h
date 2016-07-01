@@ -32,8 +32,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _WAV_H_
 #define _WAV_H_
 
-#include <KM_fileio.h>
-#include <AS_DCP.h>
+#include <asdcp/KM_fileio.h>
+#include <asdcp/AS_DCP.h>
 
 namespace ASDCP
 {
@@ -72,7 +72,7 @@ namespace ASDCP
 	    numChannels(0), numSampleFrames(0), sampleSize(0), data_len(0) {
 	    memset(sampleRate, 0, 10);
 	  }
-      	  
+
 	  Result_t  ReadFromBuffer(const byte_t* buf, ui32_t buf_len, ui32_t* data_start);
 	  Result_t  ReadFromFile(const Kumu::FileReader& InFile, ui32_t* data_start);
 	  void      FillADesc(ASDCP::PCM::AudioDescriptor& ADesc, Rational PictureRate) const;
@@ -108,9 +108,9 @@ namespace ASDCP
 	  SimpleWaveHeader() :
 	    format(0), nchannels(0), samplespersec(0), avgbps(0),
 	    blockalign(0), bitspersample(0), cbsize(0), data_len(0) {}
-      
+
 	  SimpleWaveHeader(ASDCP::PCM::AudioDescriptor& ADesc);
-	  
+
 	  Result_t  ReadFromBuffer(const byte_t* buf, ui32_t buf_len, ui32_t* data_start);
 	  Result_t  ReadFromFile(const Kumu::FileReader& InFile, ui32_t* data_start);
 	  Result_t  WriteToFile(Kumu::FileWriter& OutFile) const;

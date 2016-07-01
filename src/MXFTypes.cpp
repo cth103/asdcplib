@@ -29,8 +29,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     \brief   MXF objects
 */
 
-#include <KM_prng.h>
-#include <KM_tai.h>
+#include <asdcp/KM_prng.h>
+#include <asdcp/KM_tai.h>
 #include "MXFTypes.h"
 #include <KM_log.h>
 
@@ -173,7 +173,7 @@ ASDCP::UMID::MakeUMID(int Type, const UUID& AssetID)
 
   // Instance Number
   m_Value[13] = m_Value[14] = m_Value[15] = 0;
-  
+
   memcpy(&m_Value[16], AssetID.Value(), AssetID.Size());
   m_HasValue = true;
 }
@@ -250,7 +250,7 @@ ASDCP::MXF::UTF16String::operator=(const char* sz)
 
   else
     this->assign(sz);
-  
+
   return *this;
 }
 
@@ -372,7 +372,7 @@ ASDCP::MXF::ISO8String::operator=(const char* sz)
 
   else
     this->assign(sz);
-  
+
   return *this;
 }
 
@@ -452,7 +452,7 @@ ASDCP::MXF::TLVReader::FindTL(const MDDEntry& Entry)
       DefaultLogSink().Error("No Lookup service\n");
       return false;
     }
-  
+
   TagValue TmpTag;
 
   if ( m_Lookup->TagForKey(Entry.ul, TmpTag) != RESULT_OK )
@@ -617,7 +617,7 @@ ASDCP::MXF::TLVWriter::WriteUi8(const MDDEntry& Entry, ui8_t* value)
       if ( ! MemIOWriter::WriteUi16BE(sizeof(ui8_t)) ) return RESULT_KLV_CODING(__LINE__, __FILE__);
       if ( ! MemIOWriter::WriteUi8(*value) ) return RESULT_KLV_CODING(__LINE__, __FILE__);
     }
-  
+
   return result;
 }
 

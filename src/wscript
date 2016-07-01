@@ -80,44 +80,17 @@ def build(bld):
                  """
 
     headers = """
-                 KM_xml.h
-                 KM_error.h
-                 SyncEncoder.h
-                 ST2095_PinkNoise.h
-                 MXF.h
-                 Wav.h
-                 Metadata.h
-                 KM_mutex.h
-                 JP2K.h
-                 AtmosSyncChannel_Mixer.h
-                 AtmosSyncChannel_Generator.h
-                 SyncCommon.h
-                 AS_02.h
-                 AS_02_internal.h
-                 KM_tai.h
-                 KLV.h
-                 PCMParserList.h
-                 AS_DCP_internal.h
-                 KM_log.h
-                 AS_02_PHDR.h
-                 UUIDInformation.h
-                 KM_memio.h
-                 KM_prng.h
-                 KM_fileio.h
-                 MXFTypes.h
-                 AS_DCP.h
-                 KM_util.h
-                 AS_DCP_DCData_internal.h
-                 MDD.h
-                 MPEG.h
-                 WavFileWriter.h
-                 S12MTimecode.h
-                 KM_platform.h
-                 PCMDataProviders.h
-                 CRC16.h
-                 """
+              asdcp/KM_util.h
+              asdcp/KM_memio.h
+              asdcp/KM_platform.h
+              asdcp/KM_error.h
+              asdcp/KM_tai.h
+              asdcp/KM_fileio.h
+              asdcp/KM_prng.h
+              asdcp/AS_DCP.h
+              """
 
-    bld.install_files('${PREFIX}/include/libasdcp-cth', headers)
+    bld.install_files('${PREFIX}/include/libasdcp-cth/asdcp', headers)
     if bld.env.STATIC:
         bld.install_files('${PREFIX}/lib', 'libkumu-cth.a')
         bld.install_files('${PREFIX}/lib', 'libasdcp-cth.a')

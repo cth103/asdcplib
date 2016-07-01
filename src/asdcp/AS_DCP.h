@@ -84,8 +84,8 @@ This project depends upon the following libraries:
 #ifndef _AS_DCP_H_
 #define _AS_DCP_H_
 
-#include <KM_error.h>
-#include <KM_fileio.h>
+#include <asdcp/KM_error.h>
+#include <asdcp/KM_fileio.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <math.h>

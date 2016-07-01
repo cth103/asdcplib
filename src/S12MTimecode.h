@@ -25,7 +25,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /*! \file    S12MTimecode.cpp
-    \version $Id$       
+    \version $Id$
     \brief   AS-DCP library, Timecode PCM essence reader and writer implementation
 */
 
@@ -38,8 +38,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _S12MTIMECODE_H_
 #define _S12MTIMECODE_H_
 
-#include "KM_util.h"
-#include "KM_memio.h"
+#include <asdcp/KM_util.h>
+#include <asdcp/KM_memio.h>
 
 namespace ASDCP {
 

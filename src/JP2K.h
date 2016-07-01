@@ -36,9 +36,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _JP2K_H_
 
 // AS_DCP.h is included only for it's base type definitions.
-#include <KM_platform.h>
-#include <KM_util.h>
-#include <AS_DCP.h>
+#include <asdcp/KM_platform.h>
+#include <asdcp/KM_util.h>
+#include <asdcp/AS_DCP.h>
 #include <assert.h>
 
 namespace ASDCP
@@ -146,7 +146,7 @@ namespace JP2K
 	    }
 
 	  ~COD() {}
-	  
+
 	  inline ui8_t  ProgOrder()        const { return *(m_MarkerData + SGcodOFST ); }
 	  inline ui16_t Layers()           const { return KM_i16_BE(*(ui16_t*)(m_MarkerData + SGcodOFST + 1));}
 	  inline ui8_t  DecompLevels()     const { return *(m_MarkerData + SPcodOFST); }
@@ -213,7 +213,7 @@ namespace JP2K
 	    }
 
 	  ~COM() {}
-	  
+
 	  inline bool IsText() const { return m_IsText; }
 	  inline const byte_t* CommentData() const { return m_MarkerData; }
 	  inline ui32_t CommentSize() const { return m_DataSize; }

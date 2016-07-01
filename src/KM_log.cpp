@@ -29,7 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     \brief   message logging API
   */
 
-#include <KM_util.h>
+#include <asdcp/KM_util.h>
 #include <KM_log.h>
 #include <KM_mutex.h>
 #include <sys/types.h>
@@ -328,7 +328,7 @@ Kumu::LogEntry::CreateStringWithOptions(std::string& out_buf, i32_t opt) const
       if ( (opt & LOG_OPTION_TYPE) != 0 )
 	{
 	  if ( ! out_buf.empty() )  out_buf += " ";
-	  
+
 	  switch ( Type )
 	    {
 	    case LOG_CRIT:   out_buf += "CRT";      break;

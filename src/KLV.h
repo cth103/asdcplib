@@ -32,9 +32,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _KLV_H_
 #define _KLV_H_
 
-#include <KM_fileio.h>
-#include <KM_memio.h>
-#include "AS_DCP.h"
+#include <asdcp/KM_fileio.h>
+#include <asdcp/KM_memio.h>
+#include <asdcp/AS_DCP.h>
 #include "MDD.h"
 #include <map>
 
@@ -55,7 +55,7 @@ namespace ASDCP
   const ui32_t IntBufferLen = 64;
 
 inline const char* i64sz(i64_t i, char* buf)
-{ 
+{
   assert(buf);
 #ifdef WIN32
   snprintf(buf, IntBufferLen, "%I64d", i);
@@ -66,7 +66,7 @@ inline const char* i64sz(i64_t i, char* buf)
 }
 
 inline const char* ui64sz(ui64_t i, char* buf)
-{ 
+{
   assert(buf);
 #ifdef WIN32
   snprintf(buf, IntBufferLen, "%I64u", i);

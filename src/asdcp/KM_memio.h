@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _KM_MEMIO_H_
 #define _KM_MEMIO_H_
 
-#include <KM_platform.h>
+#include <asdcp/KM_platform.h>
 #include <string>
 #include <cstring>
 
@@ -45,7 +45,7 @@ namespace Kumu
     {
       KM_NO_COPY_CONSTRUCT(MemIOWriter);
       MemIOWriter();
-      
+
     protected:
       byte_t* m_p;
       ui32_t  m_capacity;
@@ -98,7 +98,7 @@ namespace Kumu
       inline bool WriteUi16BE(ui16_t i) {
 	if ( ( m_size + sizeof(ui16_t) ) > m_capacity )
 	  return false;
-	
+
 	i2p<ui16_t>(KM_i16_BE(i), m_p + m_size);
 	m_size += sizeof(ui16_t);
 	return true;
@@ -107,7 +107,7 @@ namespace Kumu
       inline bool WriteUi32BE(ui32_t i) {
 	if ( ( m_size + sizeof(ui32_t) ) > m_capacity )
 	  return false;
-	
+
 	i2p<ui32_t>(KM_i32_BE(i), m_p + m_size);
 	m_size += sizeof(ui32_t);
 	return true;
@@ -116,7 +116,7 @@ namespace Kumu
       inline bool WriteUi64BE(ui64_t i) {
 	if ( ( m_size + sizeof(ui64_t) ) > m_capacity )
 	  return false;
-	
+
 	i2p<ui64_t>(KM_i64_BE(i), m_p + m_size);
 	m_size += sizeof(ui64_t);
 	return true;
@@ -135,7 +135,7 @@ namespace Kumu
     {
       KM_NO_COPY_CONSTRUCT(MemIOReader);
       MemIOReader();
-      
+
     protected:
       const byte_t* m_p;
       ui32_t  m_capacity;

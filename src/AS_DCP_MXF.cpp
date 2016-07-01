@@ -29,7 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     \brief   AS-DCP library, misc classes and subroutines
 */
 
-#include <KM_fileio.h>
+#include <asdcp/KM_fileio.h>
 #include <KM_xml.h>
 #include "AS_DCP_internal.h"
 #include "JP2K.h"
@@ -331,7 +331,7 @@ ASDCP::RawEssenceType(const std::string& filename, EssenceType_t& type)
 	      else
 		{
 		  result = RF64Header.ReadFromBuffer(FB.RoData(), read_count, &data_offset);
-		
+
 		  if ( ASDCP_SUCCESS(result) )
 		    {
 		      switch ( RF64Header.samplespersec )
@@ -415,7 +415,7 @@ ASDCP::RawEssenceType(const std::string& filename, EssenceType_t& type)
 		      type = ESS_DCDATA_UNKNOWN;
 		    }
 		}
-	      
+
 	      break;
 	    }
 	}
@@ -625,7 +625,7 @@ ASDCP::IntegrityPack::TestValues(const ASDCP::FrameBuffer& FB, const byte_t* Ass
       return RESULT_HMACFAIL;
     }
   p += UUIDlen;
-  
+
   // test the sequence length
   if ( ! Kumu::read_test_BER(&p, sizeof(ui64_t)) )
         return RESULT_HMACFAIL;

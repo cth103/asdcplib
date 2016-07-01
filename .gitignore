@@ -2,6 +2,7 @@
 *.lo
 .lock-waf_*
 .waf-1.6.11-*
+.waf-1.8.*
 .waf3-*
 Makefile
 *~

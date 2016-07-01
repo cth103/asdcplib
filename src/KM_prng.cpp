@@ -29,7 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     \brief   Fortuna pseudo-random number generator
   */
 
-#include <KM_prng.h>
+#include <asdcp/KM_prng.h>
 #include <KM_log.h>
 #include <KM_mutex.h>
 #include <string.h>
@@ -44,7 +44,7 @@ using namespace Kumu;
 #ifdef KM_WIN32
 # include <wincrypt.h>
 #else // KM_WIN32
-# include <KM_fileio.h>
+# include <asdcp/KM_fileio.h>
 const char* DEV_URANDOM = "/dev/urandom";
 #endif // KM_WIN32
 
