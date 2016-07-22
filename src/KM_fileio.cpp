@@ -32,7 +32,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <asdcp/KM_fileio.h>
 #include <KM_log.h>
 #include <fcntl.h>
-#include <sstream>
 #include <iomanip>
 
 #include <assert.h>
@@ -780,13 +779,13 @@ Kumu::FileWriter::StopHashing()
   unsigned char digest[MD5_DIGEST_LENGTH];
   MD5_Final (digest, &m_MD5Context);
 
-  std::stringstream s;
+  char hex[MD5_DIGEST_LENGTH * 2 + 1];
   for (int i = 0; i < MD5_DIGEST_LENGTH; ++i)
     {
-      s << std::hex << std::setfill('0') << std::setw(2) << ((int) digest[i]);
+      sprintf(hex + i * 2, "%02x", digest[i]);
     }
 
-  return s.str ();
+  return hex;
 }
 
 
