@@ -1354,6 +1354,8 @@ ASDCP::JP2K::MXFSWriter::OpenWrite(const std::string& filename, const WriterInfo
   else
     m_Writer = new h__SWriter(DefaultInteropDict());
 
+#if 0
+  /* This check has been removed so that DCP-o-matic can use any edit rate it wants */
   if ( PDesc.EditRate != ASDCP::EditRate_24
        && PDesc.EditRate != ASDCP::EditRate_25
        && PDesc.EditRate != ASDCP::EditRate_30
@@ -1364,6 +1366,7 @@ ASDCP::JP2K::MXFSWriter::OpenWrite(const std::string& filename, const WriterInfo
       DefaultLogSink().Error("Stereoscopic wrapping requires 24, 25, 30, 48, 50 or 60 fps input streams.\n");
       return RESULT_FORMAT;
     }
+#endif
 
   if ( PDesc.StoredWidth > 2048 )
     DefaultLogSink().Warn("Wrapping non-standard 4K stereoscopic content. I hope you know what you are doing!\n");
