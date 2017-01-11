@@ -29,7 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     \brief   MXF index segment objects
 */
 
-#include "MXF.h"
+#include <asdcp/MXF.h>
 const ui32_t kl_length = ASDCP::SMPTE_UL_LENGTH + ASDCP::MXF_BER_LENGTH;
 
 
@@ -185,7 +185,7 @@ ASDCP::MXF::IndexTableSegment::DeltaEntry::Archive(Kumu::MemIOWriter* Writer) co
 // Bit 7: Random Access
 // Bit 6: Sequence Header
 // Bit 5: forward prediction flag
-// Bit 4: backward prediction flag 
+// Bit 4: backward prediction flag
 //   e.g.
 //   00== I frame (no prediction)
 //   10== P frame(forward prediction from previous  frame)
@@ -240,4 +240,3 @@ ASDCP::MXF::IndexTableSegment::IndexEntry::Archive(Kumu::MemIOWriter* Writer) co
 //
 // end Index.cpp
 //
-

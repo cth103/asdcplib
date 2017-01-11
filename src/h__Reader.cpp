@@ -31,7 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define DEFAULT_MD_DECL
 #include "AS_DCP_internal.h"
-#include "KLV.h"
+#include <asdcp/KLV.h>
 
 using namespace ASDCP;
 using namespace ASDCP::MXF;
@@ -333,7 +333,7 @@ ASDCP::Read_EKLV_Packet(Kumu::FileReader& File, const ASDCP::Dictionary& Dict,
       ui32_t SourceLength = (ui32_t)KM_i64_BE(Kumu::cp2i<ui64_t>(ess_p));
       ess_p += sizeof(ui64_t);
       assert(SourceLength);
-	  
+
       if ( FrameBuf.Capacity() < SourceLength )
 	{
 	  DefaultLogSink().Error("FrameBuf.Capacity: %u SourceLength: %u\n", FrameBuf.Capacity(), SourceLength);
@@ -369,7 +369,7 @@ ASDCP::Read_EKLV_Packet(Kumu::FileReader& File, const ASDCP::Dictionary& Dict,
 
 	  result = DecryptFrameBuffer(TmpWrapper, FrameBuf, Ctx);
 	  FrameBuf.FrameNumber(FrameNum);
-  
+
 	  // detect and test integrity pack
 	  if ( ASDCP_SUCCESS(result) && Info.UsesHMAC && HMAC )
 	    {
@@ -408,7 +408,7 @@ ASDCP::Read_EKLV_Packet(Kumu::FileReader& File, const ASDCP::Dictionary& Dict,
       ui32_t read_count;
       assert(PacketLength <= 0xFFFFFFFFL);
       result = File.Read(FrameBuf.Data(), (ui32_t) PacketLength, &read_count);
-	  
+
       if ( ASDCP_FAILURE(result) )
 	return result;
 
@@ -419,7 +419,7 @@ ASDCP::Read_EKLV_Packet(Kumu::FileReader& File, const ASDCP::Dictionary& Dict,
 	  DefaultLogSink().Error("read_count: %s != FrameLength: %s\n",
 				 ui64sz(read_count, intbuf1),
 				 ui64sz(PacketLength, intbuf2) );
-	  
+
 	  return RESULT_READFAIL;
 	}
 

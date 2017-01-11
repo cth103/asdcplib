@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "KM_mutex.h"
 #include "KM_log.h"
-#include "KLV.h"
+#include <asdcp/KLV.h>
 #include "MDD.cpp"
 
 //------------------------------------------------------------------------------------------
@@ -257,7 +257,7 @@ ASDCP::Dictionary::FindUL(const byte_t* ul_buf) const
 {
   assert(m_MDD_Table[0].name[0]);
   std::map<UL, ui32_t>::const_iterator i = m_md_lookup.find(UL(ul_buf));
-  
+
   if ( i == m_md_lookup.end() )
     {
       byte_t tmp_ul[SMPTE_UL_LENGTH];
@@ -284,7 +284,7 @@ ASDCP::Dictionary::FindSymbol(const std::string& str) const
 {
   assert(m_MDD_Table[0].name[0]);
   std::map<std::string, ui32_t>::const_iterator i = m_md_sym_lookup.find(str);
-  
+
   if ( i == m_md_sym_lookup.end() )
     {
       Kumu::DefaultLogSink().Warn("UL Dictionary: unknown symbol: %s\n", str.c_str());

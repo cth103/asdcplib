@@ -35,7 +35,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <asdcp/KM_fileio.h>
 #include <asdcp/KM_memio.h>
 #include <asdcp/AS_DCP.h>
-#include "MDD.h"
+#include <asdcp/MDD.h>
 #include <map>
 
 

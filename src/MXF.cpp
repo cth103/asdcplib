@@ -29,8 +29,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     \brief   MXF objects
 */
 
-#include "MXF.h"
-#include "Metadata.h"
+#include <asdcp/MXF.h>
+#include <asdcp/Metadata.h>
 #include <KM_log.h>
 
 using Kumu::DefaultLogSink;
@@ -205,7 +205,7 @@ ASDCP::MXF::Partition::PacketList::GetMDObjectByID(const UUID& ObjectID, Interch
   ASDCP_TEST_NULL(Object);
 
   std::map<UUID, InterchangeObject*>::iterator mi = m_Map.find(ObjectID);
-  
+
   if ( mi == m_Map.end() )
     {
       *Object = 0;
@@ -292,7 +292,7 @@ ASDCP::MXF::Partition::InitFromFile(const Kumu::FileReader& Reader)
   // could be one of several values
   if ( ASDCP_SUCCESS(result) )
     result = ASDCP::MXF::Partition::InitFromBuffer(m_ValueStart, m_ValueLength);
-  
+
   return result;
 }
 
@@ -533,7 +533,7 @@ ASDCP::MXF::Primer::InsertTag(const MDDEntry& Entry, ASDCP::TagValue& Tag)
     {
       Tag = (*i).second;
     }
-   
+
   return RESULT_OK;
 }
 
@@ -571,7 +571,7 @@ ASDCP::MXF::Primer::Dump(FILE* stream)
   fprintf(stream, "Primer: %u %s\n",
 	  (ui32_t)LocalTagEntryBatch.size(),
 	  ( LocalTagEntryBatch.size() == 1 ? "entry" : "entries" ));
-  
+
   Batch<LocalTagEntry>::iterator i = LocalTagEntryBatch.begin();
   for ( ; i != LocalTagEntryBatch.end(); i++ )
     {
@@ -721,7 +721,7 @@ ASDCP::MXF::OP1aHeader::InitFromFile(const Kumu::FileReader& Reader)
     {
       DefaultLogSink().Warn("Improbably huge HeaderByteCount value: %qu\n", HeaderByteCount);
     }
-  
+
   result = m_HeaderData.Capacity(Kumu::xmin(4*Kumu::Megabyte, static_cast<ui32_t>(HeaderByteCount)));
 
   if ( ASDCP_SUCCESS(result) )
@@ -879,7 +879,7 @@ ASDCP::MXF::OP1aHeader::WriteToFile(Kumu::FileWriter& Writer, ui32_t HeaderSize)
   if ( m_Preface == 0 )
     return RESULT_STATE;
 
-  if ( HeaderSize < 4096 ) 
+  if ( HeaderSize < 4096 )
     {
       DefaultLogSink().Error("HeaderSize %u is too small. Must be >= 4096\n", HeaderSize);
       return RESULT_PARAM;
@@ -888,7 +888,7 @@ ASDCP::MXF::OP1aHeader::WriteToFile(Kumu::FileWriter& Writer, ui32_t HeaderSize)
   ASDCP::FrameBuffer HeaderBuffer;
   HeaderByteCount = HeaderSize - ArchiveSize();
   assert (HeaderByteCount <= 0xFFFFFFFFL);
-  Result_t result = HeaderBuffer.Capacity((ui32_t) HeaderByteCount); 
+  Result_t result = HeaderBuffer.Capacity((ui32_t) HeaderByteCount);
   m_Preface->m_Lookup = &m_Primer;
 
   std::list<InterchangeObject*>::iterator pl_i = m_PacketList->m_List.begin();
@@ -1058,7 +1058,7 @@ ASDCP::MXF::OPAtomIndexFooter::InitFromBuffer(const byte_t* p, ui32_t l)
 {
   Result_t result = RESULT_OK;
   const byte_t* end_p = p + l;
-  
+
   while ( ASDCP_SUCCESS(result) && p < end_p )
     {
       // parse the packets and index them by uid, discard KLVFill items
@@ -1095,7 +1095,7 @@ ASDCP::MXF::OPAtomIndexFooter::WriteToFile(Kumu::FileWriter& Writer, ui64_t dura
   assert(m_Dict);
   ASDCP::FrameBuffer FooterBuffer;
   ui32_t   footer_size = m_PacketList->m_List.size() * MaxIndexSegmentSize; // segment-count * max-segment-size
-  Result_t result = FooterBuffer.Capacity(footer_size); 
+  Result_t result = FooterBuffer.Capacity(footer_size);
   ui32_t   iseg_count = 0;
 
   if ( m_CurrentSegment != 0 )
@@ -1262,7 +1262,7 @@ ASDCP::MXF::OPAtomIndexFooter::SetIndexParamsVBR(IPrimerLookup* lookup, const Ra
 void
 ASDCP::MXF::OPAtomIndexFooter::PushIndexEntry(const IndexTableSegment::IndexEntry& Entry)
 {
-  if ( m_BytesPerEditUnit != 0 )  // are we CBR? that's bad 
+  if ( m_BytesPerEditUnit != 0 )  // are we CBR? that's bad
     {
       DefaultLogSink().Error("Call to PushIndexEntry() failed: index is CBR\n");
       return;
@@ -1347,7 +1347,7 @@ ASDCP::MXF::InterchangeObject::InitFromBuffer(const byte_t* p, ui32_t l)
     {
       result = KLVPacket::InitFromBuffer(p, l);
     }
-  
+
   return result;
 }
 
@@ -1500,13 +1500,13 @@ ASDCP::MXF::decode_mca_string(const std::string& s, const mca_label_map_t& label
 	    }
 
 	  mca_label_map_t::const_iterator i = labels.find(symbol_buf);
-      
+
 	  if ( i == labels.end() )
 	    {
 	      DefaultLogSink().Error("Unknown symbol: '%s'\n", symbol_buf.c_str());
 	      return false;
 	    }
-      
+
 	  if ( i->second.ul.Value()[10] != 2 ) // magic depends on UL "Essence Facet" byte (see ST 428-12)
 	    {
 	      DefaultLogSink().Error("Not a soundfield group symbol: '%s'\n", symbol_buf.c_str());
@@ -1538,7 +1538,7 @@ ASDCP::MXF::decode_mca_string(const std::string& s, const mca_label_map_t& label
 	    }
 
 	  mca_label_map_t::const_iterator i = labels.find(symbol_buf);
-      
+
 	  if ( i == labels.end() )
 	    {
 	      DefaultLogSink().Error("Unknown symbol: '%s'\n", symbol_buf.c_str());
@@ -1620,7 +1620,7 @@ ASDCP::MXF::decode_mca_string(const std::string& s, const mca_label_map_t& label
   else if ( ! symbol_buf.empty() )
     {
       mca_label_map_t::const_iterator i = labels.find(symbol_buf);
-      
+
       if ( i == labels.end() )
 	{
 	  DefaultLogSink().Error("Unknown symbol: '%s'\n", symbol_buf.c_str());

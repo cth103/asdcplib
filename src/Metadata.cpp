@@ -25,13 +25,13 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /*! \file    Metadata.cpp
-    \version $Id$       
+    \version $Id$
     \brief   AS-DCP library, MXF Metadata Sets implementation
 */
 
 
 #include <KM_mutex.h>
-#include "Metadata.h"
+#include <asdcp/Metadata.h>
 
 using namespace ASDCP;
 using namespace ASDCP::MXF;
@@ -346,7 +346,7 @@ EssenceContainerData::InitFromTLVSet(TLVReader& TLVSet)
   assert(m_Dict);
   Result_t result = InterchangeObject::InitFromTLVSet(TLVSet);
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadObject(OBJ_READ_ARGS(EssenceContainerData, LinkedPackageUID));
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(EssenceContainerData, IndexSID));
     IndexSID.set_has_value( result == RESULT_OK );
   }
@@ -886,7 +886,7 @@ StructuralComponent::InitFromTLVSet(TLVReader& TLVSet)
   assert(m_Dict);
   Result_t result = InterchangeObject::InitFromTLVSet(TLVSet);
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadObject(OBJ_READ_ARGS(StructuralComponent, DataDefinition));
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi64(OBJ_READ_ARGS_OPT(StructuralComponent, Duration));
     Duration.set_has_value( result == RESULT_OK );
   }
@@ -1259,12 +1259,12 @@ FileDescriptor::InitFromTLVSet(TLVReader& TLVSet)
 {
   assert(m_Dict);
   Result_t result = GenericDescriptor::InitFromTLVSet(TLVSet);
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(FileDescriptor, LinkedTrackID));
     LinkedTrackID.set_has_value( result == RESULT_OK );
   }
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadObject(OBJ_READ_ARGS(FileDescriptor, SampleRate));
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi64(OBJ_READ_ARGS_OPT(FileDescriptor, ContainerDuration));
     ContainerDuration.set_has_value( result == RESULT_OK );
   }
@@ -1367,17 +1367,17 @@ GenericSoundEssenceDescriptor::InitFromTLVSet(TLVReader& TLVSet)
   Result_t result = FileDescriptor::InitFromTLVSet(TLVSet);
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadObject(OBJ_READ_ARGS(GenericSoundEssenceDescriptor, AudioSamplingRate));
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadUi8(OBJ_READ_ARGS(GenericSoundEssenceDescriptor, Locked));
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(GenericSoundEssenceDescriptor, AudioRefLevel));
     AudioRefLevel.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(GenericSoundEssenceDescriptor, ElectroSpatialFormulation));
     ElectroSpatialFormulation.set_has_value( result == RESULT_OK );
   }
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadUi32(OBJ_READ_ARGS(GenericSoundEssenceDescriptor, ChannelCount));
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadUi32(OBJ_READ_ARGS(GenericSoundEssenceDescriptor, QuantizationBits));
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(GenericSoundEssenceDescriptor, DialNorm));
     DialNorm.set_has_value( result == RESULT_OK );
   }
@@ -1484,7 +1484,7 @@ WaveAudioDescriptor::InitFromTLVSet(TLVReader& TLVSet)
   assert(m_Dict);
   Result_t result = GenericSoundEssenceDescriptor::InitFromTLVSet(TLVSet);
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadUi16(OBJ_READ_ARGS(WaveAudioDescriptor, BlockAlign));
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(WaveAudioDescriptor, SequenceOffset));
     SequenceOffset.set_has_value( result == RESULT_OK );
   }
@@ -1497,7 +1497,7 @@ WaveAudioDescriptor::InitFromTLVSet(TLVReader& TLVSet)
     result = TLVSet.ReadObject(OBJ_READ_ARGS_OPT(WaveAudioDescriptor, ReferenceImageEditRate));
     ReferenceImageEditRate.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(WaveAudioDescriptor, ReferenceAudioAlignmentLevel));
     ReferenceAudioAlignmentLevel.set_has_value( result == RESULT_OK );
   }
@@ -1598,59 +1598,59 @@ GenericPictureEssenceDescriptor::InitFromTLVSet(TLVReader& TLVSet)
 {
   assert(m_Dict);
   Result_t result = FileDescriptor::InitFromTLVSet(TLVSet);
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, SignalStandard));
     SignalStandard.set_has_value( result == RESULT_OK );
   }
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadUi8(OBJ_READ_ARGS(GenericPictureEssenceDescriptor, FrameLayout));
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadUi32(OBJ_READ_ARGS(GenericPictureEssenceDescriptor, StoredWidth));
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadUi32(OBJ_READ_ARGS(GenericPictureEssenceDescriptor, StoredHeight));
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, StoredF2Offset));
     StoredF2Offset.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, SampledWidth));
     SampledWidth.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, SampledHeight));
     SampledHeight.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, SampledXOffset));
     SampledXOffset.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, SampledYOffset));
     SampledYOffset.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, DisplayHeight));
     DisplayHeight.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, DisplayWidth));
     DisplayWidth.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, DisplayXOffset));
     DisplayXOffset.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, DisplayYOffset));
     DisplayYOffset.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, DisplayF2Offset));
     DisplayF2Offset.set_has_value( result == RESULT_OK );
   }
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadObject(OBJ_READ_ARGS(GenericPictureEssenceDescriptor, AspectRatio));
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, ActiveFormatDescriptor));
     ActiveFormatDescriptor.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, AlphaTransparency));
     AlphaTransparency.set_has_value( result == RESULT_OK );
   }
@@ -1658,19 +1658,19 @@ GenericPictureEssenceDescriptor::InitFromTLVSet(TLVReader& TLVSet)
     result = TLVSet.ReadObject(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, TransferCharacteristic));
     TransferCharacteristic.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, ImageAlignmentOffset));
     ImageAlignmentOffset.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, ImageStartOffset));
     ImageStartOffset.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, ImageEndOffset));
     ImageEndOffset.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, FieldDominance));
     FieldDominance.set_has_value( result == RESULT_OK );
   }
@@ -1686,19 +1686,19 @@ GenericPictureEssenceDescriptor::InitFromTLVSet(TLVReader& TLVSet)
   if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadObject(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, AlternativeCenterCuts));
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, ActiveWidth));
     ActiveWidth.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, ActiveHeight));
     ActiveHeight.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, ActiveXOffset));
     ActiveXOffset.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(GenericPictureEssenceDescriptor, ActiveYOffset));
     ActiveYOffset.set_has_value( result == RESULT_OK );
   }
@@ -1914,23 +1914,23 @@ RGBAEssenceDescriptor::InitFromTLVSet(TLVReader& TLVSet)
 {
   assert(m_Dict);
   Result_t result = GenericPictureEssenceDescriptor::InitFromTLVSet(TLVSet);
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(RGBAEssenceDescriptor, ComponentMaxRef));
     ComponentMaxRef.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(RGBAEssenceDescriptor, ComponentMinRef));
     ComponentMinRef.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(RGBAEssenceDescriptor, AlphaMinRef));
     AlphaMinRef.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(RGBAEssenceDescriptor, AlphaMaxRef));
     AlphaMaxRef.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(RGBAEssenceDescriptor, ScanningDirection));
     ScanningDirection.set_has_value( result == RESULT_OK );
   }
@@ -2179,35 +2179,35 @@ CDCIEssenceDescriptor::InitFromTLVSet(TLVReader& TLVSet)
   Result_t result = GenericPictureEssenceDescriptor::InitFromTLVSet(TLVSet);
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadUi32(OBJ_READ_ARGS(CDCIEssenceDescriptor, ComponentDepth));
   if ( ASDCP_SUCCESS(result) ) result = TLVSet.ReadUi32(OBJ_READ_ARGS(CDCIEssenceDescriptor, HorizontalSubsampling));
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(CDCIEssenceDescriptor, VerticalSubsampling));
     VerticalSubsampling.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(CDCIEssenceDescriptor, ColorSiting));
     ColorSiting.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(CDCIEssenceDescriptor, ReversedByteOrder));
     ReversedByteOrder.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi16(OBJ_READ_ARGS_OPT(CDCIEssenceDescriptor, PaddingBits));
     PaddingBits.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(CDCIEssenceDescriptor, AlphaSampleDepth));
     AlphaSampleDepth.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(CDCIEssenceDescriptor, BlackRefLevel));
     BlackRefLevel.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(CDCIEssenceDescriptor, WhiteReflevel));
     WhiteReflevel.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(CDCIEssenceDescriptor, ColorRange));
     ColorRange.set_has_value( result == RESULT_OK );
   }
@@ -2328,43 +2328,43 @@ MPEG2VideoDescriptor::InitFromTLVSet(TLVReader& TLVSet)
 {
   assert(m_Dict);
   Result_t result = CDCIEssenceDescriptor::InitFromTLVSet(TLVSet);
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(MPEG2VideoDescriptor, SingleSequence));
     SingleSequence.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(MPEG2VideoDescriptor, ConstantBFrames));
     ConstantBFrames.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(MPEG2VideoDescriptor, CodedContentType));
     CodedContentType.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(MPEG2VideoDescriptor, LowDelay));
     LowDelay.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(MPEG2VideoDescriptor, ClosedGOP));
     ClosedGOP.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(MPEG2VideoDescriptor, IdenticalGOP));
     IdenticalGOP.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(MPEG2VideoDescriptor, MaxGOP));
     MaxGOP.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(MPEG2VideoDescriptor, BPictureCount));
     BPictureCount.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(MPEG2VideoDescriptor, BitRate));
     BitRate.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi8(OBJ_READ_ARGS_OPT(MPEG2VideoDescriptor, ProfileAndLevel));
     ProfileAndLevel.set_has_value( result == RESULT_OK );
   }
@@ -3220,7 +3220,7 @@ MCALabelSubDescriptor::InitFromTLVSet(TLVReader& TLVSet)
     result = TLVSet.ReadObject(OBJ_READ_ARGS_OPT(MCALabelSubDescriptor, MCATagName));
     MCATagName.set_has_value( result == RESULT_OK );
   }
-  if ( ASDCP_SUCCESS(result) ) { 
+  if ( ASDCP_SUCCESS(result) ) {
     result = TLVSet.ReadUi32(OBJ_READ_ARGS_OPT(MCALabelSubDescriptor, MCAChannelID));
     MCAChannelID.set_has_value( result == RESULT_OK );
   }

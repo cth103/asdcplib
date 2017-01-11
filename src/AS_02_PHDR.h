@@ -24,7 +24,7 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/ 
+*/
 
 /*! \file    AS_02_PHDR.h
   \version $Id$
@@ -35,13 +35,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _AS_02_PHDR_H_
 #define _AS_02_PHDR_H_
 
-#include "AS_02.h"
+#include "asdcp/AS_02.h"
 
 namespace AS_02
 {
 
   namespace PHDR
-  { 
+  {
     //
     class FrameBuffer : public ASDCP::JP2K::FrameBuffer
       {
@@ -81,7 +81,7 @@ namespace AS_02
 
       // Opens a file sequence for reading.  The sequence is expected to contain one or
       // more pairs of filenames, each naming a file containing the codestream (.j2c) and the
-      // corresponding P-HDR metadata (.xml) for exactly one picture. The parser will 
+      // corresponding P-HDR metadata (.xml) for exactly one picture. The parser will
       // automatically parse enough data from the first file to provide a complete set of
       // stream metadata for the MXFWriter below.  If the "pedantic" parameter is given and
       // is true, the parser will check the metadata for each codestream and fail if a
@@ -108,7 +108,7 @@ namespace AS_02
       class h__Writer;
       ASDCP::mem_ptr<h__Writer> m_Writer;
       ASDCP_NO_COPY_CONSTRUCT(MXFWriter);
-      
+
     public:
       MXFWriter();
       virtual ~MXFWriter();
@@ -179,7 +179,7 @@ namespace AS_02
       void     DumpHeaderMetadata(FILE* = 0) const;
       void     DumpIndex(FILE* = 0) const;
     };
-    
+
   } // end namespace PHDR
 
 } // end namespace AS_02

@@ -29,7 +29,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   \brief   KLV objects
 */
 
-#include "KLV.h"
+#include <asdcp/KLV.h>
 #include <KM_log.h>
 using Kumu::DefaultLogSink;
 
@@ -43,7 +43,7 @@ const ui32_t tmp_read_size = 32;
 //------------------------------------------------------------------------------------------
 //
 
-// 
+//
 ASDCP::Result_t
 ASDCP::KLVPacket::InitFromBuffer(const byte_t* buf, ui32_t buf_len, const UL& label)
 {
@@ -146,7 +146,7 @@ ASDCP::KLVPacket::WriteKLToBuffer(ASDCP::FrameBuffer& Buffer, const UL& label, u
       DefaultLogSink().Error("Small write buffer\n");
       return RESULT_FAIL;
     }
-  
+
   memcpy(Buffer.Data() + Buffer.Size(), label.Value(), label.Size());
 
   if ( ! Kumu::write_BER(Buffer.Data() + Buffer.Size() + SMPTE_UL_LENGTH, length, MXF_BER_LENGTH) )
@@ -187,7 +187,7 @@ ASDCP::KLVPacket::Dump(FILE* stream, const Dictionary& Dict, bool show_value)
     }
 }
 
-// 
+//
 ASDCP::Result_t
 ASDCP::KLVFilePacket::InitFromFile(const Kumu::FileReader& Reader, const UL& label)
 {
@@ -286,7 +286,7 @@ ASDCP::KLVFilePacket::InitFromFile(const Kumu::FileReader& Reader)
       if ( remainder > 0 )
 	{
 	  result = Reader.Read(m_Buffer.Data() + tmp_read_size, remainder, &read_count);
-      
+
 	  if ( read_count != remainder )
 	    {
 	      DefaultLogSink().Error("Short read of packet body, expecting %u, got %u\n",

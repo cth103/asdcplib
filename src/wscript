@@ -88,6 +88,12 @@ def build(bld):
               asdcp/KM_fileio.h
               asdcp/KM_prng.h
               asdcp/AS_DCP.h
+              asdcp/AS_02.h
+              asdcp/Metadata.h
+              asdcp/MXF.h
+              asdcp/MXFTypes.h
+              asdcp/KLV.h
+              asdcp/MDD.h
               """
 
     bld.install_files('${PREFIX}/include/libasdcp-cth/asdcp', headers)

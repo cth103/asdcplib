@@ -30,7 +30,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "AS_DCP_internal.h"
-#include "KLV.h"
+#include <asdcp/KLV.h>
 
 using namespace ASDCP;
 using namespace ASDCP::MXF;

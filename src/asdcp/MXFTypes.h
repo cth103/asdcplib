@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _MXFTYPES_H_
 #define _MXFTYPES_H_
 
-#include "KLV.h"
+#include <asdcp/KLV.h>
 #include <list>
 #include <vector>
 #include <set>
@@ -56,7 +56,7 @@ namespace ASDCP
       typedef std::pair<ui32_t, ui32_t> ItemInfo;
       typedef std::map<TagValue, ItemInfo> TagMap;
 
-      //      
+      //
       class TLVReader : public Kumu::MemIOReader
 	{
 
@@ -76,7 +76,7 @@ namespace ASDCP
 	  Result_t ReadUi64(const MDDEntry&, ui64_t*);
 	};
 
-      //      
+      //
       class TLVWriter : public Kumu::MemIOWriter
 	{
 
@@ -119,7 +119,7 @@ namespace ASDCP
 	    if ( ! Writer->WriteUi32BE(this->size()) ) return false;
 	    if ( ! Writer->WriteUi32BE(this->ItemSize()) ) return false;
 	    if ( this->empty() ) return true;
-	    
+
 	    typename ContainerType::const_iterator i;
 	    bool result = true;
 	    for ( i = this->begin(); i != this->end() && result; ++i )
@@ -163,7 +163,7 @@ namespace ASDCP
 	      {
 		stream = stderr;
 	      }
-	    
+
 	    typename ContainerType::const_iterator i;
 	    for ( i = this->begin(); i != this->end(); ++i )
 	      {
@@ -234,7 +234,7 @@ namespace ASDCP
 
 	    for ( ; l_i != this->end(); l_i++ )
 	      arch_size += l_i->ArchiveLength();
-	    
+
 	    return arch_size;
 	  }
 
@@ -415,7 +415,7 @@ namespace ASDCP
 	Code (UInt8): Enumerated value specifying component (i.e., component identifier).
 	"0" is the layout terminator.
 
-	Depth (UInt8): Integer specifying the number of bits occupied (see also G.2.26) 
+	Depth (UInt8): Integer specifying the number of bits occupied (see also G.2.26)
 	  1->32 indicates integer depth
 	  253 = HALF (floating point 16-bit value)
 	  254 = IEEE floating point 32-bit value
@@ -488,7 +488,7 @@ namespace ASDCP
 
 	  RGBALayout(const RGBALayout& rhs) { Set(rhs.m_value); }
 	  const RGBALayout& operator=(const RGBALayout& rhs) { Set(rhs.m_value); return *this; }
-	  
+
 	  void Set(const byte_t* value) {
 	    memcpy(m_value, value, RGBAValueLength);
 	  }
