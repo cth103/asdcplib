@@ -37,6 +37,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <openssl/aes.h>
 #include <openssl/sha.h>
 #include <openssl/bn.h>
+#if HAVE_VALGRIND_MEMCHECK_H
+#include <valgrind/memcheck.h>
+#endif
 
 using namespace Kumu;
 
@@ -91,6 +94,10 @@ public:
 	  result = URandom.Read(rng_key, RNG_KEY_SIZE, &read_count);
 	}
 
+#if HAVE_VALGRIND_MEMCHECK_H
+      VALGRIND_MAKE_MEM_DEFINED (rng_key, RNG_KEY_SIZE);
+#endif
+
       if ( KM_FAILURE(result) )
 	DefaultLogSink().Error("Error opening random device: %s\n", DEV_URANDOM);
 
@@ -113,6 +120,11 @@ public:
     SHA1_Update(&SHA, (byte_t*)&m_Context, sizeof(m_Context));
     SHA1_Update(&SHA, key_fodder, RNG_KEY_SIZE);
     SHA1_Final(sha_buf, &SHA);
+
+#if HAVE_VALGRIND_MEMCHECK_H
+    VALGRIND_MAKE_MEM_DEFINED (sha_buf, 20);
+    VALGRIND_MAKE_MEM_DEFINED (&m_Context, sizeof(m_Context));
+#endif
 
     AutoMutex Lock(m_Lock);
     AES_set_encrypt_key(sha_buf, RNG_KEY_SIZE_BITS, &m_Context);
@@ -150,6 +162,11 @@ public:
 	  buf[i] = rand_r(&m_cth_test_rng_state);
 #endif
       }
+
+#if HAVE_VALGRIND_MEMCHECK_H
+    VALGRIND_MAKE_MEM_DEFINED (buf, len);
+#endif
+
   }
 
   void reset()
