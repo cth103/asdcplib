@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <asdcp/KM_fileio.h>
 #include <MPEG.h>
 
-#include <KM_log.h>
+#include <asdcp/KM_log.h>
 using Kumu::DefaultLogSink;
 
 using namespace ASDCP;

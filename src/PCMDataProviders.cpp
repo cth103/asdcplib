@@ -31,7 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <PCMDataProviders.h>
 
-#include <KM_log.h>
+#include <asdcp/KM_log.h>
 
 using namespace ASDCP;
 using namespace Kumu;

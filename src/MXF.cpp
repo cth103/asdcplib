@@ -31,7 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <asdcp/MXF.h>
 #include <asdcp/Metadata.h>
-#include <KM_log.h>
+#include <asdcp/KM_log.h>
 
 using Kumu::DefaultLogSink;
 using Kumu::GenRandomValue;

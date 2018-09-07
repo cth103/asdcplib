@@ -33,8 +33,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <asdcp/KM_prng.h>
 #include <asdcp/KM_memio.h>
 #include <asdcp/KM_fileio.h>
-#include <KM_log.h>
-#include <KM_mutex.h>
+#include <asdcp/KM_log.h>
+#include <asdcp/KM_mutex.h>
 #include <ctype.h>
 #include <list>
 #include <map>

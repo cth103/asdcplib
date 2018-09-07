@@ -34,7 +34,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _KM_LOG_H_
 
 #include <asdcp/KM_platform.h>
-#include <KM_mutex.h>
+#include <asdcp/KM_mutex.h>
 #include <asdcp/KM_util.h>
 #include <stdarg.h>
 #include <errno.h>

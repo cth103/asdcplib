@@ -30,7 +30,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 
-#include <KM_mutex.h>
+#include <asdcp/KM_mutex.h>
 #include <asdcp/Metadata.h>
 
 using namespace ASDCP;

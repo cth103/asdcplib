@@ -87,6 +87,8 @@ def build(bld):
               asdcp/KM_tai.h
               asdcp/KM_fileio.h
               asdcp/KM_prng.h
+              asdcp/KM_log.h
+              asdcp/KM_mutex.h
               asdcp/AS_DCP.h
               asdcp/AS_02.h
               asdcp/Metadata.h

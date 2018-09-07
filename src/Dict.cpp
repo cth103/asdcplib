@@ -30,8 +30,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 
-#include "KM_mutex.h"
-#include "KM_log.h"
+#include <asdcp/KM_mutex.h>
+#include <asdcp/KM_log.h>
 #include <asdcp/KLV.h>
 #include "MDD.cpp"
 

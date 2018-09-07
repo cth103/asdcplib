@@ -34,7 +34,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <asdcp/KM_platform.h>
 #include <asdcp/KM_util.h>
-#include <KM_log.h>
+#include <asdcp/KM_log.h>
 #include <asdcp/Metadata.h>
 
 using Kumu::DefaultLogSink;

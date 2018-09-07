@@ -30,7 +30,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "MXF.h"
-#include <KM_log.h>
+#include <asdcp/KM_log.h>
 
 
 using namespace ASDCP;

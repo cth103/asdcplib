@@ -30,8 +30,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <KM_xml.h>
-#include <KM_log.h>
-#include <KM_mutex.h>
+#include <asdcp/KM_log.h>
+#include <asdcp/KM_mutex.h>
 #include <stack>
 #include <map>
 
@@ -59,7 +59,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <xercesc/framework/XMLPScanToken.hpp>
 
 
-XERCES_CPP_NAMESPACE_USE 
+XERCES_CPP_NAMESPACE_USE
 
 extern "C"
 {
@@ -437,7 +437,7 @@ public:
 };
 
 // expat wrapper functions
-// 
+//
 static void
 xph_start(void* p, const XML_Char* name, const XML_Char** attrs)
 {
@@ -467,7 +467,7 @@ xph_start(void* p, const XML_Char* name, const XML_Char** attrs)
   std::string key;
   if ( ns_root != name )
     key.assign(ns_root, name - ns_root - 1);
-  
+
   ns_map::iterator ni = Ctx->Namespaces->find(key);
   if ( ni != Ctx->Namespaces->end() )
     Element->SetNamespace(ni->second);
@@ -514,7 +514,7 @@ xph_namespace_start(void* p, const XML_Char* ns_prefix, const XML_Char* ns_name)
 {
   assert(p);  assert(ns_name);
   ExpatParseContext* Ctx = (ExpatParseContext*)p;
-  
+
   if ( ns_prefix == 0 )
     ns_prefix = "";
 
@@ -578,7 +578,7 @@ Kumu::XMLElement::ParseString(const char* document, ui32_t doc_len)
 }
 
 // expat wrapper functions
-// 
+//
 static void
 xph_start_one_shot(void* p, const XML_Char* name, const XML_Char** attrs)
 {
@@ -639,7 +639,7 @@ Kumu::XMLElement::ParseFirstFromString(const char* document, ui32_t doc_len)
 
 static Mutex sg_xerces_init_lock; // protect the xerces initialized
 static bool  sg_xml_init = false; // signal initialization
-static Mutex sg_coder_lock;       // protect the transcoder context 
+static Mutex sg_coder_lock;       // protect the transcoder context
 static XMLTranscoder*   sg_coder = 0;
 static const int sg_coder_buf_len = 128 * 1024;
 static char sg_coder_buf[sg_coder_buf_len + 8];
@@ -647,7 +647,7 @@ static unsigned char sg_coder_counts[sg_coder_buf_len / sizeof(XMLCh)]; // see X
 
 static const XMLCh sg_LS[] = { chLatin_L, chLatin_S, chNull };
 static const XMLCh sg_label_UTF_8[] = { chLatin_U, chLatin_T, chLatin_F,
-					chDash, chDigit_8, chNull}; 
+					chDash, chDigit_8, chNull};
 
 //
 void
@@ -902,7 +902,7 @@ public:
     std::string key;
     if ( ns_root != name )
       key.assign(ns_root, name - ns_root - 1);
-  
+
     ns_map::iterator ni = m_Namespaces->find(key);
     if ( ni != m_Namespaces->end() )
       Element->SetNamespace(ni->second);
@@ -973,7 +973,7 @@ Kumu::XMLElement::ParseString(const char* document, ui32_t doc_len)
       DefaultLogSink().Error("Unexpected XML parser error\n");
       errorCount++;
     }
-  
+
   if ( errorCount == 0 )
     m_NamespaceOwner = (void*)docHandler->TakeNamespaceMap();
 
@@ -993,7 +993,7 @@ Kumu::XMLElement::ParseFirstFromString(const char* document, ui32_t doc_len)
     }
 
   kumu_init_xml_dom();
-  
+
   int errorCount = 0;
   SAXParser* parser = new SAXParser();
 
@@ -1040,7 +1040,7 @@ Kumu::XMLElement::ParseFirstFromString(const char* document, ui32_t doc_len)
       DefaultLogSink().Error("Unexpected XML parser error\n");
       errorCount++;
     }
-  
+
   if ( errorCount == 0 )
     m_NamespaceOwner = (void*)docHandler->TakeNamespaceMap();
 

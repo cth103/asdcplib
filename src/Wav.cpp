@@ -31,7 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Wav.h"
 #include <assert.h>
-#include <KM_log.h>
+#include <asdcp/KM_log.h>
 using Kumu::DefaultLogSink;
 
 

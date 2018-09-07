@@ -30,7 +30,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <MPEG.h>
-#include <KM_log.h>
+#include <asdcp/KM_log.h>
 using Kumu::DefaultLogSink;
 
 // walk a buffer stopping at the end of the buffer or the end of a VES
@@ -216,7 +216,7 @@ ASDCP::MPEG2::VESParser::Parse(const byte_t* buf, ui32_t buf_len)
 	      // let the delegate handle the header
 	      switch( m_HBuf[3] )
 		{
-		case PIC_START:   result = m_Delegate->Picture(this, m_HBuf, m_HBufLen);   break;	  
+		case PIC_START:   result = m_Delegate->Picture(this, m_HBuf, m_HBufLen);   break;
 		case EXT_START:   result = m_Delegate->Extension(this, m_HBuf, m_HBufLen); break;
 		case SEQ_START:   result = m_Delegate->Sequence(this, m_HBuf, m_HBufLen);  break;
 		case GOP_START:   result = m_Delegate->GOP(this, m_HBuf, m_HBufLen);       break;
@@ -233,7 +233,7 @@ ASDCP::MPEG2::VESParser::Parse(const byte_t* buf, ui32_t buf_len)
 		  m_State->Goto_IDLE();
 		  return result;
 		}
-	      
+
 	      m_HBuf[0] = m_HBuf[1] = 0; m_HBuf[2] = 1; m_HBuf[3] = *p; // 001x
 	      run_len = 0;
 

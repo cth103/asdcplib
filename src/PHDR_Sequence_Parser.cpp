@@ -31,7 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <AS_02_PHDR.h>
 #include <KM_fileio.h>
-#include <KM_log.h>
+#include <asdcp/KM_log.h>
 #include <list>
 #include <string>
 #include <algorithm>
