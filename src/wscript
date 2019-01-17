@@ -3,7 +3,7 @@ def configure(conf):
     # Don't include the micro version number in PACKAGE_VERSION, as
     # this ends up in MXFs and screws up DCP-o-matic's test references
     # every time it changes
-    s = conf.env.VERSION.split('.')
+    s = conf.env.VERSION.split(b'.')
     major_minor = '%s.%s.0' % (s[0], s[1])
     conf.env.append_value('CXXFLAGS', '-DPACKAGE_VERSION="%s"' % major_minor)
     if conf.options.target_windows:
