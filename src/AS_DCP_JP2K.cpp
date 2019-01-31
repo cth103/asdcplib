@@ -216,6 +216,7 @@ ASDCP::JP2K_PDesc_to_MD(const JP2K::PictureDescriptor& PDesc,
   EssenceDescriptor.FrameLayout = 0;
   EssenceDescriptor.StoredWidth = PDesc.StoredWidth;
   EssenceDescriptor.StoredHeight = PDesc.StoredHeight;
+  EssenceDescriptor.DisplayHeight = PDesc.StoredHeight;
   EssenceDescriptor.AspectRatio = PDesc.AspectRatio;
 
   EssenceSubDescriptor.Rsize = PDesc.Rsize;
