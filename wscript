@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import subprocess
 import shlex
 import os
@@ -8,7 +10,7 @@ from waflib import Logs
 APPNAME = 'libasdcp-cth'
 
 if os.path.exists('.git'):
-    this_version = subprocess.Popen(shlex.split('git tag -l --points-at HEAD'), stdout=subprocess.PIPE).communicate()[0]
+    this_version = subprocess.Popen(shlex.split('git tag -l --points-at HEAD'), stdout=subprocess.PIPE).communicate()[0].decode('utf-8')
     last_version = subprocess.Popen(shlex.split('git describe --tags --abbrev=0'), stdout=subprocess.PIPE).communicate()[0]
     if this_version == '':
         VERSION = '%sdevel' % last_version[1:].strip()
@@ -106,5 +108,5 @@ def tags(bld):
 
 def dist(bld):
     f = open('VERSION', 'w')
-    print>>f,VERSION
+    print(VERSION, file=f)
     f.close()
