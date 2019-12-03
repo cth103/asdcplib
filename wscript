@@ -7,7 +7,7 @@ import sys
 import distutils.spawn
 from waflib import Logs
 
-APPNAME = 'libasdcp-cth'
+APPNAME = 'libasdcp-carl'
 
 if os.path.exists('.git'):
     this_version = subprocess.Popen(shlex.split('git tag -l --points-at HEAD'), stdout=subprocess.PIPE).communicate()[0].decode('utf-8')
@@ -88,10 +88,10 @@ def build(bld):
         boost_lib_suffix = ''
         flags = ''
 
-    bld(source='libasdcp-cth.pc.in',
+    bld(source='libasdcp-carl.pc.in',
         version=VERSION,
-        includedir='%s/include/libasdcp-cth' % bld.env.PREFIX,
-        libs="-L${libdir} -lasdcp-cth -lkumu-cth -lboost_system%s" % boost_lib_suffix,
+        includedir='%s/include/libasdcp-carl' % bld.env.PREFIX,
+        libs="-L${libdir} -lasdcp-carl -lkumu-carl -lboost_system%s" % boost_lib_suffix,
         cflags=flags,
         install_path='${LIBDIR}/pkgconfig')
 

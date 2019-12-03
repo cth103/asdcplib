@@ -18,8 +18,8 @@ def build(bld):
     else:
         obj = bld(features='cxx cxxshlib')
 
-    obj.name = 'libkumu-cth'
-    obj.target = 'kumu-cth'
+    obj.name = 'libkumu-carl'
+    obj.target = 'kumu-carl'
     obj.uselib = 'OPENSSL BOOST_FILESYSTEM'
     obj.includes = ['.']
     obj.export_includes = ['.']
@@ -37,10 +37,10 @@ def build(bld):
     else:
         obj = bld(features='cxx cxxshlib')
 
-    obj.name = 'libasdcp-cth'
-    obj.target = 'asdcp-cth'
+    obj.name = 'libasdcp-carl'
+    obj.target = 'asdcp-carl'
     obj.uselib = 'OPENSSL BOOST_FILESYSTEM'
-    obj.use = 'libkumu-cth'
+    obj.use = 'libkumu-carl'
     obj.includes = ['.']
     obj.export_includes = ['.']
     obj.source = """
@@ -98,7 +98,7 @@ def build(bld):
               asdcp/MDD.h
               """
 
-    bld.install_files('${PREFIX}/include/libasdcp-cth/asdcp', headers)
+    bld.install_files('${PREFIX}/include/libasdcp-carl/asdcp', headers)
     if bld.env.STATIC:
-        bld.install_files('${PREFIX}/lib', 'libkumu-cth.a')
-        bld.install_files('${PREFIX}/lib', 'libasdcp-cth.a')
+        bld.install_files('${PREFIX}/lib', 'libkumu-carl.a')
+        bld.install_files('${PREFIX}/lib', 'libasdcp-carl.a')
