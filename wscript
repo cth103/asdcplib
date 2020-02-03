@@ -83,7 +83,7 @@ def configure(conf):
 def build(bld):
     if bld.env.TARGET_WINDOWS:
         boost_lib_suffix = '-mt'
-        flags = '-DKM_WIN32'
+        flags = '-DKM_WIN32 -DWIN32_LEAN_AND_MEAN'
     else:
         boost_lib_suffix = ''
         flags = ''
