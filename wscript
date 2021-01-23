@@ -40,8 +40,7 @@ def configure(conf):
 
     if conf.env.TARGET_LINUX:
         gcc = conf.env['CC_VERSION']
-        if int(gcc[0]) >= 4 and int(gcc[1]) > 1:
-            conf.env.append_value('CXXFLAGS', ['-Wno-unused-result'])
+        conf.env.append_value('CXXFLAGS', ['-Wno-unused-result', '-Wno-deprecated-copy', '-Wno-class-memaccess'])
 
     conf.check_cfg(package='openssl', args='--cflags --libs', uselib_store='OPENSSL', mandatory=True)
 
