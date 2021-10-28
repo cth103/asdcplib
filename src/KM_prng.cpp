@@ -214,6 +214,10 @@ Kumu::FortunaRNG::FillRandom(byte_t* buf, ui32_t len)
       s_RNG->set_key(rng_key);
   }
 
+#if HAVE_VALGRIND_MEMCHECK_H
+  VALGRIND_MAKE_MEM_DEFINED(buf, len);
+#endif
+
   return front_of_buffer;
 }
 
