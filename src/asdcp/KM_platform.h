@@ -50,8 +50,6 @@ typedef unsigned __int64   ui64_t;
 typedef __int64            i64_t;
 #  define i64_C(c)  (i64_t)(c)
 #  define ui64_C(c) (ui64_t)(c)
-#  define snprintf _snprintf
-#  define vsnprintf _vsnprintf
 
 # else // KM_WIN32
 typedef unsigned long long ui64_t;
