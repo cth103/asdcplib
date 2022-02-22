@@ -21,7 +21,8 @@ else:
 
 def options(opt):
     opt.load('compiler_cxx')
-    opt.add_option('--target-windows', action='store_true', default=False, help='set up to do a cross-compile to Windows')
+    opt.add_option('--target-windows-64', action='store_true', default=False, help='set up to do a cross-compile to Windows 64-bit')
+    opt.add_option('--target-windows-32', action='store_true', default=False, help='set up to do a cross-compile to Windows 32-bit')
     opt.add_option('--enable-debug', action='store_true', default=False, help='build with debugging information and without optimisation')
     opt.add_option('--static', action='store_true', default=False, help='build statically')
 
@@ -29,9 +30,10 @@ def configure(conf):
     conf.load('compiler_cxx')
     conf.env.append_value('CXXFLAGS', ['-Wall', '-Wextra', '-D_FILE_OFFSET_BITS=64', '-D__STDC_FORMAT_MACROS'])
 
-    conf.env.TARGET_WINDOWS = conf.options.target_windows
+    conf.env.TARGET_WINDOWS_64 = conf.options.target_windows_64
+    conf.env.TARGET_WINDOWS_32 = conf.options.target_windows_32
     conf.env.TARGET_OSX = sys.platform == 'darwin'
-    conf.env.TARGET_LINUX = not conf.env.TARGET_WINDOWS and not conf.env.TARGET_OSX
+    conf.env.TARGET_LINUX = not conf.env.TARGET_WINDOWS_64 and not conf.env.TARGET_WINDOWS_32 and not conf.env.TARGET_OSX
     conf.env.STATIC = conf.options.static
     conf.env.VERSION = VERSION
 
@@ -44,8 +46,10 @@ def configure(conf):
 
     conf.check_cfg(package='openssl', args='--cflags --libs', uselib_store='OPENSSL', mandatory=True)
 
-    if conf.options.target_windows:
-        boost_lib_suffix = '-mt'
+    if conf.options.target_windows_64:
+        boost_lib_suffix = '-mt-x64'
+    elif conf.options.target_windows_32:
+        boost_lib_suffix = '-mt-x32'
     else:
         boost_lib_suffix = ''
 
@@ -80,8 +84,11 @@ def configure(conf):
     conf.recurse('src')
 
 def build(bld):
-    if bld.env.TARGET_WINDOWS:
-        boost_lib_suffix = '-mt'
+    if bld.env.TARGET_WINDOWS_64:
+        boost_lib_suffix = '-mt-x64'
+        flags = '-DKM_WIN32 -DWIN32_LEAN_AND_MEAN'
+    elif bld.env.TARGET_WINDOWS_32:
+        boost_lib_suffix = '-mt-x32'
         flags = '-DKM_WIN32 -DWIN32_LEAN_AND_MEAN'
     else:
         boost_lib_suffix = ''
