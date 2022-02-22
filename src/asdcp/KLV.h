@@ -57,22 +57,14 @@ namespace ASDCP
 inline const char* i64sz(i64_t i, char* buf)
 {
   assert(buf);
-#ifdef WIN32
-  snprintf(buf, IntBufferLen, "%I64d", i);
-#else
   snprintf(buf, IntBufferLen, "%lld", i);
-#endif
   return buf;
 }
 
 inline const char* ui64sz(ui64_t i, char* buf)
 {
   assert(buf);
-#ifdef WIN32
-  snprintf(buf, IntBufferLen, "%I64u", i);
-#else
   snprintf(buf, IntBufferLen, "%llu", i);
-#endif
   return buf;
 }
 
