@@ -40,6 +40,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #if HAVE_VALGRIND_MEMCHECK_H
 #include <valgrind/memcheck.h>
 #endif
+#include <boost/random.hpp>
 
 using namespace Kumu;
 
@@ -67,9 +68,11 @@ public:
   AES_KEY   m_Context;
   byte_t    m_ctr_buf[RNG_BLOCK_SIZE];
   Mutex     m_Lock;
-  unsigned int m_cth_test_rng_state;
+  boost::random::mt19937 _test_rng;
+  boost::random::uniform_int_distribution<> _test_dist;
 
   h__RNG()
+    : _test_dist(0, 255)
   {
     memset(m_ctr_buf, 0, RNG_BLOCK_SIZE);
     byte_t rng_key[RNG_KEY_SIZE];
@@ -157,10 +160,8 @@ public:
 
     if (cth_test)
       {
-#ifdef __unix__
 	for (unsigned int i = 0; i < len; ++i)
-	  buf[i] = rand_r(&m_cth_test_rng_state);
-#endif
+          buf[i] = _test_dist(_test_rng);
       }
 
 #if HAVE_VALGRIND_MEMCHECK_H
@@ -171,7 +172,8 @@ public:
 
   void reset()
     {
-      m_cth_test_rng_state = 1;
+      _test_rng.seed(1);
+      _test_dist.reset();
     }
 };
 
