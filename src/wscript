@@ -25,8 +25,8 @@ def build(bld):
     obj.source = """
                  KM_fileio.cpp
                  KM_log.cpp
-		 KM_util.cpp
-		 KM_xml.cpp
+                 KM_util.cpp
+                 KM_xml.cpp
                  KM_tai.cpp
                  KM_prng.cpp
                  """
@@ -43,19 +43,19 @@ def build(bld):
     obj.includes = ['.']
     obj.export_includes = ['.']
     obj.source = """
-		 MPEG2_Parser.cpp
+                 MPEG2_Parser.cpp
                  MPEG.cpp
                  JP2K_Codestream_Parser.cpp
-		 JP2K_Sequence_Parser.cpp
+                 JP2K_Sequence_Parser.cpp
                  JP2K.cpp
                  PCM_Parser.cpp
                  Wav.cpp
-		 TimedText_Parser.cpp
+                 TimedText_Parser.cpp
                  KLV.cpp
                  Dict.cpp
                  MXFTypes.cpp
                  MXF.cpp
-		 Index.cpp
+                 Index.cpp
                  Metadata.cpp
                  AS_02_JP2K.cpp
                  AS_02_PCM.cpp
