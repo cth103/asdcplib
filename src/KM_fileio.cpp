@@ -1045,6 +1045,7 @@ Kumu::FileWriter::Writev(ui32_t* bytes_written)
 
       if ( wr_result == 0 || tmp_count != iov->m_iovec[i].iov_len)
 	{
+	  DefaultLogSink().Error("Writev failed (%d)", wr_result);
 	  result = Kumu::RESULT_WRITEFAIL;
 	  break;
 	}
@@ -1078,7 +1079,10 @@ Kumu::FileWriter::Write(const byte_t* buf, ui32_t buf_len, ui32_t* bytes_written
   ::SetErrorMode(prev);
 
   if ( result == 0 || *bytes_written != buf_len )
-    return Kumu::RESULT_WRITEFAIL;
+    {
+      DefaultLogSink().Error("WriteFile failed (%d)", result);
+      return Kumu::RESULT_WRITEFAIL;
+    }
 
   MaybeHash(buf, buf_len);
 
@@ -1223,7 +1227,10 @@ Kumu::FileWriter::Writev(ui32_t* bytes_written)
   int write_size = writev(m_Handle, iov->m_iovec, iov->m_Count);
 
   if ( write_size == -1L || write_size != total_size )
-    return RESULT_WRITEFAIL;
+    {
+      DefaultLogSink().Error("writev failed (%d)", errno);
+      return RESULT_WRITEFAIL;
+    }
 
   for (int i = 0; i < iov->m_Count; ++i)
     {
@@ -1252,7 +1259,10 @@ Kumu::FileWriter::Write(const byte_t* buf, ui32_t buf_len, ui32_t* bytes_written
   MaybeHash(buf, buf_len);
 
   if ( write_size == -1L || (ui32_t)write_size != buf_len )
-    return RESULT_WRITEFAIL;
+    {
+      DefaultLogSink().Error("write failed (%d)", errno);
+      return RESULT_WRITEFAIL;
+    }
 
   *bytes_written = write_size;
   return RESULT_OK;
@@ -1372,6 +1382,10 @@ Kumu::WriteObjectIntoFile(const Kumu::IArchive& Object, const std::string& Filen
 	  Buffer.Length(MemWriter.Length());
 	  result = Writer.OpenWrite(Filename);
 	}
+      else
+	{
+          DefaultLogSink().Error("Object.Archive() failed in WriteObjectIntoFile()");
+	}
 
       if ( KM_SUCCESS(result) )
 	result = Writer.Write(Buffer.RoData(), Buffer.Length(), &write_count);
@@ -1425,7 +1439,10 @@ Kumu::WriteBufferIntoFile(const Kumu::ByteString& Buffer, const std::string& Fil
     result = Writer.Write(Buffer.RoData(), Buffer.Length(), &write_count);
 
   if ( KM_SUCCESS(result) && Buffer.Length() != write_count)
+  {
+    DefaultLogSink().Error("WriteBufferIntoFile failed (%d)", result.Value());
     return RESULT_WRITEFAIL;
+  }
 
   return result;
 }
