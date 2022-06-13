@@ -32,8 +32,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _ATMOSSYNCCHANNEL_MIXER_H_
 #define _ATMOSSYNCCHANNEL_MIXER_H_
 
-#include <AS_DCP.h>
-#include <KM_error.h>
+#include <asdcp/AS_DCP.h>
+#include <asdcp/KM_error.h>
 #include <PCMDataProviders.h>
 #include <vector>
 

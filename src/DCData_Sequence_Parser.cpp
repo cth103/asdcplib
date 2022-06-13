@@ -29,14 +29,14 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     \brief   AS-DCP library, DCinema data seqence reader implementation
 */
 
-#include "AS_DCP.h"
+#include <asdcp/AS_DCP.h>
 
 #include <algorithm>
 #include <list>
 #include <string>
 
-#include "KM_fileio.h"
-#include "KM_log.h"
+#include <asdcp/KM_fileio.h>
+#include <asdcp/KM_log.h>
 
 using ASDCP::Result_t;
 

@@ -33,7 +33,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <algorithm>
 
-#include <AS_DCP.h>
+#include <asdcp/AS_DCP.h>
 #include <asdcp/KM_log.h>
 #include <PCMDataProviders.h>
 

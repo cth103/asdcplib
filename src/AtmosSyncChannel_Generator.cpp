@@ -31,7 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <AtmosSyncChannel_Generator.h>
 
-#include <AS_DCP.h>
+#include <asdcp/AS_DCP.h>
 
 using namespace ASDCP;
 

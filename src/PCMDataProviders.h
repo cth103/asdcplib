@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _PCMDATAPROVIDERS_H_
 #define _PCMDATAPROVIDERS_H_
 
-#include <AS_DCP.h>
+#include <asdcp/AS_DCP.h>
 #include <AtmosSyncChannel_Generator.h>
 
 namespace ASDCP
