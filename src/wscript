@@ -76,6 +76,13 @@ def build(bld):
                  AS_DCP_DCData.cpp
                  PCMParserList.cpp
                  MDD.cpp
+                 DCData_Sequence_Parser.cpp
+                 DCData_ByteStream_Parser.cpp
+                 AtmosSyncChannel_Mixer.cpp
+                 AtmosSyncChannel_Generator.cpp
+                 PCMDataProviders.cpp
+                 SyncEncoder.c
+                 CRC16.c
                  """
 
     headers = """
@@ -101,3 +108,15 @@ def build(bld):
     if bld.env.STATIC:
         bld.install_files('${PREFIX}/lib', 'libkumu-carl.a')
         bld.install_files('${PREFIX}/lib', 'libasdcp-carl.a')
+
+    obj = bld(features='cxx cxxprogram')
+    obj.use = ['libkumu-carl', 'libasdcp-carl']
+    obj.includes = ['asdcp']
+    obj.source = 'asdcp-wrap.cpp'
+    obj.target = 'asdcp-wrap'
+
+    obj = bld(features='cxx cxxprogram')
+    obj.use = ['libkumu-carl', 'libasdcp-carl']
+    obj.includes = ['asdcp']
+    obj.source = 'asdcp-unwrap.cpp'
+    obj.target = 'asdcp-unwrap'
