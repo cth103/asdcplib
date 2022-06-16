@@ -111,12 +111,14 @@ def build(bld):
 
     obj = bld(features='cxx cxxprogram')
     obj.use = ['libkumu-carl', 'libasdcp-carl']
+    obj.uselib = "OPENSSL BOOST_FILESYSTEM"
     obj.includes = ['asdcp']
     obj.source = 'asdcp-wrap.cpp'
     obj.target = 'asdcp-wrap'
 
     obj = bld(features='cxx cxxprogram')
     obj.use = ['libkumu-carl', 'libasdcp-carl']
+    obj.uselib = "OPENSSL BOOST_FILESYSTEM"
     obj.includes = ['asdcp']
     obj.source = 'asdcp-unwrap.cpp'
     obj.target = 'asdcp-unwrap'
