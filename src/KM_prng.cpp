@@ -125,7 +125,10 @@ public:
     SHA1_Final(sha_buf, &SHA);
 
 #if HAVE_VALGRIND_MEMCHECK_H
-    VALGRIND_MAKE_MEM_DEFINED (sha_buf, 20);
+    /* I think AES_set_encryt_key will read 32 bytes from sha_buf
+     * even though it's only 20 bytes long, which seems dubious.
+     */
+    VALGRIND_MAKE_MEM_DEFINED (sha_buf, RNG_KEY_SIZE);
     VALGRIND_MAKE_MEM_DEFINED (&m_Context, sizeof(m_Context));
 #endif
 
@@ -201,6 +204,10 @@ Kumu::FortunaRNG::FillRandom(byte_t* buf, ui32_t len)
   assert(s_RNG);
   const byte_t* front_of_buffer = buf;
 
+#if HAVE_VALGRIND_MEMCHECK_H
+  auto const original_len = len;
+#endif
+
   while ( len )
     {
       // 2^20 bytes max per seeding, use 2^19 to save
@@ -217,7 +224,7 @@ Kumu::FortunaRNG::FillRandom(byte_t* buf, ui32_t len)
   }
 
 #if HAVE_VALGRIND_MEMCHECK_H
-  VALGRIND_MAKE_MEM_DEFINED(buf, len);
+  VALGRIND_MAKE_MEM_DEFINED(front_of_buffer, original_len);
 #endif
 
   return front_of_buffer;
