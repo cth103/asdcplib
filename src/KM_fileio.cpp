@@ -95,7 +95,13 @@ do_stat(const char* path, fstat_t* stat_info)
 #ifdef KM_WIN32
   UINT prev = ::SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 
+#ifdef KM_WIN32_UTF8
+  ByteString wb_filename;
+  Result_t result = utf8_to_wbstr(path, wb_filename);
+  if ( _wstati64((wchar_t*)wb_filename.RoData(), stat_info) == (__int64)-1 )
+#else
   if ( _stati64(path, stat_info) == (__int64)-1 )
+#endif
     result = Kumu::RESULT_FILEOPEN;
 
   ::SetErrorMode( prev );
