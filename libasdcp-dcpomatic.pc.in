@@ -1,0 +1,10 @@
+prefix=@prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: asdcplib-dcpomatic
+Description: asdcplib with patches by carl@dcpomatic.com
+Version: @version@
+Requires: openssl
+Libs: @libs@
+Cflags: -I${includedir} @cflags@
