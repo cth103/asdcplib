@@ -34,6 +34,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <KM_util.h>
 #include <string>
+#include <openssl/md5.h>
 
 #ifdef KM_WIN32
 # include <io.h>
@@ -133,7 +134,7 @@ namespace Kumu
   //
   // error: 'void Kumu::compile_time_size_checker() [with bool sizecheck = false]' previously declared here
   //
-  // This is happening because the equality being tested below is false. The reason for this 
+  // This is happening because the equality being tested below is false. The reason for this
   // will depend on your OS, but on Linux it is probably because you have not used -D_FILE_OFFSET_BITS=64
   // Adding this magic macro to your CFLAGS will get you going again. If you are on a system that
   // does not support 64-bit files, you can disable this check by using -DKM_SMALL_FILES_OK. You
@@ -380,6 +381,8 @@ namespace Kumu
       class h__iovec;
       mem_ptr<h__iovec>  m_IOVec;
       KM_NO_COPY_CONSTRUCT(FileWriter);
+      bool m_Hashing;
+      MD5_CTX m_MD5Context;
 
     public:
       FileWriter();
@@ -399,6 +402,10 @@ namespace Kumu
       // the iovec list will be written to disk before the given buffer,as though
       // you had called Writev() first.
       Result_t Write(const byte_t*, ui32_t, ui32_t* = 0);            // write buffer to disk
+
+      void StartHashing();
+      void MaybeHash(void const*, int);
+      std::string StopHashing();
    };
 
   Result_t CreateDirectoriesInPath(const std::string& Path);

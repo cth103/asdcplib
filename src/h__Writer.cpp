@@ -319,12 +319,12 @@ ASDCP::h__ASDCPWriter::WriteASDCPHeader(const std::string& PackageLabel, const U
 //
 Result_t
 ASDCP::h__ASDCPWriter::WriteEKLVPacket(const ASDCP::FrameBuffer& FrameBuf,const byte_t* EssenceUL,
-				       const ui32_t& MinEssenceElementBerLength,	       
-				       AESEncContext* Ctx, HMACContext* HMAC)
+				       const ui32_t& MinEssenceElementBerLength,
+				       AESEncContext* Ctx, HMACContext* HMAC, std::string* hash)
 {
   return Write_EKLV_Packet(m_File, *m_Dict, m_HeaderPart, m_Info, m_CtFrameBuf, m_FramesWritten,
 			   m_StreamOffset, FrameBuf, EssenceUL, MinEssenceElementBerLength,
-			   Ctx, HMAC);
+			   Ctx, HMAC, hash);
 }
 
 Result_t
@@ -393,10 +393,15 @@ ASDCP::Write_EKLV_Packet(Kumu::FileWriter& File, const ASDCP::Dictionary& Dict, 
 			 const ASDCP::WriterInfo& Info, ASDCP::FrameBuffer& CtFrameBuf, ui32_t& FramesWritten,
 			 ui64_t & StreamOffset, const ASDCP::FrameBuffer& FrameBuf, const byte_t* EssenceUL,
 			 const ui32_t& MinEssenceElementBerLength,
-			 AESEncContext* Ctx, HMACContext* HMAC)
+			 AESEncContext* Ctx, HMACContext* HMAC, std::string* hash)
 {
   Result_t result = RESULT_OK;
   IntegrityPack IntPack;
+
+  if (hash)
+    {
+      File.StartHashing();
+    }
 
   byte_t overhead[128];
   Kumu::MemIOWriter Overhead(overhead, 128);
@@ -537,6 +542,11 @@ ASDCP::Write_EKLV_Packet(Kumu::FileWriter& File, const ASDCP::Dictionary& Dict, 
 
   if ( ASDCP_SUCCESS(result) )
     result = File.Writev();
+
+  if (hash)
+    {
+      *hash = File.StopHashing();
+    }
 
   return result;
 }

@@ -743,7 +743,9 @@ Kumu::FileReader::Size() const
 
 // these are declared here instead of in the header file
 // because we have a mem_ptr that is managing a hidden class
-Kumu::FileWriter::FileWriter() {}
+Kumu::FileWriter::FileWriter()
+  : m_Hashing(false)
+{}
 Kumu::FileWriter::~FileWriter() {}
 
 //
@@ -766,6 +768,57 @@ Kumu::FileWriter::Writev(const byte_t* buf, ui32_t buf_len)
   iov->m_Count++;
 
   return RESULT_OK;
+}
+
+void
+Kumu::FileWriter::StartHashing()
+{
+  m_Hashing = true;
+  MD5_Init(&m_MD5Context);
+}
+
+void
+Kumu::FileWriter::MaybeHash(void const * data, int size)
+{
+  if (m_Hashing)
+    {
+      MD5_Update (&m_MD5Context, data, size);
+    }
+}
+
+std::string
+Kumu::FileWriter::StopHashing()
+{
+  m_Hashing = false;
+
+  unsigned char digest[MD5_DIGEST_LENGTH];
+  MD5_Final (digest, &m_MD5Context);
+
+  char buffer[33];
+  snprintf(
+	  buffer,
+	  33,
+	  //  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16
+	  "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+	  digest[0],
+	  digest[1],
+	  digest[2],
+	  digest[3],
+	  digest[4],
+	  digest[5],
+	  digest[6],
+	  digest[7],
+	  digest[8],
+	  digest[9],
+	  digest[10],
+	  digest[11],
+	  digest[12],
+	  digest[13],
+	  digest[14],
+	  digest[15]
+	  );
+
+  return buffer;
 }
 
 Kumu::FileReader::FileReader()
@@ -1086,6 +1139,7 @@ Kumu::FileWriter::Writev(ui32_t* bytes_written)
 	  break;
 	}
 
+      MaybeHash(iov->m_iovec[i].iov_base, iov->m_iovec[i].iov_len);
       *bytes_written += tmp_count;
     }
 
@@ -1115,6 +1169,8 @@ Kumu::FileWriter::Write(const byte_t* buf, ui32_t buf_len, ui32_t* bytes_written
 
   if ( result == 0 || *bytes_written != buf_len )
     return Kumu::RESULT_WRITEFAIL;
+
+  MaybeHash(buf, buf_len);
 
   return Kumu::RESULT_OK;
 }
@@ -1259,6 +1315,11 @@ Kumu::FileWriter::Writev(ui32_t* bytes_written)
   if ( write_size == -1L || write_size != total_size )
     return RESULT_WRITEFAIL;
 
+  for (int i = 0; i < iov->m_Count; ++i)
+    {
+      MaybeHash(iov->m_iovec[i].iov_base, iov->m_iovec[i].iov_len);
+    }
+
   iov->m_Count = 0;
   *bytes_written = write_size;  
   return RESULT_OK;
@@ -1282,6 +1343,7 @@ Kumu::FileWriter::Write(const byte_t* buf, ui32_t buf_len, ui32_t* bytes_written
   if ( write_size == -1L || (ui32_t)write_size != buf_len )
     return RESULT_WRITEFAIL;
 
+  MaybeHash(buf, buf_len);
   *bytes_written = write_size;
   return RESULT_OK;
 }

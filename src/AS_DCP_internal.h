@@ -183,7 +183,7 @@ extern MXF::RIP *g_RIP;
 			     const ASDCP::WriterInfo& Info, ASDCP::FrameBuffer& CtFrameBuf, ui32_t& FramesWritten,
 			     ui64_t & StreamOffset, const ASDCP::FrameBuffer& FrameBuf, const byte_t* EssenceUL,
 			     const ui32_t& MinEssenceElementBerLength,
-			     AESEncContext* Ctx, HMACContext* HMAC);
+			     AESEncContext* Ctx, HMACContext* HMAC, std::string* hash = 0);
 
   //
  class KLReader : public ASDCP::KLVPacket
@@ -965,7 +965,7 @@ extern MXF::RIP *g_RIP;
       Result_t CreateBodyPart(const MXF::Rational& EditRate, ui32_t BytesPerEditUnit = 0);
       Result_t WriteEKLVPacket(const ASDCP::FrameBuffer& FrameBuf,const byte_t* EssenceUL,
 			       const ui32_t& MinEssenceElementBerLength,
-			       AESEncContext* Ctx, HMACContext* HMAC);
+			       AESEncContext* Ctx, HMACContext* HMAC, std::string* hash = 0);
       Result_t FakeWriteEKLVPacket(int size);
       Result_t WriteASDCPFooter();
     };
