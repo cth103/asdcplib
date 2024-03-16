@@ -40,6 +40,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace Kumu
 {
+  extern bool dcpomatic_test;
+
   // The version number declaration and explanation are in ../configure.ac
   const char* Version();
 
@@ -421,7 +423,9 @@ namespace Kumu
   
   void GenRandomUUID(byte_t* buf); // buf must be UUID_Length or longer
   void GenRandomValue(UUID&);
-  
+
+  void ResetTestRNG();
+
   typedef ArchivableList<UUID> UUIDList;
 
   // a self-wiping key container

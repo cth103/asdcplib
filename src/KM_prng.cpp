@@ -36,6 +36,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <KM_mutex.h>
 #include <string.h>
 #include <assert.h>
+#include <boost/random.hpp>
 
 #ifdef HAVE_OPENSSL
 # define ENABLE_FIPS_186
@@ -69,8 +70,11 @@ namespace{
       AES_ctx   m_Context;
       byte_t    m_ctr_buf[RNG_BLOCK_SIZE];
       Mutex     m_Lock;
+      boost::random::mt19937 _test_rng;
+      boost::random::uniform_int_distribution<> _test_dist;
 
       h__RNG()
+	: _test_dist(0, 255)
       {
         memset(m_ctr_buf, 0, RNG_BLOCK_SIZE);
         byte_t rng_key[RNG_KEY_SIZE];
@@ -102,6 +106,7 @@ namespace{
         } // end AutoMutex context
 
         set_key(rng_key);
+	reset();
       }
         
       //
@@ -145,7 +150,19 @@ namespace{
         AES_encrypt(&m_Context, tmp);
         memcpy(buf + gen_count, tmp, len - gen_count);
           }
+
+	if (dcpomatic_test)
+	  {
+	    for (unsigned int i = 0; i < len; ++i)
+	      buf[i] = _test_dist(_test_rng);
+	  }
       }
+
+      void reset()
+        {
+	  _test_rng.seed(1);
+	  _test_dist.reset();
+	}
     };
 }
 
@@ -200,6 +217,12 @@ Kumu::FortunaRNG::FillRandom(Kumu::ByteString& Buffer)
   return Buffer.Data();
 }
 
+
+void
+Kumu::FortunaRNG::Reset()
+{
+  s_RNG->reset();
+}
 
 //------------------------------------------------------------------------------------------
 
