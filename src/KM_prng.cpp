@@ -43,6 +43,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # include <openssl/sha.h>
 # include <openssl/bn.h>
 #endif // HAVE_OPENSSL
+#if HAVE_VALGRIND_MEMCHECK_H
+#include <valgrind/memcheck.h>
+#endif
 
 using namespace Kumu;
 
@@ -99,6 +102,10 @@ namespace{
           result = URandom.Read(rng_key, RNG_KEY_SIZE, &read_count);
         }
 
+#if HAVE_VALGRIND_MEMCHECK_H
+        VALGRIND_MAKE_MEM_DEFINED(rng_key, RNG_KEY_SIZE);
+#endif
+
           if ( KM_FAILURE(result) )
         DefaultLogSink().Error("Error opening random device: %s\n", DEV_URANDOM);
 
@@ -108,7 +115,7 @@ namespace{
         set_key(rng_key);
 	reset();
       }
-        
+
       //
       void
       set_key(const byte_t* key_fodder)
@@ -122,11 +129,19 @@ namespace{
         SHA1_Update(&SHA, key_fodder, RNG_KEY_SIZE);
         SHA1_Final(sha_buf, &SHA);
 
+#if HAVE_VALGRIND_MEMCHECK_H
+        /* I think AES_set_encryt_key will read 32 bytes from sha_buf
+         * even though it's only 20 bytes long, which seems dubious.
+         */
+        VALGRIND_MAKE_MEM_DEFINED (sha_buf, RNG_KEY_SIZE);
+        VALGRIND_MAKE_MEM_DEFINED (&m_Context, sizeof(m_Context));
+#endif
+
         AutoMutex Lock(m_Lock);
         AES_init_ctx(&m_Context, sha_buf);
         *(ui32_t*)(m_ctr_buf + 12) = 1;
       }
-        
+
       //
       void
       fill_rand(byte_t* buf, ui32_t len)
@@ -142,7 +157,7 @@ namespace{
         *(ui32_t*)(m_ctr_buf + 12) += 1;
         gen_count += RNG_BLOCK_SIZE;
           }
-                
+
         if ( len != gen_count ) // partial count needed?
           {
         byte_t tmp[RNG_BLOCK_SIZE];
@@ -156,6 +171,10 @@ namespace{
 	    for (unsigned int i = 0; i < len; ++i)
 	      buf[i] = _test_dist(_test_rng);
 	  }
+
+#if HAVE_VALGRIND_MEMCHECK_H
+        VALGRIND_MAKE_MEM_DEFINED (buf, len);
+#endif
       }
 
       void reset()
@@ -190,6 +209,10 @@ Kumu::FortunaRNG::FillRandom(byte_t* buf, ui32_t len)
   assert(s_RNG);
   const byte_t* front_of_buffer = buf;
 
+#if HAVE_VALGRIND_MEMCHECK_H
+  auto const original_len = len;
+#endif
+
   while ( len )
     {
       // 2^20 bytes max per seeding, use 2^19 to save
@@ -198,13 +221,17 @@ Kumu::FortunaRNG::FillRandom(byte_t* buf, ui32_t len)
       s_RNG->fill_rand(buf, gen_size);
       buf += gen_size;
       len -= gen_size;
-	  
+
       // re-seed the generator
       byte_t rng_key[RNG_KEY_SIZE];
       s_RNG->fill_rand(rng_key, RNG_KEY_SIZE);
       s_RNG->set_key(rng_key);
   }
-  
+
+#if HAVE_VALGRIND_MEMCHECK_H
+  VALGRIND_MAKE_MEM_DEFINED(front_of_buffer, original_len);
+#endif
+
   return front_of_buffer;
 }
 
