@@ -1187,6 +1187,8 @@ namespace ASDCP {
 	  // encrypted headers.
 	  Result_t OpenReadFrame(const std::string& filename, FrameBuffer&) const;
 
+	  Result_t OpenReadFrame(const unsigned char * data, unsigned int size, FrameBuffer&) const;
+
 	  // Fill a PictureDescriptor struct with the values from the file's codestream.
 	  // Returns RESULT_INIT if the file is not open.
 	  Result_t FillPictureDescriptor(PictureDescriptor&) const;
