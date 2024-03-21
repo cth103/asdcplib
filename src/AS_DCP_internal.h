@@ -32,9 +32,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _AS_DCP_INTERNAL_H_
 #define _AS_DCP_INTERNAL_H_
 
-#include <KM_platform.h>
-#include <KM_util.h>
-#include <KM_log.h>
+#include "KM_platform.h"
+#include "KM_util.h"
+#include "KM_log.h"
 #include "Metadata.h"
 
 using Kumu::DefaultLogSink;

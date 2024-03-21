@@ -33,7 +33,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _ST2095_PINKNOISE_H_
 #define _ST2095_PINKNOISE_H_
 
-#include <KM_fileio.h>
+#include "KM_fileio.h"
 #include <cmath>
 
 //

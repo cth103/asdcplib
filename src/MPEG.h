@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _MPEG_H_
 #define _MPEG_H_
 
-#include <KM_platform.h>
+#include "KM_platform.h"
 #include "AS_DCP.h"
 #include <stdio.h>
 #include <assert.h>

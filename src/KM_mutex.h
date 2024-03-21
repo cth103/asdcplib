@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _KM_MUTEX_H_
 #define _KM_MUTEX_H_
 
-#include <KM_platform.h>
+#include "KM_platform.h"
 
 #ifndef KM_WIN32
 # include <pthread.h>

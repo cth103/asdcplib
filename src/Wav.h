@@ -32,8 +32,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _WAV_H_
 #define _WAV_H_
 
-#include <KM_fileio.h>
-#include <AS_DCP.h>
+#include "KM_fileio.h"
+#include "AS_DCP.h"
 
 namespace ASDCP
 {

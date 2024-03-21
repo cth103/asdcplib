@@ -38,9 +38,9 @@ support parsing picture metadata from a codestream header.
 #define _JXS_H_
 
 // AS_DCP.h is included only for it's base type definitions.
-#include <KM_platform.h>
-#include <KM_util.h>
-#include <Metadata.h>
+#include "KM_platform.h"
+#include "KM_util.h"
+#include "Metadata.h"
 #include <assert.h>
 
 namespace ASDCP

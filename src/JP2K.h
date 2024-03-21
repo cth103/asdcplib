@@ -36,9 +36,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define _JP2K_H_
 
 // AS_DCP.h is included only for it's base type definitions.
-#include <KM_platform.h>
-#include <KM_util.h>
-#include <AS_DCP.h>
+#include "KM_platform.h"
+#include "KM_util.h"
+#include "AS_DCP.h"
 #include <assert.h>
 
 namespace ASDCP

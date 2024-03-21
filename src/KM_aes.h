@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _KM_AES_H_
 #define _KM_AES_H_
 
-#include <KM_platform.h>
+#include "KM_platform.h"
 
 #define AES_BLOCKLEN 16 // Block length in bytes - AES is 128b block only
 #define AES_KEYLEN 16   // Key length in bytes

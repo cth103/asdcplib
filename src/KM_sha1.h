@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _KM_SHA1_H_
 #define _KM_SHA1_H_
 
-#include <KM_platform.h>
+#include "KM_platform.h"
 
 namespace Kumu {
   int const SHA1_DIGEST_LENGTH = 20;

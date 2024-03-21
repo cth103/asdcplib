@@ -32,8 +32,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _KLV_H_
 #define _KLV_H_
 
-#include <KM_fileio.h>
-#include <KM_memio.h>
+#include "KM_fileio.h"
+#include "KM_memio.h"
 #include "AS_DCP.h"
 #include "MDD.h"
 #include <map>
