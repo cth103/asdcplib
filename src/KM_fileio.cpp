@@ -916,10 +916,17 @@ Kumu::FileReader::OpenRead(const std::string& filename) const
 			  NULL                           // no template file
 			  );
 
+  HRESULT const last_error = GetLastError();
+
   ::SetErrorMode(prev);
 
-  return ( m_Handle == INVALID_HANDLE_VALUE ) ?
-    Kumu::RESULT_FILEOPEN : Kumu::RESULT_OK;
+  if (m_Handle == INVALID_HANDLE_VALUE)
+    {
+      DefaultLogSink().Error("CreateFileW failed: %lu", last_error);
+      return Kumu::RESULT_FILEOPEN;
+    }
+
+  return Kumu::RESULT_OK;
 }
 
 //
@@ -1054,11 +1061,16 @@ Kumu::FileWriter::OpenWrite(const std::string& filename)
 			  NULL                           // no template file
 			  );
 
+  HRESULT const last_error = GetLastError();
+
   ::SetErrorMode(prev);
 
-  if ( m_Handle == INVALID_HANDLE_VALUE )
-    return Kumu::RESULT_FILEOPEN;
-  
+  if (m_Handle == INVALID_HANDLE_VALUE)
+    {
+      DefaultLogSink().Error("CreateFileW failed: %lu\n", last_error);
+      return Kumu::RESULT_FILEOPEN;
+    }
+
   m_IOVec = new h__iovec;
   return Kumu::RESULT_OK;
 }
