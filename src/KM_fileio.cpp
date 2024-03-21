@@ -1010,6 +1010,48 @@ Kumu::FileWriter::OpenWrite(const std::string& filename)
   return Kumu::RESULT_OK;
 }
 
+
+/** @param filename File name (UTF-8 encoded) */
+Kumu::Result_t
+Kumu::FileWriter::OpenModify(const std::string& filename)
+{
+  m_Filename = filename;
+
+  // suppress popup window on error
+  UINT prev = ::SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
+
+  int const wn = MultiByteToWideChar(CP_UTF8, 0, filename.c_str(), -1, 0, 0);
+  wchar_t* buffer = new wchar_t[wn];
+  if (MultiByteToWideChar(CP_UTF8, 0, filename.c_str(), -1, buffer, wn) == 0) {
+    delete[] buffer;
+    return Kumu::RESULT_FAIL;
+  }
+
+  m_Handle = ::CreateFileW(buffer,
+			  (GENERIC_WRITE|GENERIC_READ),  // open for reading
+			  FILE_SHARE_READ,               // share for reading
+			  NULL,                          // no security
+			  OPEN_ALWAYS,                   // don't truncate existing
+			  FILE_ATTRIBUTE_NORMAL,         // normal file
+			  NULL                           // no template file
+			  );
+
+  delete[] buffer;
+  HRESULT const last_error = GetLastError();
+
+  ::SetErrorMode(prev);
+
+  if (m_Handle == INVALID_HANDLE_VALUE)
+    {
+      DefaultLogSink().Error("CreateFileW failed: %lu\n", last_error);
+      return Kumu::RESULT_FILEOPEN;
+    }
+
+  m_IOVec = new h__iovec;
+  return Kumu::RESULT_OK;
+}
+
+
 //
 Kumu::Result_t
 Kumu::FileWriter::Writev(ui32_t* bytes_written)

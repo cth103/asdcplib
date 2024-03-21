@@ -327,6 +327,15 @@ ASDCP::h__ASDCPWriter::WriteEKLVPacket(const ASDCP::FrameBuffer& FrameBuf,const 
 			   Ctx, HMAC);
 }
 
+Result_t
+ASDCP::h__ASDCPWriter::FakeWriteEKLVPacket(int size)
+{
+  m_StreamOffset += size;
+  m_File.Seek(size, Kumu::SP_POS);
+
+  return RESULT_OK;
+}
+
 // standard method of writing the header and footer of a completed MXF file
 //
 Result_t

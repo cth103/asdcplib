@@ -966,6 +966,7 @@ extern MXF::RIP *g_RIP;
       Result_t WriteEKLVPacket(const ASDCP::FrameBuffer& FrameBuf,const byte_t* EssenceUL,
 			       const ui32_t& MinEssenceElementBerLength,
 			       AESEncContext* Ctx, HMACContext* HMAC);
+      Result_t FakeWriteEKLVPacket(int size);
       Result_t WriteASDCPFooter();
     };
 
