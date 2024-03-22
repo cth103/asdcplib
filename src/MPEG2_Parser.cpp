@@ -382,11 +382,14 @@ class Parser::h__Parser
 
   ASDCP_NO_COPY_CONSTRUCT(h__Parser);
 
+  Result_t Parse(ui32_t read_count);
+
 public:
   h__Parser() : m_TmpBuffer(VESReadSize*8) {}
   ~h__Parser() { Close(); }
 
   Result_t OpenRead(const std::string& filename);
+  Result_t OpenRead(unsigned char const* data, int size);
   void     Close();
   Result_t Reset();
   Result_t ReadFrame(FrameBuffer&);
@@ -427,6 +430,25 @@ ASDCP::MPEG2::Parser::h__Parser::OpenRead(const std::string& filename)
   
   if ( ASDCP_SUCCESS(result) )
     {
+      result = Parse(read_count);
+    }
+
+  return result;
+}
+
+
+ASDCP::Result_t
+ASDCP::MPEG2::Parser::h__Parser::OpenRead(unsigned char const* data, int size)
+{
+  ui32_t const read_count = std::min(m_TmpBuffer.Capacity(), static_cast<ui32_t>(size));
+  memcpy(m_TmpBuffer.Data(), data, read_count);
+  return Parse(read_count);
+}
+
+
+ASDCP::Result_t
+ASDCP::MPEG2::Parser::h__Parser::Parse(ui32_t read_count)
+{
       const byte_t* p = m_TmpBuffer.RoData();
 
       // the mxflib parser demanded the file start with a sequence header.
@@ -442,12 +464,8 @@ ASDCP::MPEG2::Parser::h__Parser::OpenRead(const std::string& filename)
 	  return RESULT_RAW_FORMAT;
 	}
 
-      if ( ASDCP_SUCCESS(result) )
-	{
-	  m_Parser.SetDelegate(&m_ParamsDelegate);
-	  result = m_Parser.Parse(p, read_count);
-	}
-    }
+	m_Parser.SetDelegate(&m_ParamsDelegate);
+	Result_t result = m_Parser.Parse(p, read_count);
 
   if ( ASDCP_SUCCESS(result) )
     {
@@ -459,7 +477,7 @@ ASDCP::MPEG2::Parser::h__Parser::OpenRead(const std::string& filename)
 
   if ( ASDCP_FAILURE(result) )
     {
-      DefaultLogSink().Error("Unable to identify a wrapping mode for the essence in file \"%s\"\n", filename.c_str());
+      DefaultLogSink().Error("Unable to identify a wrapping mode for the essence\n");
       m_FileReader.Close();
     }
 
@@ -593,6 +611,20 @@ ASDCP::MPEG2::Parser::OpenRead(const std::string& filename) const
 
   return result;
 }
+
+ASDCP::Result_t
+ASDCP::MPEG2::Parser::OpenRead(unsigned char const* data, int size) const
+{
+  const_cast<ASDCP::MPEG2::Parser*>(this)->m_Parser = new h__Parser;
+
+  Result_t result = m_Parser->OpenRead(data, size);
+
+  if ( ASDCP_FAILURE(result) )
+    const_cast<ASDCP::MPEG2::Parser*>(this)->m_Parser.release();
+
+  return result;
+}
+
 
 // Rewinds the stream to the beginning.
 ASDCP::Result_t

@@ -542,9 +542,10 @@ public:
 
   virtual ~h__Writer(){}
 
-  Result_t OpenWrite(const std::string&, ui32_t HeaderSize);
+  Result_t OpenWrite(const std::string&, ui32_t HeaderSize, bool overwrite = false);
   Result_t SetSourceStream(const VideoDescriptor&);
-  Result_t WriteFrame(const FrameBuffer&, AESEncContext* = 0, HMACContext* = 0);
+  Result_t WriteFrame(const FrameBuffer&, AESEncContext* = 0, HMACContext* = 0, std::string* hash = 0);
+  Result_t FakeWriteFrame(int size, FrameType_t frame_type, bool gop_start, bool closed_gop, ui8_t temporal_offset);
   Result_t Finalize();
 };
 
@@ -552,12 +553,21 @@ public:
 // Open the file for writing. The file must not exist. Returns error if
 // the operation cannot be completed.
 ASDCP::Result_t
-ASDCP::MPEG2::MXFWriter::h__Writer::OpenWrite(const std::string& filename, ui32_t HeaderSize)
+ASDCP::MPEG2::MXFWriter::h__Writer::OpenWrite(const std::string& filename, ui32_t HeaderSize, bool overwrite)
 {
   if ( ! m_State.Test_BEGIN() )
     return RESULT_STATE;
 
-  Result_t result = m_File.OpenWrite(filename);
+  Result_t result = RESULT_OK;
+  if (overwrite)
+    {
+      result = m_File.OpenModify(filename);
+      m_File.Seek(0);
+    }
+  else
+    {
+      result = m_File.OpenWrite(filename);
+    }
 
   if ( ASDCP_SUCCESS(result) )
     {
@@ -606,7 +616,7 @@ ASDCP::MPEG2::MXFWriter::h__Writer::SetSourceStream(const VideoDescriptor& VDesc
 //
 ASDCP::Result_t
 ASDCP::MPEG2::MXFWriter::h__Writer::WriteFrame(const FrameBuffer& FrameBuf, AESEncContext* Ctx,
-					       HMACContext* HMAC)
+					       HMACContext* HMAC, std::string* hash)
 {
   Result_t result = RESULT_OK;
 
@@ -617,7 +627,7 @@ ASDCP::MPEG2::MXFWriter::h__Writer::WriteFrame(const FrameBuffer& FrameBuf, AESE
   Entry.StreamOffset = m_StreamOffset;
 
   if ( ASDCP_SUCCESS(result) )
-    result = WriteEKLVPacket(FrameBuf, m_EssenceUL, MXF_BER_LENGTH, Ctx, HMAC);
+    result = WriteEKLVPacket(FrameBuf, m_EssenceUL, MXF_BER_LENGTH, Ctx, HMAC, hash);
 
   if ( ASDCP_FAILURE(result) )
     return result;
@@ -644,6 +654,62 @@ ASDCP::MPEG2::MXFWriter::h__Writer::WriteFrame(const FrameBuffer& FrameBuf, AESE
 
   // update the index manager
   Entry.TemporalOffset = - FrameBuf.TemporalOffset();
+  Entry.KeyFrameOffset = 0 - m_GOPOffset;
+  Entry.Flags = Flags;
+  /*
+  fprintf(stderr, "to: %4hd   ko: %4hd   c1: %4hd   c2: %4hd   fl: 0x%02x\n",
+	  Entry.TemporalOffset, Entry.KeyFrameOffset,
+	  m_GOPOffset + Entry.TemporalOffset,
+	  Entry.KeyFrameOffset - Entry.TemporalOffset,
+	  Entry.Flags);
+  */
+  m_FooterPart.PushIndexEntry(Entry);
+  m_FramesWritten++;
+  m_GOPOffset++;
+
+  return RESULT_OK;
+}
+
+
+ASDCP::Result_t
+ASDCP::MPEG2::MXFWriter::h__Writer::FakeWriteFrame(int size, FrameType_t frame_type, bool gop_start, bool closed_gop, ui8_t temporal_offset)
+{
+  Result_t result = RESULT_OK;
+
+  if ( m_State.Test_READY() )
+    result = m_State.Goto_RUNNING(); // first time through, get the body location
+
+  IndexTableSegment::IndexEntry Entry;
+  Entry.StreamOffset = m_StreamOffset;
+
+  if ( ASDCP_SUCCESS(result) )
+    result = FakeWriteEKLVPacket(size);
+
+  if ( ASDCP_FAILURE(result) )
+    return result;
+
+  // create mxflib flags
+  int Flags = 0;
+
+  switch (frame_type)
+    {
+    case FRAME_I: Flags = 0x00; break;
+    case FRAME_P: Flags = 0x22; break;
+    case FRAME_B: Flags = 0x33; break;
+    case FRAME_U: break;
+    }
+
+  if (gop_start)
+    {
+      m_GOPOffset = 0;
+      Flags |= 0x40;
+
+      if (closed_gop)
+	Flags |= 0x80;
+    }
+
+  // update the index manager
+  Entry.TemporalOffset = - temporal_offset;
   Entry.KeyFrameOffset = 0 - m_GOPOffset;
   Entry.Flags = Flags;
   /*
@@ -736,7 +802,7 @@ ASDCP::MPEG2::MXFWriter::RIP()
 // the operation cannot be completed.
 ASDCP::Result_t
 ASDCP::MPEG2::MXFWriter::OpenWrite(const std::string& filename, const WriterInfo& Info,
-				   const VideoDescriptor& VDesc, ui32_t HeaderSize)
+				   const VideoDescriptor& VDesc, ui32_t HeaderSize, bool overwrite)
 {
   if ( Info.LabelSetType == LS_MXF_SMPTE )
     m_Writer = new h__Writer(&DefaultSMPTEDict());
@@ -744,8 +810,8 @@ ASDCP::MPEG2::MXFWriter::OpenWrite(const std::string& filename, const WriterInfo
     m_Writer = new h__Writer(&DefaultInteropDict());
 
   m_Writer->m_Info = Info;
-  
-  Result_t result = m_Writer->OpenWrite(filename, HeaderSize);
+
+  Result_t result = m_Writer->OpenWrite(filename, HeaderSize, overwrite);
 
   if ( ASDCP_SUCCESS(result) )
     result = m_Writer->SetSourceStream(VDesc);
@@ -762,12 +828,21 @@ ASDCP::MPEG2::MXFWriter::OpenWrite(const std::string& filename, const WriterInfo
 // Fails if the file is not open, is finalized, or an operating system
 // error occurs.
 ASDCP::Result_t
-ASDCP::MPEG2::MXFWriter::WriteFrame(const FrameBuffer& FrameBuf, AESEncContext* Ctx, HMACContext* HMAC)
+ASDCP::MPEG2::MXFWriter::WriteFrame(const FrameBuffer& FrameBuf, AESEncContext* Ctx, HMACContext* HMAC, std::string* hash)
 {
   if ( m_Writer.empty() )
     return RESULT_INIT;
 
-  return m_Writer->WriteFrame(FrameBuf, Ctx, HMAC);
+  return m_Writer->WriteFrame(FrameBuf, Ctx, HMAC, hash);
+}
+
+ASDCP::Result_t
+ASDCP::MPEG2::MXFWriter::FakeWriteFrame(int size, FrameType_t frame_type, bool gop_start, bool closed_gop, ui8_t temporal_offset)
+{
+  if ( m_Writer.empty() )
+    return RESULT_INIT;
+
+  return m_Writer->FakeWriteFrame(size, frame_type, gop_start, closed_gop, temporal_offset);
 }
 
 // Closes the MXF file, writing the index and other closing information.
@@ -778,6 +853,13 @@ ASDCP::MPEG2::MXFWriter::Finalize()
     return RESULT_INIT;
 
   return m_Writer->Finalize();
+}
+
+
+ui64_t
+ASDCP::MPEG2::MXFWriter::Tell() const
+{
+  return m_Writer->m_File.TellPosition();
 }
 
 

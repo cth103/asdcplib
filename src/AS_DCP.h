@@ -737,6 +737,7 @@ namespace ASDCP {
 	  // Opens the stream for reading, parses enough data to provide a complete
 	  // set of stream metadata for the MXFWriter below.
 	  Result_t OpenRead(const std::string& filename) const;
+	  Result_t OpenRead(unsigned char const* data, int size) const;
 
 	  // Fill a VideoDescriptor struct with the values from the file's header.
 	  // Returns RESULT_INIT if the file is not open.
@@ -775,16 +776,21 @@ namespace ASDCP {
 	  // the operation cannot be completed or if nonsensical data is discovered
 	  // in the essence descriptor.
 	  Result_t OpenWrite(const std::string& filename, const WriterInfo&,
-			     const VideoDescriptor&, ui32_t HeaderSize = 16384);
+			     const VideoDescriptor&, ui32_t HeaderSize = 16384, bool overwrite = false);
 
 	  // Writes a frame of essence to the MXF file. If the optional AESEncContext
 	  // argument is present, the essence is encrypted prior to writing.
 	  // Fails if the file is not open, is finalized, or an operating system
 	  // error occurs.
-	  Result_t WriteFrame(const FrameBuffer&, AESEncContext* = 0, HMACContext* = 0);
+	  Result_t WriteFrame(const FrameBuffer&, AESEncContext* = 0, HMACContext* = 0, std::string* hash = 0);
+
+	  Result_t FakeWriteFrame(int size, FrameType_t frame_type, bool gop_start, bool closed_gop, ui8_t temporal_offset);
 
 	  // Closes the MXF file, writing the index and revised header.
 	  Result_t Finalize();
+
+	  // Return the current file offset in the MXF file that we are writing.
+	  ui64_t Tell() const;
 	};
 
       // A class which reads MPEG frame data from an AS-DCP format MXF file.
