@@ -338,7 +338,7 @@ namespace AS_02
         {}
 
         bool HasOpenClip() const { return m_ClipStart != 0; }
-        Result_t StartClip(const byte_t* EssenceUL, AESEncContext* Ctx, HMACContext* HMAC)
+        Result_t StartClip(const byte_t* EssenceUL, AESEncContext* Ctx, HMACContext*)
         {
             if (Ctx != 0)
             {

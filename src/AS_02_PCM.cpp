@@ -406,7 +406,7 @@ AS_02::PCM::MXFWriter::h__Writer::OpenWrite(const std::string& filename, ASDCP::
 
 // Automatically sets the MXF file's metadata from the WAV parser info.
 ASDCP::Result_t
-AS_02::PCM::MXFWriter::h__Writer::SetSourceStream(const ASDCP::Rational& edit_rate)
+AS_02::PCM::MXFWriter::h__Writer::SetSourceStream(const ASDCP::Rational& /*edit_rate*/)
 {
   if ( ! m_State.Test_INIT() )
     {

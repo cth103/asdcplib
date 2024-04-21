@@ -55,7 +55,6 @@ SHA1Transform(
     } CHAR64LONG16;
 
     ui32_t a, b, c, d, e;
-    size_t i;
     CHAR64LONG16 block[1];      /* use array to appear as a pointer */
 
     block[0].q[0] = reinterpret_cast<const CHAR64LONG16*>(buffer)->q[0];
