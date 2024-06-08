@@ -321,7 +321,9 @@ ASDCP::KLVFilePacket::WriteKLToFile(Kumu::FileWriter& Writer, const UL& label, u
 
   ui32_t write_count;
   Writer.Write(buffer, kl_length, &write_count);
-  assert(write_count == kl_length);
+  if (write_count != kl_length)
+    return RESULT_FAIL;
+
   return RESULT_OK;
 }
 
