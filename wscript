@@ -4,7 +4,6 @@ import subprocess
 import shlex
 import os
 import sys
-import distutils.spawn
 from waflib import Logs
 
 APPNAME = 'libasdcp-carl'
