@@ -20,8 +20,7 @@ else:
 
 def options(opt):
     opt.load('compiler_cxx')
-    opt.add_option('--target-windows-64', action='store_true', default=False, help='set up to do a cross-compile to Windows 64-bit')
-    opt.add_option('--target-windows-32', action='store_true', default=False, help='set up to do a cross-compile to Windows 32-bit')
+    opt.add_option('--target-windows', action='store_true', default=False, help='set up to do a cross-compile to Windows')
     opt.add_option('--enable-debug', action='store_true', default=False, help='build with debugging information and without optimisation')
     opt.add_option('--static', action='store_true', default=False, help='build statically')
 
@@ -29,8 +28,7 @@ def configure(conf):
     conf.load('compiler_cxx')
     conf.env.append_value('CXXFLAGS', ['-Wall', '-Wextra', '-D_FILE_OFFSET_BITS=64', '-D__STDC_FORMAT_MACROS'])
 
-    conf.env.TARGET_WINDOWS_64 = conf.options.target_windows_64
-    conf.env.TARGET_WINDOWS_32 = conf.options.target_windows_32
+    conf.env.TARGET_WINDOWS = conf.options.target_windows
     conf.env.TARGET_OSX = sys.platform == 'darwin'
     conf.env.TARGET_LINUX = not conf.env.TARGET_WINDOWS_64 and not conf.env.TARGET_WINDOWS_32 and not conf.env.TARGET_OSX
     conf.env.STATIC = conf.options.static
@@ -55,9 +53,7 @@ def configure(conf):
     conf.recurse('src')
 
 def build(bld):
-    if bld.env.TARGET_WINDOWS_64:
-        flags = '-DKM_WIN32 -DWIN32_LEAN_AND_MEAN -DKM_WIN32_UTF8'
-    elif bld.env.TARGET_WINDOWS_32:
+    if bld.env.TARGET_WINDOWS:
         flags = '-DKM_WIN32 -DWIN32_LEAN_AND_MEAN -DKM_WIN32_UTF8'
     else:
         flags = ''

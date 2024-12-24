@@ -9,8 +9,8 @@ def configure(conf):
     else:
         major_minor = '0.0.0'
     conf.env.append_value('CXXFLAGS', ['-DPACKAGE_VERSION="%s"' % major_minor])
-    if conf.options.target_windows_64 or conf.options.target_windows_32:
         conf.env.append_value('CXXFLAGS', ['-DASDCP_PLATFORM="win32"', '-DKM_WIN32', '-DWIN32_LEAN_AND_MEAN'])
+    if conf.options.target_windows:
     else:
         conf.env.append_value('CXXFLAGS', '-DASDCP_PLATFORM="linux"')
 

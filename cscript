@@ -4,7 +4,7 @@ def build(target, options):
     if target.platform == 'linux':
         cmd += ' --static'
     elif target.platform == 'windows':
-        cmd += f' --target-windows-{target.bits}'
+        cmd += f' --target-windows'
 
     target.append_with_space('LIBS', '-lboost_system')
     target.append_with_space('LIBS', '-lboost_filesystem')
