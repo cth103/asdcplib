@@ -1147,7 +1147,7 @@ Kumu::FileWriter::Writev(ui32_t* bytes_written)
 
       if ( wr_result == 0 || tmp_count != iov->m_iovec[i].iov_len)
 	{
-	  DefaultLogSink().Error("Writev failed (%d)", wr_result);
+	  DefaultLogSink().Error("Writev failed (%d) (%d)", wr_result, GetLastError());
 	  result = Kumu::RESULT_WRITEFAIL;
 	  break;
 	}
