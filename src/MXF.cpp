@@ -1229,7 +1229,6 @@ ASDCP::MXF::OPAtomIndexFooter::WriteToFile(Kumu::FileWriter& Writer, ui64_t dura
     {
       ui32_t write_count = 0;
       result = Writer.Write(FooterBuffer.RoData(), FooterBuffer.Size(), &write_count);
-      assert(write_count == FooterBuffer.Size());
     }
 
   return result;
