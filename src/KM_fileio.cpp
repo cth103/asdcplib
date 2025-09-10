@@ -413,7 +413,7 @@ std::string
 Kumu::PathGetExtension(const std::string& Path)
 {
   std::string Basename = PathBasename(Path);
-  const char* p = strrchr(Basename.c_str(), '.'); 
+  const char* p = strrchr(Basename.c_str(), '.');
 
   if ( p++ == 0 )
     return "";
@@ -426,7 +426,7 @@ std::string
 Kumu::PathSetExtension(const std::string& Path, const std::string& Extension) // empty extension removes
 {
   std::string Basename = PathBasename(Path);
-  const char* p = strrchr(Basename.c_str(), '.'); 
+  const char* p = strrchr(Basename.c_str(), '.');
 
   if ( p != 0 )
     Basename = Basename.substr(0, p - Basename.c_str());
@@ -488,7 +488,7 @@ Kumu::PathResolveLinks(const std::string& link_path, std::string& resolved_path,
 	      DefaultLogSink().Error("%s: readlink: %s\n", next_link.c_str(), strerror(errno));
 	      return false;
 	    }
-	  
+
 	  assert(link_size < MaxFilePath);
 	  link_buf[link_size] = 0;
 	  std::string tmp_path;
@@ -556,7 +556,7 @@ Kumu::FindInPath(const IPathMatch& Pattern, const std::string& SearchDir,
 
 	  if ( PathIsDirectory(tmp_path.c_str()) )
 	    FindInPath(Pattern, tmp_path, FoundPaths, one_shot, separator);
-	  
+
 	  else if ( Pattern.Match(name_buf) )
 	    {
 	      FoundPaths.push_back(SearchDir + separator + name_buf);
@@ -963,7 +963,7 @@ Kumu::FileReader::Seek(Kumu::fpos_t position, SeekPos_t whence) const
 	&& (in.LowPart == INVALID_SET_FILE_POINTER
 	    || in.LowPart == ERROR_NEGATIVE_SEEK )) )
     return Kumu::RESULT_READFAIL;
-  
+
   return Kumu::RESULT_OK;
 }
 
@@ -1008,7 +1008,7 @@ Kumu::FileReader::Read(byte_t* buf, ui32_t buf_len, ui32_t* read_count) const
 
   if ( m_Handle == INVALID_HANDLE_VALUE )
     return Kumu::RESULT_FILEOPEN;
-  
+
   UINT prev = ::SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
   if ( ::ReadFile(m_Handle, buf, buf_len, &tmp_count, NULL) == 0 )
     result = Kumu::RESULT_READFAIL;
@@ -1327,7 +1327,7 @@ Kumu::FileWriter::Writev(ui32_t* bytes_written)
     total_size += iov->m_iovec[i].iov_len;
 
   int write_size = writev(m_Handle, iov->m_iovec, iov->m_Count);
-  
+
   if ( write_size == -1L || write_size != total_size )
     {
       DefaultLogSink().Error("writev failed (%d)", errno);
@@ -1340,7 +1340,7 @@ Kumu::FileWriter::Writev(ui32_t* bytes_written)
     }
 
   iov->m_Count = 0;
-  *bytes_written = write_size;  
+  *bytes_written = write_size;
   return RESULT_OK;
 }
 
@@ -1456,7 +1456,7 @@ Kumu::ReadFileIntoObject(const std::string& Filename, Kumu::IArchive& Object, ui
 
       if ( KM_SUCCESS(result) )
 	result = Reader.Read(Buffer.Data(), file_size, &read_count);
-    
+
       if ( KM_SUCCESS(result) )
 	{
 	  assert(file_size == read_count);
@@ -1520,16 +1520,16 @@ Kumu::ReadFileIntoBuffer(const std::string& Filename, Kumu::ByteString& Buffer, 
 
       if ( KM_SUCCESS(result) )
 	result = Reader.Read(Buffer.Data(), file_size, &read_count);
-    
+
       if ( KM_SUCCESS(result) )
 	{
-	  if ( file_size != read_count) 
+	  if ( file_size != read_count)
 	    return RESULT_READFAIL;
 
 	  Buffer.Length(read_count);
 	}
     }
-  
+
   return result;
 }
 
@@ -1757,7 +1757,7 @@ Kumu::DirScannerEx::GetNext(std::string& next_item_name, DirectoryEntryType_t& n
     default:
       next_item_type = DET_DEV;
     }
-#else // __sun 
+#else // __sun
   switch ( entry->d_type )
     {
     case DT_DIR:
@@ -1873,7 +1873,7 @@ h__DeletePath(const std::string& pathname)
 	      {
 		if ( next_file[1] ==  0 )
 		  continue; // don't delete 'this'
-		
+
 		if ( next_file[1] == '.' && next_file[2] ==  0 )
 		  continue; // don't delete 'this' parent
 	      }
@@ -2008,9 +2008,9 @@ Kumu::FreeSpaceForPath(const std::string& path, Kumu::fsize_t& free_space, Kumu:
 
   DefaultLogSink().Error("FreeSpaceForPath statfs %s: %s\n", path.c_str(), strerror(errno));
   return RESULT_FAIL;
-#endif // __sun 
+#endif // __sun
 #endif // KM_WIN32
-} 
+}
 
 
 //
