@@ -916,7 +916,7 @@ Kumu::FileReader::OpenRead(const std::string& filename) const
 			  NULL                           // no template file
 			  );
 
-  HRESULT const last_error = GetLastError();
+  const HRESULT last_error = GetLastError();
 
   ::SetErrorMode(prev);
 
@@ -1061,7 +1061,7 @@ Kumu::FileWriter::OpenWrite(const std::string& filename)
 			  NULL                           // no template file
 			  );
 
-  HRESULT const last_error = GetLastError();
+  const HRESULT last_error = GetLastError();
 
   ::SetErrorMode(prev);
 
@@ -1102,7 +1102,7 @@ Kumu::FileWriter::OpenModify(const std::string& filename)
 			  );
 
   delete[] buffer;
-  HRESULT const last_error = GetLastError();
+  const HRESULT last_error = GetLastError();
 
   ::SetErrorMode(prev);
 
