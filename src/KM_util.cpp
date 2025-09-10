@@ -335,7 +335,7 @@ Kumu::base64encode(const byte_t* buf, ui32_t buf_len, char* strbuf, ui32_t strbu
       diff = buf_len - i;
       assert(diff > 0);
       assert(diff < 3);
-      
+
       strbuf[out_char++] = base64_chars[( buf[0] >> 2 )];
 
       if ( diff == 1 )
@@ -590,7 +590,7 @@ Kumu::bin2UUIDhex(const byte_t* bin_buf, ui32_t bin_len, char* str_buf, ui32_t s
   // add in the hyphens and trainling null
   for ( i = 8; i < 24; i += 5 )
     str_buf[i] = '-';
-  
+
   str_buf[36] = 0;
   return str_buf;
 }
@@ -669,7 +669,7 @@ bool
 Kumu::read_BER(const byte_t* buf, ui64_t* val)
 {
   ui8_t ber_size, i;
-  
+
   if ( buf == 0 || val == 0 )
     return false;
 
@@ -693,7 +693,7 @@ Kumu::read_BER(const byte_t* buf, ui64_t* val)
 
 
 static const ui64_t ber_masks[9] =
-  { ui64_C(0xffffffffffffffff), ui64_C(0xffffffffffffff00), 
+  { ui64_C(0xffffffffffffffff), ui64_C(0xffffffffffffff00),
     ui64_C(0xffffffffffff0000), ui64_C(0xffffffffff000000),
     ui64_C(0xffffffff00000000), ui64_C(0xffffff0000000000),
     ui64_C(0xffff000000000000), ui64_C(0xff00000000000000),
@@ -738,7 +738,7 @@ Kumu::write_BER(byte_t* buf, ui64_t val, ui32_t ber_len)
           DefaultLogSink().Error("BER integer length %u exceeds maximum size of 9\n", ber_len);
           return false;
         }
-      
+
       if ( ( val & ber_masks[ber_len - 1] ) != 0 )
         {
 	  ui64Printer tmp_i(val);
@@ -859,7 +859,7 @@ Kumu::Timestamp::SetTZOffsetMinutes(const i32_t& minutes)
   return true;
 }
 
-// 
+//
 const char*
 Kumu::Timestamp::EncodeString(char* str_buf, ui32_t buf_len) const
 {
@@ -888,7 +888,7 @@ Kumu::Timestamp::EncodeString(char* str_buf, ui32_t buf_len) const
       if ( m_TZOffsetMinutes < 0 )
 	direction = '-';
     }
-  
+
   // 2004-05-01T13:20:00+00:00
   snprintf(str_buf, buf_len,
 	   "%04hu-%02hhu-%02hhuT%02hhu:%02hhu:%02hhu%c%02u:%02u",
@@ -918,7 +918,7 @@ Kumu::Timestamp::DecodeString(const char* datestr)
   YMDhms.date.year = strtol(datestr, 0, 10);
   YMDhms.date.month = strtol(datestr + 5, 0, 10);
   YMDhms.date.day = strtol(datestr + 8, 0, 10);
- 
+
   if ( datestr[10] == 'T' )
     {
       if ( ! ( isdigit(datestr[11]) && isdigit(datestr[12]) )
@@ -991,7 +991,7 @@ Kumu::Timestamp::DecodeString(const char* datestr)
 				   datestr, char_count);
       return false;
     }
-  
+
   m_Timestamp = YMDhms;
   m_TZOffsetMinutes = YMDhms.offset;
   return true;
@@ -1033,7 +1033,7 @@ Kumu::Timestamp::Archive(MemIOWriter* Writer) const
   ui8_t month, day, hour, minute, second, tick = 0;
   GetComponents(year, month, day, hour, minute, second);
 
-  if ( ! Writer->WriteUi16BE(year) ) return false;	
+  if ( ! Writer->WriteUi16BE(year) ) return false;
   if ( ! Writer->WriteUi8(month) ) return false;
   if ( ! Writer->WriteUi8(day) ) return false;
   if ( ! Writer->WriteUi8(hour) ) return false;
@@ -1169,7 +1169,7 @@ Kumu::ByteString::Capacity(ui32_t cap_size)
       else
 	free(m_Data);
     }
-		
+
   if ( ( m_Data = (byte_t*)malloc(cap_size) ) == 0 )
     return RESULT_ALLOC;
 
@@ -1179,7 +1179,7 @@ Kumu::ByteString::Capacity(ui32_t cap_size)
       memcpy(m_Data, tmp_data, m_Length);
       free(tmp_data);
     }
-		
+
   m_Capacity = cap_size;
   return RESULT_OK;
 }
@@ -1270,7 +1270,7 @@ Kumu::km_token_split(const std::string& str, const std::string& separator)
       pstr = r + separator.size();
       r = strstr(pstr, separator.c_str());
     }
-      
+
   components.push_back(std::string(pstr));
   return components;
 }
