@@ -49,6 +49,10 @@ namespace Kumu
     {
       int value;
       std::string label, symbol, message;
+      /** operating-system-dependent error code, if known.
+       *  0 on success or if the OS error code is not known.
+       */
+      int os_error = 0;
       Result_t();
 
     public:
@@ -67,6 +71,8 @@ namespace Kumu
       static const Result_t& Get(unsigned int);
 
       Result_t(int v, const std::string& s, const std::string& l);
+      // Create a new Result_t from an existing one with a specified operating system error code
+      Result_t(const Result_t& other, int o);
       Result_t(const Result_t& rhs);
       const Result_t& operator=(const Result_t& rhs);
       ~Result_t();
@@ -86,6 +92,7 @@ namespace Kumu
       inline operator    const char*() const { return label.c_str(); }
       inline const char* Symbol() const { return symbol.c_str(); }
       inline const char* Message() const { return message.c_str(); }
+      inline int         OsError() const { return os_error; }
     };
 
   KM_DECLARE_RESULT(FALSE,       1,   "Successful but not true.");

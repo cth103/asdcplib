@@ -165,12 +165,20 @@ Kumu::Result_t::Result_t(int v, const std::string& s, const std::string& l) : va
 }
 
 
+Kumu::Result_t::Result_t(const Result_t& other, int o)
+{
+	*this = other;
+	os_error = o;
+}
+
+
 Kumu::Result_t::Result_t(const Result_t& rhs)
 {
   value = rhs.value;
   symbol = rhs.symbol;
   label = rhs.label;
   message = rhs.message;
+  os_error = rhs.os_error;
 }
 
 Kumu::Result_t::~Result_t() {}
@@ -183,6 +191,7 @@ Kumu::Result_t::operator=(const Result_t& rhs)
   symbol = rhs.symbol;
   label = rhs.label;
   message = rhs.message;
+  os_error = rhs.os_error;
   return *this;
 }
 

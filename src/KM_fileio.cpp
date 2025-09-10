@@ -923,7 +923,7 @@ Kumu::FileReader::OpenRead(const std::string& filename) const
   if (m_Handle == INVALID_HANDLE_VALUE)
     {
       DefaultLogSink().Error("CreateFileW failed: %lu", last_error);
-      return Kumu::RESULT_FILEOPEN;
+      return Kumu::Result_t(Kumu::RESULT_FILEOPEN, last_error);
     }
 
   return Kumu::RESULT_OK;
@@ -962,7 +962,7 @@ Kumu::FileReader::Seek(Kumu::fpos_t position, SeekPos_t whence) const
   if ( (LastError != NO_ERROR
 	&& (in.LowPart == INVALID_SET_FILE_POINTER
 	    || in.LowPart == ERROR_NEGATIVE_SEEK )) )
-    return Kumu::RESULT_READFAIL;
+    return Kumu::Result_t(Kumu::RESULT_READFAIL, LastError);
 
   return Kumu::RESULT_OK;
 }
@@ -986,7 +986,7 @@ Kumu::FileReader::Tell(Kumu::fpos_t* pos) const
   if ( (LastError != NO_ERROR
 	&& (in.LowPart == INVALID_SET_FILE_POINTER
 	    || in.LowPart == ERROR_NEGATIVE_SEEK )) )
-    return Kumu::RESULT_READFAIL;
+    return Kumu::Result_t(Kumu::RESULT_READFAIL, LastError);
 
   *pos = (Kumu::fpos_t)in.QuadPart;
   return Kumu::RESULT_OK;
@@ -1068,7 +1068,7 @@ Kumu::FileWriter::OpenWrite(const std::string& filename)
   if (m_Handle == INVALID_HANDLE_VALUE)
     {
       DefaultLogSink().Error("CreateFileW failed: %lu\n", last_error);
-      return Kumu::RESULT_FILEOPEN;
+      return Kumu::Result_t(Kumu::RESULT_FILEOPEN, last_error);
     }
 
   m_IOVec = new h__iovec;
@@ -1109,7 +1109,7 @@ Kumu::FileWriter::OpenModify(const std::string& filename)
   if (m_Handle == INVALID_HANDLE_VALUE)
     {
       DefaultLogSink().Error("CreateFileW failed: %lu\n", last_error);
-      return Kumu::RESULT_FILEOPEN;
+      return Kumu::Result_t(Kumu::RESULT_FILEOPEN, last_error);
     }
 
   m_IOVec = new h__iovec;
@@ -1145,10 +1145,11 @@ Kumu::FileWriter::Writev(ui32_t* bytes_written)
 				   (DWORD*)&tmp_count,
 				   NULL);
 
+      const auto last_error = GetLastError();
       if ( wr_result == 0 || tmp_count != iov->m_iovec[i].iov_len)
 	{
-	  DefaultLogSink().Error("Writev failed (%d) (%d)", wr_result, GetLastError());
-	  result = Kumu::RESULT_WRITEFAIL;
+	  DefaultLogSink().Error("Writev failed (%d) (%d)", wr_result, last_error);
+	  result = Kumu::Result_t(Kumu::RESULT_WRITEFAIL, last_error);
 	  break;
 	}
 
@@ -1284,7 +1285,7 @@ Kumu::FileWriter::OpenWrite(const std::string& filename)
   if ( m_Handle == -1L )
     {
       DefaultLogSink().Error("Error opening file %s: %s\n", filename.c_str(), strerror(errno));
-      return RESULT_FILEOPEN;
+      return Kumu::Result_t(RESULT_FILEOPEN, errno);
     }
 
   m_IOVec = new h__iovec;
@@ -1301,7 +1302,7 @@ Kumu::FileWriter::OpenModify(const std::string& filename)
   if ( m_Handle == -1L )
     {
       DefaultLogSink().Error("Error opening file %s: %s\n", filename.c_str(), strerror(errno));
-      return RESULT_FILEOPEN;
+      return Kumu::Result_t(RESULT_FILEOPEN, errno);
     }
 
   m_IOVec = new h__iovec;
@@ -1331,7 +1332,7 @@ Kumu::FileWriter::Writev(ui32_t* bytes_written)
   if ( write_size == -1L || write_size != total_size )
     {
       DefaultLogSink().Error("writev failed (%d)", errno);
-      return RESULT_WRITEFAIL;
+      return Kumu::Result_t(RESULT_WRITEFAIL, errno);
     }
 
   for (int i = 0; i < iov->m_Count; ++i)
@@ -1362,7 +1363,7 @@ Kumu::FileWriter::Write(const byte_t* buf, ui32_t buf_len, ui32_t* bytes_written
   if ( write_size == -1L || (ui32_t)write_size != buf_len )
     {
       DefaultLogSink().Error("write failed (%d)", errno);
-      return RESULT_WRITEFAIL;
+      return Kumu::Result_t(RESULT_WRITEFAIL, errno);
     }
 
   MaybeHash(buf, buf_len);
@@ -1588,7 +1589,7 @@ Kumu::DirScanner::Open(const std::string& dirname)
 	  break;
 	default:
 	  DefaultLogSink().Error("DirScanner::Open(%s): %s\n", dirname.c_str(), strerror(errno));
-	  result = RESULT_FAIL;
+	  result = Kumu::Result_t(RESULT_FAIL, errno);
 	  break;
 	}
     }
@@ -1612,7 +1613,7 @@ Kumu::DirScanner::Close()
 	return RESULT_STATE;
       default:
 	DefaultLogSink().Error("DirScanner::Close(): %s\n", strerror(errno));
-	return RESULT_FAIL;
+	return Kumu::Result_t(RESULT_FAIL, errno);
       }
   }
 
@@ -1676,7 +1677,7 @@ Kumu::DirScannerEx::Open(const std::string& dirname)
 	  break;
 	default:
 	  DefaultLogSink().Error("DirScanner::Open(%s): %s\n", dirname.c_str(), strerror(errno));
-	  result = RESULT_FAIL;
+	  result = Kumu::Result_t(RESULT_FAIL, errno);
 	  break;
 	}
     }
@@ -1706,7 +1707,7 @@ Kumu::DirScannerEx::Close()
 
 	default:
 	  DefaultLogSink().Error("DirScanner::Close(): %s\n", strerror(errno));
-	  return RESULT_FAIL;
+	  return Kumu::Result_t(RESULT_FAIL, errno);
 	}
     }
 
@@ -1813,7 +1814,7 @@ Kumu::CreateDirectoriesInPath(const std::string& Path)
 	    {
 	      DefaultLogSink().Error("CreateDirectoriesInPath mkdir %s: %s\n",
 				     tmp_path.c_str(), strerror(errno));
-	      return RESULT_DIR_CREATE;
+	      return Kumu::Result_t(RESULT_DIR_CREATE, errno);
 	    }
 	}
     }
@@ -1841,7 +1842,7 @@ Kumu::DeleteFile(const std::string& filename)
     }
 
   DefaultLogSink().Error("DeleteFile %s: %s\n", filename.c_str(), strerror(errno));
-  return RESULT_FAIL;
+  return Kumu::Result_t(RESULT_FAIL, errno);
 }
 
 namespace Kumu
@@ -1900,7 +1901,7 @@ h__DeletePath(const std::string& pathname)
 
 	    default:
 	      DefaultLogSink().Error("DeletePath %s: %s\n", pathname.c_str(), strerror(errno));
-	      result = RESULT_FAIL;
+	      result = Kumu::Result_t(RESULT_FAIL, errno);
 	    }
 	}
     }
@@ -1967,7 +1968,7 @@ Kumu::FreeSpaceForPath(const std::string& path, Kumu::fsize_t& free_space, Kumu:
   HRESULT last_error = ::GetLastError();
 
   DefaultLogSink().Error("FreeSpaceForPath GetDiskFreeSpaceEx %s: %lu\n", path.c_str(), last_error);
-  return RESULT_FAIL;
+  return Result_t(RESULT_FAIL, last_error);
 #else // KM_WIN32
   struct statfs s;
 
@@ -2007,7 +2008,7 @@ Kumu::FreeSpaceForPath(const std::string& path, Kumu::fsize_t& free_space, Kumu:
     }
 
   DefaultLogSink().Error("FreeSpaceForPath statfs %s: %s\n", path.c_str(), strerror(errno));
-  return RESULT_FAIL;
+  return Kumu::Result_t(RESULT_FAIL, errno);
 #endif // __sun
 #endif // KM_WIN32
 }
