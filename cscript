@@ -1,12 +1,20 @@
+import os
 
-def build(target, options):
-    cmd = './waf configure --prefix=%s ' % target.directory
-    if target.platform == 'linux':
-        cmd += ' --static'
-    elif target.platform == 'windows':
-        cmd += f' --target-windows'
+def build(target, options, for_package, version):
+    if for_package and target.platform == 'linux' and target.distro == 'arch':
+        target.command('git clone https://aur.archlinux.org/libasdcp-cth.git')
+        os.chdir('libasdcp-cth')
+        target.command('sed -i "s/tag=v\${pkgver}/branch=dcpomatic-2.13.0/" PKGBUILD')
+        target.command('makepkg --skipinteg')
+        target.command('sudo pacman --noconfirm -U libasdcp-cth*.zst')
+    else:
+        cmd = './waf configure --prefix=%s ' % target.directory
+        if target.platform == 'linux':
+            cmd += ' --static'
+        elif target.platform == 'windows':
+            cmd += f' --target-windows'
 
-    target.append_with_space('LIBS', '-lboost_system')
-    target.append_with_space('LIBS', '-lboost_filesystem')
-    target.command(cmd)
-    target.command('./waf build install')
+        target.append_with_space('LIBS', '-lboost_system')
+        target.append_with_space('LIBS', '-lboost_filesystem')
+        target.command(cmd)
+        target.command('./waf build install')
