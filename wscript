@@ -26,7 +26,7 @@ def options(opt):
 
 def configure(conf):
     conf.load('compiler_cxx')
-    conf.env.append_value('CXXFLAGS', ['-Wall', '-Wextra', '-D_FILE_OFFSET_BITS=64', '-D__STDC_FORMAT_MACROS'])
+    conf.env.append_value('CXXFLAGS', ['-Wall', '-Wextra', '-D_FILE_OFFSET_BITS=64', '-D__STDC_FORMAT_MACROS', '-std=c++11'])
 
     conf.env.TARGET_WINDOWS = conf.options.target_windows
     conf.env.TARGET_OSX = sys.platform == 'darwin'
