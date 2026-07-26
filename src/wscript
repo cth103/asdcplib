@@ -128,3 +128,10 @@ def build(bld):
     obj.includes = ['asdcp']
     obj.source = 'asdcp-unwrap.cpp'
     obj.target = 'asdcp-unwrap'
+
+    obj = bld(features='cxx cxxprogram')
+    obj.use = ['libkumu-dcpomatic', 'libasdcp-dcpomatic']
+    obj.uselib = "OPENSSL BOOST_FILESYSTEM"
+    obj.includes = ['asdcp']
+    obj.source = 'asdcp-info.cpp'
+    obj.target = 'asdcp-info'
