@@ -998,7 +998,6 @@ Kumu::FileReader::Read(byte_t* buf, ui32_t buf_len, ui32_t* read_count) const
 {
   KM_TEST_NULL_L(buf);
   Result_t result = Kumu::RESULT_OK;
-  DWORD    tmp_count;
   ui32_t tmp_int;
 
   if ( read_count == 0 )
@@ -1010,16 +1009,27 @@ Kumu::FileReader::Read(byte_t* buf, ui32_t buf_len, ui32_t* read_count) const
     return Kumu::RESULT_FILEOPEN;
 
   UINT prev = ::SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
-  if ( ::ReadFile(m_Handle, buf, buf_len, &tmp_count, NULL) == 0 )
-    result = Kumu::RESULT_READFAIL;
+  ui32_t total = 0;
+  while (total < buf_len) {
+    DWORD tmp_count;
+    if ( ::ReadFile(m_Handle, buf, buf_len, &tmp_count, NULL) == 0 )
+      result = Kumu::RESULT_READFAIL;
+
+    if (tmp_count == 0) {
+      // EOF
+      break;
+    }
+
+    total += tmp_count;
+  }
 
   ::SetErrorMode(prev);
 
-  if ( tmp_count == 0 ) /* EOF */
+  if ( total == 0 ) /* EOF */
     result = Kumu::RESULT_ENDOFFILE;
 
   if ( KM_SUCCESS(result) )
-    *read_count = tmp_count;
+    *read_count = total;
 
   return result;
 }
@@ -1249,12 +1259,11 @@ Kumu::FileReader::Tell(Kumu::fpos_t* pos) const
   return RESULT_OK;
 }
 
-//
+// Read from the file into buf, retrying until buf is full or an error occurs
 Kumu::Result_t
 Kumu::FileReader::Read(byte_t* buf, ui32_t buf_len, ui32_t* read_count) const
 {
   KM_TEST_NULL_L(buf);
-  i32_t  tmp_count = 0;
   ui32_t tmp_int = 0;
 
   if ( read_count == 0 )
@@ -1265,11 +1274,25 @@ Kumu::FileReader::Read(byte_t* buf, ui32_t buf_len, ui32_t* read_count) const
   if ( m_Handle == -1L )
     return RESULT_FILEOPEN;
 
-  if ( (tmp_count = read(m_Handle, buf, buf_len)) == -1L )
-    return RESULT_READFAIL;
+  ui32_t total = 0;
+  while (total < buf_len) {
+    ssize_t const n = read(m_Handle, buf + total, buf_len - total);
+    if (n == -1) {
+      if (errno == EINTR) {
+	// Interrupted
+        continue;
+      }
+      return RESULT_READFAIL;
+    }
+    if (n == 0) {
+      // EOF
+      break;
+    }
+    total += n;
+  }
 
-  *read_count = tmp_count;
-  return (tmp_count == 0 ? RESULT_ENDOFFILE : RESULT_OK);
+  *read_count = total;
+  return (total == 0 ? RESULT_ENDOFFILE : RESULT_OK);
 }
 
 //------------------------------------------------------------------------------------------
